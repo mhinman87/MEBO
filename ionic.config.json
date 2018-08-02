@@ -1,0 +1,7 @@
+{
+  "name": "Localholic_dev",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
