@@ -1,0 +1,195 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController, Events } from 'ionic-angular';
+import { FoodTruck } from '../../models/foodtruck.model';
+import { DatabaseProvider } from '../../providers/database/database';
+import { Observable } from '../../../node_modules/rxjs';
+import { AuthService } from '../../providers/auth/auth.service';
+import { Account } from '../../models/account.model';
+import { User } from 'firebase/app';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+
+/**
+ * Generated class for the DetailsPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
+@IonicPage()
+@Component({
+  selector: 'page-details',
+  templateUrl: 'details.html',
+})
+export class DetailsPage {
+
+  foodtruck: FoodTruck;
+  currentTime: number;
+  obFoodtruck: Observable<FoodTruck[]>;
+  x: any;
+  loader: Loading;
+  account: Account;
+  account$: Observable<Account>;
+  authenticatedUser = {} as User;
+  accountSubscription: any;
+  isUserCloseEnough: boolean;
+  loactionCd: number;
+  
+
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              private database: DatabaseProvider,
+              private loadingCtrl: LoadingController,
+              private auth: AuthService,
+              private geolocation: Geolocation,
+              private alertCtrl: AlertController,
+              private events: Events) {
+    this.foodtruck = {} as FoodTruck;
+    this.showLoading();
+    
+    
+    this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
+
+     if (user != null){
+      try {
+        this.authenticatedUser = user;
+        console.log(this.authenticatedUser);
+        this.account$ = this.database.getAccountInfo(user.uid);
+        this.database.getAccountInfo(user.uid).subscribe((account) =>{
+        this.setAccount(account);
+        })
+      } catch(e) {
+        console.error(e);
+      }
+     }
+    }) 
+  }
+
+  async canUserCheckIn(){
+    this.isUserCloseEnough = undefined;
+    let now = new Date().getTime()
+        this.loactionCd = now + 30000;
+    let position: Geoposition;
+    position = await this.geolocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 15000
+    })
+    
+    let lat = position.coords.latitude;
+    let lng = position.coords.longitude;
+    this.events.publish('user-location', [lat, lng]);
+
+    let distance = Math.pow((Math.pow((this.foodtruck.lat - lat), 2) + Math.pow((this.foodtruck.long - lng),2)), 0.5);
+
+    if (distance < 0.0012){
+      this.isUserCloseEnough = true;
+      console.log(this.isUserCloseEnough)
+    } else {
+      this.isUserCloseEnough = false;
+      console.log(this.isUserCloseEnough)
+    }
+    
+    
+    console.log('distance here', distance);
+  }
+
+  setAccount(account: Account){
+    this.account = account;
+  }
+
+  ionViewDidEnter(){
+    this.canUserCheckIn();
+  }
+
+
+  ionViewDidLoad() {
+    this.foodtruck = this.navParams.get('truckData');
+    //this.getFoodtruck(this.foodtruck.eventStart);
+    const second = 1000,
+    minute = second * 60,
+    hour = minute * 60,
+    day = hour * 24;
+
+    
+      let countDown = this.foodtruck.eventEnd + 5*3600000;
+      this.x = setInterval(() => {
+        this.currentTime = new Date().getTime();
+        let now = new Date().getTime(),
+            distance = countDown - now;
+
+          //document.getElementById('days').innerText = Math.floor(distance / (day)).toString();
+          document.getElementById('hours').innerText = Math.floor((distance % (day)) / (hour)).toString()
+          document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)).toString()
+          document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second).toString()
+
+        
+        //do something later when date is reached
+        if (distance < 0) {
+          this.navCtrl.popToRoot();
+        }
+        let cdDistance = this.account.eventCheckInTimer - now;
+        if (document.getElementById('cdseconds')){
+          document.getElementById('cdseconds').innerText = Math.floor((cdDistance) / second).toString();
+        }
+
+        
+        let ciTimer = this.loactionCd - now;
+        document.getElementById('ciTimer').innerText = Math.floor((ciTimer) / second).toString();
+
+        if (ciTimer < 0) {
+          this.canUserCheckIn();
+        }
+
+      }, second)
+      setTimeout(()=>{
+        this.loader.dismiss();
+      }, 1000);
+
+      
+  }
+
+  ionViewDidLeave(){
+    clearInterval(this.x);
+    this.isUserCloseEnough = undefined;
+    this.accountSubscription.unsubscribe();
+  }
+
+  showLoading(){
+    this.loader = this.loadingCtrl.create({
+      content: `<img src="assets/imgs/loading.gif" />`,
+      showBackdrop: false,
+      spinner: 'hide'
+    })
+    this.loader.present();
+  }
+
+  getFoodtruck(id: number){
+    this.obFoodtruck = this.database.getFoodtruckFromId(id);
+    this.database.getFoodtruckFromId(id).subscribe(truck =>{
+      console.log(truck);
+    })
+    console.log(this.obFoodtruck)
+  }
+
+  checkIn(){
+    if(this.isUserCloseEnough){
+      this.database.userCheckIn(this.account, this.foodtruck);
+    console.log(this.account)
+    } else {
+      this.alertCtrl.create({
+        title: 'You are not close enough',
+        subTitle: "You must move closer and wait 30 seconds",
+        buttons: [
+          {
+            text: 'Oh word... Lemme try that',
+            role: 'Cancel'
+          },
+        ]
+      }).present();
+    }
+    
+  }
+
+
+
+}

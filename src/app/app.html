@@ -1,16 +1,32 @@
 <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
+  <ion-header >
+    <ion-toolbar color="dark">
+      <ion-title >Menu</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content class="background" >
+    <div menuClose [ngClass]="{hidden: authenticatedUser == undefined}" class="menu-header" (click)="navToProfile()">
+        <img  class="menu-profile-img"  src="{{account.profilePic}}" alt="Avatar" >
+        <h3 text-center class="menu-profile-username"  >{{account.username}}</h3>
+        <p class="view-profile">View Profile</p>
+    </div>
+      
+
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+      <button class="background" color="primary" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        <ion-icon style="padding-right: 10px;
+                         padding-top: 10px;
+                         font-size: 2.0em;
+                         float: left;" name="{{p.icon}}"></ion-icon>
+
+                         <div style="float: left;
+                              padding-top: 16px;
+                              padding-left: 5px;">{{p.title}}</div>
       </button>
     </ion-list>
+
+    <button ion-button round outline class="logout-button" (click)="logout()" [ngClass]="{hidden: authenticatedUser == undefined}">Logout</button>
   </ion-content>
 
 </ion-menu>

@@ -14,3 +14,42 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+.menu-profile-img {
+    border-radius: 100%;
+    height: 125px;
+    width: 125px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 0 0 1pt #f4f4f4;
+    margin-top: 15px;
+}
+
+.view-profile{
+    color: white;
+    text-align: center;
+    font-size: 9px;
+    margin-top: -13px;
+}
+
+.menu-header:hover{
+    cursor: pointer;
+}
+
+.menu-profile-username {
+    color: white;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 25px;
+    margin-top: 0px;
+}
+
+.logout-button {
+    display: block;
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none;
+}

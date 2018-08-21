@@ -1,0 +1,88 @@
+page-details {
+    .title{
+        position: absolute;
+        left: 38%;
+	}
+
+	#image-1 {
+		margin: 0 auto;
+		width: 50%;
+		display: block;
+
+	}
+
+	#time-left{
+		color: white;
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		background: linear-gradient(270deg, #CE0058, #0085CA);
+		width: 70%;
+		padding: 10px;
+		border-radius: 25px;
+		margin-top: 10px;
+	}
+
+	.check-in-button {
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+	}
+
+	.truck-title{
+		color: white;
+		text-align: center;
+		font-size: 45px;
+		margin-top: -10px;
+	}
+
+	.notification-is-danger {
+        color: red;
+        margin-left: 50px;
+    }
+
+    .notification-is-success{
+        color: #3DD969;
+        margin-left: 50px;
+	}
+	
+	.notification-is-info {
+        color: #0085CA;
+        margin-left: 50px;
+    }
+
+	.container {
+		color: white;
+		text-align: center;
+		
+	  }
+	  
+	  li {
+		display: inline-block;
+		font-size: 1.2em;
+		list-style-type: none;
+		padding: 1em;
+		text-transform: uppercase;
+		font-weight: bold;
+		margin: 0 auto;
+	  }
+	  
+	  li span {
+		display: block;
+		font-size: 2.5rem;
+		color: white;
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		background: linear-gradient(270deg, #CE0058, #0085CA);
+		width: 50px;
+		height: 50px;
+		padding-top: 16%;
+		border-radius: 60px;
+		margin-bottom: 20px;
+		font-weight: normal;
+		box-shadow: 0 0 0 4pt rgb(0, 73, 109);
+	  }
+	
+	  
+}

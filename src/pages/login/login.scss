@@ -1,0 +1,117 @@
+page-login {
+
+
+    .logo{
+        margin: 0 auto;
+        display: block;
+        width: 40%;
+    }
+
+    .statusbar{
+        color:white;
+    }
+
+
+    .grid-2 {
+    position: absolute;
+    bottom: 36%;
+    left: 4%;
+    }
+
+    .input{
+      color: #f4f4f4;
+      
+    }
+
+    .long-button{
+        width: 90%;
+        position: absolute;
+        bottom: 10px;
+    }
+
+    .long-button1 {
+        width: 90%;
+        position: absolute;
+        bottom: 70px;
+        background: linear-gradient(270deg, #CE0058, #0085CA);
+        color: white;
+    }
+
+    .ion-col.col{
+        padding: 0px;
+    }
+
+    .ion-icons{
+        text-align: center;
+        font-size: 30px;
+        margin-top: 33px;
+
+    }
+
+    .astext {
+    box-shadow: 0 0 0 1pt transparent;
+    color: #f4f4f4;
+    margin:0;
+    height: 23px;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: center;
+}
+
+      .ion-icons1{
+        text-align: center;
+        font-size: 30px;
+        margin-top: 530%;
+        padding-left: 2px;
+    }
+
+    .buttonz-container{
+        width: 100%;
+        margin-top: 10px;
+        margin-left: 70px;
+        
+    }
+
+
+    .twitter{
+        margin-top: 35px;
+        box-shadow: 0 0 0 1pt #f4f4f4;
+    }
+
+    .facebook{
+        margin-top: 30px;
+    }
+
+    .error {
+        color: white;
+        font-size: 12pt;
+        text-align: center;
+    }
+
+  
+
+    .card-extention{
+        margin-top: 0px;
+        margin-bottom: 80px;
+        color: #f4f4f4;
+        text-align: center;
+        position: absolute;
+        bottom: 21%;
+        left: 30%;
+        
+    }
+
+    .grid{
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .login-card{
+        background-color: transparent;
+    }
+
+    .login-input{
+        background-color: transparent;
+    }
+}

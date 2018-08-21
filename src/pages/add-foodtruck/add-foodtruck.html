@@ -1,0 +1,161 @@
+
+<ion-header >
+
+    <ion-navbar color="clear">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title style="text-align: center;
+        position: absolute;
+        left: 30%;
+        top: 35%;">Post Location</ion-title>
+      </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="background">
+
+    <div id="map_canvas1"></div>
+    <div id="pin">
+      <img src="assets/imgs/LOCALHOLIC-1.png">
+    </div>
+
+  <form #eventForm="ngForm" novalidate>
+
+
+<!--
+<ion-item style="padding-top: 5%;" color="clear">
+      <ion-label color="blue" stacked>Name</ion-label>
+      <ion-input type="text" [(ngModel)]="foodtruck.name" placeholder="Name of Truck" 
+      #title="ngModel" name="title" required></ion-input>
+    </ion-item>
+
+    
+
+    <ion-list>
+  <ion-item color="clear">
+    <ion-label color="blue">Type</ion-label>
+    <ion-select   [(ngModel)]="foodtruck.type" #type="ngModel" name="type" required placeholder="Foodtruck">
+        <ion-option  value="foodtruck" >Foodtruck</ion-option>
+        
+
+      
+      <ion-option value="bar" >Bar</ion-option>
+      <ion-option value="basketball" >Basketball</ion-option>
+      <ion-option value="brunch" >Brunch</ion-option>
+      <ion-option value="coffee" >coffee</ion-option>
+      <ion-option value="football" >Football</ion-option>
+      <ion-option value="keg" >Keg</ion-option>
+      <ion-option value="live-music" >Live Music</ion-option>
+      <ion-option value="open-house" >Open House</ion-option>
+      <ion-option value="restaurant" >Restaurant</ion-option>
+      <ion-option value="sale" >Flash Sale</ion-option>
+      <ion-option value="soccer" >Soccer</ion-option>
+      <ion-option value="special" >Special</ion-option>
+      <ion-option value="volleyball" >Volleyball</ion-option>
+      <ion-option value="wine" >Wine</ion-option>
+      
+    </ion-select>
+  </ion-item>
+</ion-list>
+
+-->
+
+    <ion-item text-wrap color="clear">
+      <ion-label color="blue" stacked>Details</ion-label>
+      <ion-textarea style="height: 7em;" id="details-text" class="details-area" type="text" [(ngModel)]="foodtruck.details" 
+      placeholder="Location Description, Specials, etc." 
+      #details="ngModel" name="details" required></ion-textarea>
+    </ion-item>
+
+    <ion-list>
+        <ion-item color="clear">
+          <ion-label color="blue">Image</ion-label>
+          <ion-select   [(ngModel)]="foodtruck.image" #type="ngModel" name="image" required placeholder="Foodtruck">
+              <ion-option  value="foodtruck" >Foodtruck</ion-option>
+              <ion-option  value="burger-gif" >Burger Truck</ion-option>
+            <!--
+            <ion-option value="bar" >Bar</ion-option>
+            <ion-option value="basketball" >Basketball</ion-option>
+            <ion-option value="brunch" >Brunch</ion-option>
+            <ion-option value="coffee" >coffee</ion-option>
+            <ion-option value="football" >Football</ion-option>
+            <ion-option value="keg" >Keg</ion-option>
+            <ion-option value="live-music" >Live Music</ion-option>
+            <ion-option value="open-house" >Open House</ion-option>
+            <ion-option value="restaurant" >Restaurant</ion-option>
+            <ion-option value="sale" >Flash Sale</ion-option>
+            <ion-option value="soccer" >Soccer</ion-option>
+            <ion-option value="special" >Special</ion-option>
+            <ion-option value="volleyball" >Volleyball</ion-option>
+            <ion-option value="wine" >Wine</ion-option>
+            -->
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+
+
+
+    
+    
+
+<ion-list>
+  <ion-item color="clear">
+    <ion-label color="blue">Duration</ion-label>
+    <ion-select [(ngModel)]="foodtruck.duration" #duration="ngModel" name="durations" required placeholder = "Hours">
+      <ion-option value=1 >1 Hour</ion-option>
+      <ion-option value=1.5 >1.5 Hour</ion-option>
+      <ion-option value=2 >2 Hours</ion-option>
+      <ion-option value=2.5 >2.5 Hours</ion-option>
+      <ion-option value=3 >3 Hours</ion-option>
+      <ion-option value=3.5 >3.5 Hours</ion-option>
+      <ion-option value=4 >4 Hours</ion-option>
+      <ion-option value=4.5 >4.5 Hours</ion-option>
+      <ion-option value=5 >5 Hours</ion-option>
+      <ion-option value=5.5 >5.5 Hours</ion-option>
+      <ion-option value=6 >6 Hours</ion-option>
+      <ion-option value=6.5 >6.5 Hours</ion-option>
+      <ion-option value=7 >7 Hour</ion-option>
+      <ion-option value=7.5 >7.5 Hours</ion-option>
+      <ion-option value=8 >8 Hours</ion-option>
+      <ion-option value=8.5 >8.5 Hours</ion-option>
+      <ion-option value=9 >9 Hours</ion-option>
+      <ion-option value=9.5 >9.5 Hours</ion-option>
+      <ion-option value=10 >10 Hours</ion-option>
+      <ion-option value=10.5 >10.5 Hours</ion-option>
+      <ion-option value=11 >11 Hours</ion-option>
+      <ion-option value=11.5 >11.5 Hours</ion-option>
+      <ion-option value=12 >12 Hours</ion-option>
+      <ion-option value=12.5 >12.5 Hours</ion-option>
+      <ion-option value=13 >13 Hours</ion-option>
+      <ion-option value=13.5 >13.5 Hours</ion-option>
+      <ion-option value=14 >14 Hours</ion-option>
+      <ion-option value=14.5 >14.5 Hours</ion-option>
+      <ion-option value=15 >15 Hours</ion-option>
+      <ion-option value=15.5 >15.5 Hours</ion-option>
+    </ion-select>
+  </ion-item>
+
+
+</ion-list>
+
+<!--
+ <ion-item color="clear">
+  <ion-label color="blue">Start Time</ion-label>
+  <ion-datetime displayFormat="h:mm A" [(ngModel)]="foodtruck.eventStart" name="time" placeholder="12:00 AM" required></ion-datetime>
+</ion-item>
+-->
+
+
+</form>
+    
+
+
+<button ion-button (click)="saveFoodtruck(this.foodtruck)" [disabled]="eventForm.invalid" round long class="post-button">Post</button>
+
+
+
+
+</ion-content>

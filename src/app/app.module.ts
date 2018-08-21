@@ -3,32 +3,48 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { FIREBASE_CONFIG } from './app.firebase.config';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuth } from '../../node_modules/angularfire2/auth';
+import { AngularFireDatabase} from 'angularfire2/database';
+import { AuthService} from '../providers/auth/auth.service';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Geolocation } from '@ionic-native/geolocation';
+
+import { ComponentsModule } from '../components/components.module';
+import { DatabaseProvider } from '../providers/database/database';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(FIREBASE_CONFIG),
+    AngularFirestoreModule,
+    ComponentsModule,
+    ReactiveFormsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AngularFireAuth,
+    AuthService,
+    DatabaseProvider,
+    AngularFireDatabase,
+    AngularFireStorage,
+    Geolocation
   ]
 })
 export class AppModule {}

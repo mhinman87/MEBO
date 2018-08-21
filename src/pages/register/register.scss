@@ -1,0 +1,124 @@
+page-register {
+    .logo{
+        margin: 0 auto;
+        display: block;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        width: 80%;
+    }
+    .ion-icons{
+        text-align: center;
+        font-size: 30px;
+        margin-top: 33px;
+        
+    }
+
+    .toolbar-title {
+        color: #f4f4f4;
+    }
+
+    .input{
+      color: #f4f4f4;
+    }
+
+    .long-button{
+        width: 90%;
+        position: absolute;
+        bottom: 20px;
+        background: linear-gradient(270deg, #CE0058, #0085CA);
+        color: white;
+    }
+
+    .ion-col.col{
+        padding: 0px;
+    }
+
+    .ion-username-icon {
+        text-align: center;
+        font-size: 30px;
+        margin-top: 33px;
+    }
+
+    .ion-mail-icon {
+        text-align: center;
+        font-size: 30px;
+        margin-top: 40px;
+
+    }
+
+    .astext {
+    color: #f4f4f4;
+    width: 90%;
+    margin:0;
+    background:none;
+    position: absolute;
+    bottom: 200px;
+}
+
+
+
+    .ion-lock-icon{
+        text-align: center;
+        font-size: 30px;
+        margin-top: 440%;
+        padding-left: 2px;
+    }
+
+    .buttonz-container{
+        width: 100%;
+        margin-top: 10px;
+        margin-left: 70px;
+        
+    }
+
+
+    .twitter{
+        margin-top: 35px;
+        box-shadow: 0 0 0 1pt #f4f4f4;
+    }
+
+    .facebook{
+        margin-top: 30px;
+    }
+
+    .error {
+        font-size: 12pt;
+        color: white;
+    }
+
+    .card-extention{
+        margin-top: 0px;
+        margin-bottom: 80px;
+        color: #f4f4f4;
+        text-align: center;
+        
+    }
+
+    .grid{
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .login-card{
+        background-color: transparent;
+    }
+
+    .login-input{
+        background-color: transparent;
+    }
+
+    .notification-is-danger {
+        color: red;
+        margin-left: 50px;
+    }
+
+    .notification-is-success{
+        color: #3DD969;
+        margin-left: 50px;
+    }
+
+    .notification-is-info {
+        color: #0085CA;
+        margin-left: 50px;
+    }
+}

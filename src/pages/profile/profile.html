@@ -1,0 +1,31 @@
+<!--
+  Generated template for the ProfilePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header no-border >
+  <ion-navbar hideBackButton color="clear">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons end>
+      <button *ngIf="verifiedEmail" ion-button icon-left class="edit-button" [ngClass]="{hidden: hideEditButton == true}" (click)="navigateToEditProfile()">
+        <ion-icon name="ios-create-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="background" >
+
+<img class="profile-pic" src="{{account.profilePic}}" *ngIf="verifiedEmail">  
+<h2 class="username" *ngIf="verifiedEmail">{{account.username}}</h2>
+<h4 *ngIf="verifiedEmail">{{account.email}}</h4>
+<h4 *ngIf="verifiedEmail">{{account.isVendor}}</h4>
+<h2 *ngIf="verifiedEmail" class="username">{{account.aura}}</h2>
+
+<h1 *ngIf="verifiedEmail != true" class="username">Verify your email to access your profile</h1>
+
+</ion-content> 

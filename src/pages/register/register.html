@@ -1,0 +1,100 @@
+<ion-header no-border>
+    <ion-navbar color="clear">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title style="text-align: center;
+        position: absolute;
+        left: 30%;
+        top: 35%;">Create Account</ion-title>
+      </ion-navbar>
+    
+  
+</ion-header>
+
+<ion-content padding class="background">
+
+  <form [formGroup]="myForm">
+
+      <ion-grid>
+          <ion-col>
+              <ion-row>
+                  <ion-col col-1>
+                      <ion-icon color="light" class="ion-icons" name="ios-person-outline"></ion-icon>
+                  </ion-col>
+                  <ion-col col-11>
+                      <ion-item class="login-input">    
+                          <ion-label floating color="light" >Username</ion-label>
+                          <ion-input [(ngModel)]='account.username' class="input" type="text"  formControlName="username" 
+                          ></ion-input>
+                      </ion-item>
+                  </ion-col>
+                </ion-row>
+
+                <div *ngIf="username.invalid && username.dirty" class="notification-is-danger">
+                    {{ username.value }} is not available
+                  </div>
+                  
+                  <div *ngIf="username.valid" class="notification-is-success">
+                    {{ username.value }} is available
+                  </div>
+                  
+                  <div *ngIf="username.pending" class="notification-is-info">
+                    Hold tight... Checking availability of {{ username.value }}
+                  </div>
+
+
+
+            <ion-row>
+              <ion-col col-1>
+                  <ion-icon color="light" class="ion-icons" name="ios-mail-outline"></ion-icon>
+              </ion-col>
+              <ion-col col-11>
+                  <ion-item class="login-input">    
+                      <ion-label floating color="light" >Email</ion-label>
+                      <ion-input [(ngModel)]='account.email' class="input" type="email"  formControlName="email" 
+                      required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"></ion-input>
+                  </ion-item>
+              </ion-col>
+            </ion-row>
+    
+            <!--
+            <div padding class="error">
+                <span>Email Address must be a valid email</span>
+              </div>
+              -->
+    
+            <ion-row>
+                <ion-col col-1>
+                    <ion-icon color="light" class="ion-icons" name="ios-lock-outline"></ion-icon>
+                </ion-col>
+                <ion-col col-11>
+                    <ion-item class="login-input">
+                        <ion-label floating color="light" >Password</ion-label>
+                        <ion-input [(ngModel)]='account.password' type="password"  formControlName="password" 
+                         required pattern="(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$"></ion-input>
+                      </ion-item>
+                </ion-col>
+              </ion-row>
+    
+              <!--
+              <div padding class="error">
+                  <span>Password must be at least 6 characters and have one uppercase character</span>
+                </div>
+                -->
+    
+          </ion-col>
+        </ion-grid>
+     
+
+ <ion-grid>
+   <ion-row>
+   </ion-row>
+   <ion-row>
+      <button long round class="long-button" ion-button [disabled]="myForm.invalid" (click)="register()">Create Account</button>
+   </ion-row>
+ </ion-grid>
+  
+  </form>
+
+</ion-content>
