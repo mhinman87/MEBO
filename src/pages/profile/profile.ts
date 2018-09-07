@@ -5,6 +5,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { User } from 'firebase/app';
 import { Account } from '../../models/account.model';
 
+
 /**
  * Generated class for the ProfilePage page.
  *
@@ -28,7 +29,7 @@ export class ProfilePage implements OnDestroy {
               public navParams: NavParams,
               public auth: AuthService,
               public database: DatabaseProvider) {
-
+               
                 this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
 
                   //this produces an error when the user logs out

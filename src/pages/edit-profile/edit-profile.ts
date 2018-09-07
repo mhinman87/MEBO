@@ -51,6 +51,7 @@ export class EditProfilePage {
     return url;
   }
 
+
   clickFile(){
     this.picInput = (document.getElementById('file') as HTMLInputElement);
     document.getElementById('file').click();

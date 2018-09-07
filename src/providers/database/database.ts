@@ -47,28 +47,31 @@ export class DatabaseProvider {
     this.foodTruckCollection = this.afs.collection('foodtrucks', ref => {
       return ref.where('eventEnd', '>=', Date.now()- 5*3600000);
     }) //reference
-    
-    this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions => {       
+    //
+
+    this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions => { 
+      let now = new Date().getTime() - 5*3600000;      
       return actions.map(a => {
         const data = a.payload.doc.data() as FoodTruck;
         data.id = a.payload.doc.id;
-        return data;
+        return data
       });
     });
     
 
-    /* SPECIAL SAUCE BITCH!!!! Perform more filtering on returned results
+    // SPECIAL SAUCE BITCH!!!! Perform more filtering on returned results
 
-    this.foodTrucks = this.foodTruckCollection.valueChanges().map(actions =>{
-      let data = [] as Array<FoodTruck>;
-      for (var i = 0; i < actions.length; i++){
-        if (actions[i].name == "test"){
-          data.push(actions[i]);
-        }
-      }
-      return data;
-    })
-    */
+    // this.foodTrucks = this.foodTruckCollection.valueChanges().map(actions =>{
+    //   let now = new Date().getTime() - 5*3600000;
+    //   const data = [] as Array<FoodTruck>;
+    //   for (var i = 0; i < actions.length; i++){
+    //     if (actions[i].eventEnd < now){
+    //       data.push(actions[i]);
+    //     }
+    //   }
+    //   return data;
+    // })
+    
 
     return this.foodTrucks;
   }
@@ -125,6 +128,16 @@ export class DatabaseProvider {
   async uploadFile(username: string, file, uid) {
     var fileRef = this.afStorage.storage.ref("profilePics/");
     var dbfile = await fileRef.child(`${uid}/` + file.name).put(file);
+
+    this.myUrl = await dbfile.ref.getDownloadURL();
+    
+    console.log(this.myUrl)
+      return this.myUrl;
+  }
+
+  async eventUploadFile(username: string, file, eventName: string) {
+    var fileRef = this.afStorage.storage.ref("eventPics/");
+    var dbfile = await fileRef.child(`${username}/${eventName}/` + file.name).put(file);
 
     this.myUrl = await dbfile.ref.getDownloadURL();
     

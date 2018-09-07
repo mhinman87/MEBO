@@ -14,7 +14,7 @@
       </ion-buttons>
         <ion-buttons end>
             <button ion-button icon-left class="save-button" (click)="updateAccount()">
-              save
+              Save
             </button>
           </ion-buttons>
   </ion-navbar>
@@ -24,16 +24,11 @@
 
 <ion-content padding class="background">
 
-  <ion-fab class="edit-pic-button">
-    <button ion-fab mini round (click)="clickFile()">
-      <ion-icon name="ios-create-outline"></ion-icon>
-    </button>
-  </ion-fab>
+
   <img class="profile-pic" id="blah" src="{{this.account.profilePic}}" alt="assets/imgs/icon.png">
 
  
   <input name="myFile" type="file" id="file" (change)="readURL(this)">
- 
 
 
 

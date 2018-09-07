@@ -4,16 +4,54 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-fab>
-  <button ion-button no-border menuToggle [clear]="true" style="font-size: 23px; color: white">
-    <ion-icon name="menu"></ion-icon>
+
+
+
+<ion-fab top right [ngClass]="{hidden: hideMap == true}">
+  <button ion-button no-border [clear]="true" (click)="toggleMap()" style="font-size: 23px; color: white; margin-top: -7px; margin-right: -4px;">
+    <ion-icon name="md-list"></ion-icon>
   </button>
   <button ion-fab style="display: none"></button>
 </ion-fab>
+
+<ion-fab top right [ngClass]="{hidden: hideMap == false}">
+  <button ion-button no-border [clear]="true" (click)="toggleMap()" style="font-size: 23px; color: white; margin-top: -7px; margin-right: -4px;">
+    <ion-icon name="md-map"></ion-icon>
+  </button>
+  <button ion-fab style="display: none"></button>
+</ion-fab>
+ 
+
+
+<ion-fab>
+  <button ion-button no-border menuToggle [clear]="true" style="font-size: 23px; color: white">
+    <ion-icon name="md-menu"></ion-icon>
+  </button>
+  <button ion-fab style="display: none"></button>
+</ion-fab>
+
+<ion-fab bottom right>
+  <button ion-fab color="primary" (click)="getPositionCenterMap()" [ngClass]="{hidden: hideMap == true}">
+    <ion-icon name="md-locate"></ion-icon>
+  </button>
+</ion-fab>
+
+
    
 
 
 
 <ion-content class="background">
-  <div id="map_canvas" allow="geolocation"></div>
+  <ion-list  [ngClass]="{hidden: hideMap == false}" class="event-list">
+    <button ion-item *ngFor="let event of trucks$ | async" color="clear" (click)="navToDetails(event)">
+      <ion-avatar item-left>
+        <img src="assets/imgs/{{event.image}}.gif" alt="Avatar">
+      </ion-avatar>
+      <h2 class="event-title">{{event.name}}</h2>
+      <p>{{event.type}}  <br>Aura: {{event.aura}} </p>
+    </button>
+    
+  </ion-list>
+
+  <div [ngClass]="{hidden: hideMap == true}" id="map_canvas" allow="geolocation"></div>
 </ion-content>

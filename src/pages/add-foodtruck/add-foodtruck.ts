@@ -5,6 +5,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { AuthService } from '../../providers/auth/auth.service';
 import { User } from 'firebase/app';
 import { Account } from '../../models/account.model';
+import { Geolocation } from '@ionic-native/geolocation'
 
 /**
  * Generated class for the AddFoodtruckPage page.
@@ -31,7 +32,8 @@ export class AddFoodtruckPage {
               private database: DatabaseProvider,
               private platform: Platform,
               private loadingCtrl: LoadingController,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private geolocation: Geolocation,) {
 
                 this.auth.getAuthenticatedUser().subscribe((user: User)=>{
                   if (user){
@@ -44,35 +46,39 @@ export class AddFoodtruckPage {
                 })
   }
 
-  ionViewDidLoad() {
-    
-    this.platform.ready().then(() => {
-      this.initializeMap();
-    })
+  async ionViewDidLoad() {
+    this.showLoading();
+    await this.geolocation.getCurrentPosition({
+      timeout: 5000
+    }).then((position)=>{
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+      this.platform.ready().then(() => {
+        this.initializeMap(latLng);
+      })
+    },(err) => {
+      this.platform.ready().then(()=>{
+        let wichita = new google.maps.LatLng(37.6872, -97.3301 );
+        this.initializeMap(wichita);
+      })
+      console.log(err);
+    });
+
+    this.loader.dismiss();
   }
 
   setAccount(account: Account){
     this.account = account;
   }
 
-  async saveFoodtruck(foodtruck: FoodTruck){
-    this.showLoading();
-    this.foodtruck.lat = this.map.getCenter().lat();
-    this.foodtruck.long = this.map.getCenter().lng();
-    this.foodtruck.name = this.account.username;
-    this.foodtruck.type = "foodtruck";
-    this.foodtruck.aura = 0;
-    this.foodtruck.eventStart = Date.now() - 5*3600000;
-    this.foodtruck.eventEnd = this.foodtruck.eventStart + this.foodtruck.duration*3600000;
-    await this.database.saveFoodtruck(foodtruck);
-    
-    this.loader.dismiss().then(()=>{
-      this.navCtrl.setRoot('HomePage');
-    })
-    
+  navigateToSubmitPage(){
+    this.navCtrl.push('SubmitPostPage', {lat: this.map.getCenter().lat(), 
+                                         lng: this.map.getCenter().lng(),
+                                         account: this.account});
   }
 
-  initializeMap(){
+
+
+  initializeMap(latLng: google.maps.LatLng){
     let zoomLevel = 14;
 
     var styledMapType = new google.maps.StyledMapType(
@@ -316,7 +322,7 @@ export class AddFoodtruckPage {
     this.map = new
     google.maps.Map(document.getElementById('map_canvas1'), {
       zoom: zoomLevel,
-      center: new google.maps.LatLng(37.6872, -97.3301),
+      center: latLng,
       mapTypeControl: false,
       streetViewControl: false,
       disableDefaultUI: true,

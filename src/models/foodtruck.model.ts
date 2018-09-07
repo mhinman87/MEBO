@@ -1,5 +1,3 @@
-import { MenuItem } from './menu-item.model';
-
 export interface FoodTruck {
     //General Info 
     name: string;
@@ -15,8 +13,8 @@ export interface FoodTruck {
     lat: number;
     long: number;
 
-    //Menu
-    menu: Array<MenuItem>;
+    img: string;
+    imgName: string;
 
     //Operation Hours
     eventStart: number;

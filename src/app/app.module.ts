@@ -16,7 +16,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Geolocation } from '@ionic-native/geolocation';
 
-import { ComponentsModule } from '../components/components.module';
+
 import { DatabaseProvider } from '../providers/database/database';
 
 @NgModule({
@@ -28,7 +28,6 @@ import { DatabaseProvider } from '../providers/database/database';
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFirestoreModule,
-    ComponentsModule,
     ReactiveFormsModule
   ],
   bootstrap: [IonicApp],

@@ -45,8 +45,6 @@ export class DetailsPage {
               private events: Events) {
     this.foodtruck = {} as FoodTruck;
     this.showLoading();
-    
-    
     this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
 
      if (user != null){
@@ -64,33 +62,38 @@ export class DetailsPage {
     }) 
   }
 
+  //there is an error in this code - if position isn't returned
   async canUserCheckIn(){
     this.isUserCloseEnough = undefined;
     let now = new Date().getTime()
         this.loactionCd = now + 30000;
     let position: Geoposition;
-    position = await this.geolocation.getCurrentPosition({
+    await this.geolocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 10000,
       maximumAge: 15000
-    })
-    
-    let lat = position.coords.latitude;
-    let lng = position.coords.longitude;
-    this.events.publish('user-location', [lat, lng]);
-
-    let distance = Math.pow((Math.pow((this.foodtruck.lat - lat), 2) + Math.pow((this.foodtruck.long - lng),2)), 0.5);
-
-    if (distance < 0.0012){
-      this.isUserCloseEnough = true;
-      console.log(this.isUserCloseEnough)
-    } else {
-      this.isUserCloseEnough = false;
-      console.log(this.isUserCloseEnough)
+    }).then((resp)=>{
+      position = resp
+    }), (err) => {
+      console.error(err)
     }
     
-    
-    console.log('distance here', distance);
+    if (position != undefined){
+      let lat = position.coords.latitude;
+      let lng = position.coords.longitude;
+      this.events.publish('user-location', [lat, lng]);
+
+      let distance = Math.pow((Math.pow((this.foodtruck.lat - lat), 2) + Math.pow((this.foodtruck.long - lng),2)), 0.5);
+
+      if (distance < 0.0012){
+        this.isUserCloseEnough = true;
+        console.log(this.isUserCloseEnough)
+      } else {
+        this.isUserCloseEnough = false;
+        console.log(this.isUserCloseEnough)
+      }
+      console.log('distance here', distance);
+    }
   }
 
   setAccount(account: Account){
@@ -110,20 +113,19 @@ export class DetailsPage {
     hour = minute * 60,
     day = hour * 24;
 
-    
-      let countDown = this.foodtruck.eventEnd + 5*3600000;
-      this.x = setInterval(() => {
-        this.currentTime = new Date().getTime();
-        let now = new Date().getTime(),
-            distance = countDown - now;
+    let countDown = this.foodtruck.eventEnd + 5*3600000;
+    this.x = setInterval(() => {
+    this.currentTime = new Date().getTime();
+    let now = new Date().getTime(),
+      distance = countDown - now;
 
-          //document.getElementById('days').innerText = Math.floor(distance / (day)).toString();
-          document.getElementById('hours').innerText = Math.floor((distance % (day)) / (hour)).toString()
-          document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)).toString()
-          document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second).toString()
+        //document.getElementById('days').innerText = Math.floor(distance / (day)).toString();
+        document.getElementById('hours').innerText = Math.floor((distance % (day)) / (hour)).toString()
+        document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)).toString()
+        document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second).toString()
 
         
-        //do something later when date is reached
+        //popToRoot page when foodtruck is no longer active
         if (distance < 0) {
           this.navCtrl.popToRoot();
         }
@@ -133,12 +135,7 @@ export class DetailsPage {
         }
 
         
-        let ciTimer = this.loactionCd - now;
-        document.getElementById('ciTimer').innerText = Math.floor((ciTimer) / second).toString();
 
-        if (ciTimer < 0) {
-          this.canUserCheckIn();
-        }
 
       }, second)
       setTimeout(()=>{
@@ -178,7 +175,7 @@ export class DetailsPage {
     } else {
       this.alertCtrl.create({
         title: 'You are not close enough',
-        subTitle: "You must move closer and wait 30 seconds",
+        subTitle: "You must move closer and update location",
         buttons: [
           {
             text: 'Oh word... Lemme try that',

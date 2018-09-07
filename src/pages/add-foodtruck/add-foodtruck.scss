@@ -1,42 +1,45 @@
 page-add-foodtruck {
-    .post-button{
-        display: block;
-        margin: 0 auto;
-    }
 
     #map_canvas1{
         margin-top: 0.5px;
         width: 100%;
-        height: 75%;
-        border-radius: 10%;
-        box-shadow: 0 0 0 5pt #0085CA;
+        height: 110%;
+        position: relative;
+        z-index: -1;
     }
 
     //pointer-events: none;
 
     #pin{
-        background-image:  url('../../assets/imgs/LOCALHOLIC-1.png');
+        background-image:  url('../../assets/imgs/logo.png');
         position: absolute;
         left: 50%;
         top: 50%;
         width: 10%;
         height: 10%;
-        margin-left: -20px;
-        margin-top: -150px; //bottom of image is centered
+        margin-left: -18px;
+        margin-top: -18px; //bottom of image is centered
     }
 
    
-    textarea {
-        height: 6em;
-    }
+    // textarea {
+    //     height: 6em;
+    // }
 
-    .gmnoprint {
-        visibility: hidden;
-    }
+    // .gmnoprint {
+    //     visibility: hidden;
+    // }
 
     .post-button{
         background: linear-gradient(270deg, #CE0058, #0085CA);
         width: 90%;
+        position: absolute;
+        bottom: 15px;
+        left: 5%;
+        right: 5%;
+        color: white;
+        display: block;
+        margin: 0 auto;
     }
 
 

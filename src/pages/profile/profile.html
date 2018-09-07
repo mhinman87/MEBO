@@ -19,12 +19,16 @@
 
 
 <ion-content padding class="background" >
-
-<img class="profile-pic" src="{{account.profilePic}}" *ngIf="verifiedEmail">  
+<div class="img-cropper">
+    <img class="profile-pic" src="{{account.profilePic}}" *ngIf="verifiedEmail">  
+</div>
 <h2 class="username" *ngIf="verifiedEmail">{{account.username}}</h2>
-<h4 *ngIf="verifiedEmail">{{account.email}}</h4>
-<h4 *ngIf="verifiedEmail">{{account.isVendor}}</h4>
-<h2 *ngIf="verifiedEmail" class="username">{{account.aura}}</h2>
+<!-- <h4 *ngIf="verifiedEmail">{{account.email}}</h4>
+<h4 *ngIf="verifiedEmail">{{account.isVendor}}</h4> -->
+<h2 *ngIf="verifiedEmail" class="username">Aura Progress</h2>
+
+<progress-bar *ngIf="verifiedEmail" [progress]="account.aura"></progress-bar>
+
 
 <h1 *ngIf="verifiedEmail != true" class="username">Verify your email to access your profile</h1>
 

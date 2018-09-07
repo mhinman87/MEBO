@@ -7,5 +7,17 @@ page-home {
         position: relative;
         z-index: -1;
     }
+
+    .hidden {
+        display: none;
+    }
+
+    .event-list{
+        margin-top: 17%;
+    }
+
+    .event-title{
+        font-weight: bold;
+    }
     
 }
