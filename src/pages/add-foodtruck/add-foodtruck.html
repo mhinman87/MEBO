@@ -13,12 +13,13 @@
 
 </ion-header> -->
 
-<ion-fab>
+<!-- <ion-fab>
   <button ion-button no-border menuToggle [clear]="true" style="font-size: 23px; color: white">
     <ion-icon name="menu"></ion-icon>
   </button>
   <button ion-fab style="display: none"></button>
-</ion-fab>
+</ion-fab> -->
+<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
 
 
 <ion-content class="background">
@@ -28,7 +29,8 @@
       <img src="assets/imgs/logo.png">
     </div>
 
-    <button ion-button (click)="navigateToSubmitPage()" round long class="post-button">Post</button>
+    <button ion-button (click)="navigateToSubmitPage()" round long class="post-button">Post Now</button>
+    <button ion-button (click)="navigateToSchedulePostPage()" round long class="post-later-button">Post Later</button>
   </ion-content>
   
 

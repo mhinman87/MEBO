@@ -14,7 +14,7 @@ $app-direction: ltr;
 
 @import "ionic.globals";
 .background {
-  background-image: linear-gradient( 0deg, #1A1E2A, #1A1E2A);
+  background-image: linear-gradient( 0deg, #27B3C0, #27B3C0);
 }
 
 .clear-nav-bar {
@@ -41,7 +41,7 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #0085CA,
+  primary:    #E42547,
   secondary:  #0085CA,
   danger:     #f53d3d,
   light:      #f4f4f4,
@@ -102,5 +102,6 @@ $toolbar-md-title-text-color: #f4f4f4;
 // Fonts
 // --------------------------------------------------
 
-@import "roboto";
+@import url('https://fonts.googleapis.com/css?family=K2D');
 @import "noto-sans";
+$font-family-base: "K2D", sans-serif; 

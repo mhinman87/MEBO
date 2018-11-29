@@ -7,51 +7,77 @@
 
 
 
-<ion-fab top right [ngClass]="{hidden: hideMap == true}">
-  <button ion-button no-border [clear]="true" (click)="toggleMap()" style="font-size: 23px; color: white; margin-top: -7px; margin-right: -4px;">
-    <ion-icon name="md-list"></ion-icon>
-  </button>
-  <button ion-fab style="display: none"></button>
-</ion-fab>
 
-<ion-fab top right [ngClass]="{hidden: hideMap == false}">
-  <button ion-button no-border [clear]="true" (click)="toggleMap()" style="font-size: 23px; color: white; margin-top: -7px; margin-right: -4px;">
-    <ion-icon name="md-map"></ion-icon>
-  </button>
-  <button ion-fab style="display: none"></button>
-</ion-fab>
+
+
  
 
 
-<ion-fab>
-  <button ion-button no-border menuToggle [clear]="true" style="font-size: 23px; color: white">
-    <ion-icon name="md-menu"></ion-icon>
-  </button>
-  <button ion-fab style="display: none"></button>
-</ion-fab>
-
-<ion-fab bottom right>
-  <button ion-fab color="primary" (click)="getPositionCenterMap()" [ngClass]="{hidden: hideMap == true}">
-    <ion-icon name="md-locate"></ion-icon>
-  </button>
-</ion-fab>
 
 
-   
+<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
 
 
 
-<ion-content class="background">
-  <ion-list  [ngClass]="{hidden: hideMap == false}" class="event-list">
-    <button ion-item *ngFor="let event of trucks$ | async" color="clear" (click)="navToDetails(event)">
+
+
+
+
+
+<ion-content >
+    <div class="scene-map">
+        <div class="map">
+          <div class="map__face map__face--front">
+              <img src="assets/imgs/Refresh-Button.png" button (click)="getPositionCenterMap()" class="ref-button">
+              <img src="assets/imgs/List-Shadow.png" button (click)="flipMap()" class="list-button">
+              <div id="map_canvas" allow="geolocation"></div>
+          </div>
+          <div class="map__face map__face--back">
+              <img src="assets/imgs/Map-Shadow.png" button (click)="flipMap()" class="map-button">
+              <h1 class="page-title">CURRENT EVENTS</h1>
+              <div class="btn-group3" >
+                  <button  *ngFor="let event of trucks$ | async" (click)="navToDetails(event)"
+                  [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
+                    
+                  <div class="row">
+                      <div class="column-1">
+                          <img class="btn-image" src="assets/imgs/{{event.image}}.gif" alt="Avatar">
+                      </div>
+                      <div class="column-2">
+                          <p class="btn-title">{{event.name}}</p>
+                          <p class="btn-aura">Aura: {{event.aura}}</p>
+                          <p class="btn-countdown">{{minsRemaining(event.eventEnd)}} Mins Left</p>
+                      </div>
+                    </div>
+                  </button>
+                  
+                </div>
+              <!-- <ion-list class="event-list">
+                  <button ion-item *ngFor="let event of trucks$ | async" color="clear" (click)="navToDetails(event)" 
+                  [ngClass]="{hidden: event.eventEnd + 5*3600000 < currentTime}">
+                    <ion-avatar item-left>
+                      <img src="assets/imgs/{{event.image}}.gif" alt="Avatar">
+                    </ion-avatar>
+                    <h2 class="event-title">{{event.name}}</h2>
+                    <p>Aura: {{event.aura}} <br>{{minsRemaining(event.eventEnd)}} Mins Left</p>
+                  </button>
+                  
+                </ion-list> -->
+          </div>
+        </div>
+      </div>
+      
+  <!-- <ion-list [ngClass]="{hidden: hideMap == false}" class="event-list">
+    <button ion-item *ngFor="let event of trucks$ | async" color="clear" (click)="navToDetails(event)" 
+    [ngClass]="{hidden: event.eventEnd + 5*3600000 < currentTime}">
       <ion-avatar item-left>
         <img src="assets/imgs/{{event.image}}.gif" alt="Avatar">
       </ion-avatar>
       <h2 class="event-title">{{event.name}}</h2>
-      <p>{{event.type}}  <br>Aura: {{event.aura}} </p>
+      <p>Aura: {{event.aura}} <br>{{minsRemaining(event.eventEnd)}} Mins Left</p>
     </button>
     
   </ion-list>
 
-  <div [ngClass]="{hidden: hideMap == true}" id="map_canvas" allow="geolocation"></div>
+  <div [ngClass]="{hidden: hideMap == true}" id="map_canvas" allow="geolocation"></div> -->
 </ion-content>

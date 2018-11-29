@@ -23,12 +23,15 @@ import { FoodTruck } from '../../models/foodtruck.model';
 export class HomePage implements OnDestroy {
 
   map: google.maps.Map;
-  markers = [];
+  markers: Array<google.maps.Marker>;
   foodtruckSubscription: any;
   loader: Loading;
   userPositionMarker: google.maps.Marker;
   hideMap: boolean;
   trucks$: Observable<FoodTruck[]>;
+  campusOverlay: any;
+  currentTime: number;
+  x: any;
  
   
   
@@ -41,53 +44,47 @@ export class HomePage implements OnDestroy {
               private loadingCrtl: LoadingController,
               private events: Events,
               private alertCtrl: AlertController ) {
+                this.markers = [];
                 this.hideMap = false;
                 this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
                   data.sort(this.auraDescending);
                   return data;
                 })
+                const second = 1000;
+                this.x = setInterval(() => {
+                  this.currentTime = new Date().getTime();
+                    }, second)
+                    setTimeout(()=>{
+                    }, 1000);
                 
   }
  
   //Initialize Map on page load
   async ionViewDidLoad() {
     this.showLoading();
-    await this.geolocation.getCurrentPosition({
-      timeout: 5000
-    }).then((position)=>{
-
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      let latLng = new google.maps.LatLng(37.71814898706639, -97.28986489422863 );
       this.platform.ready().then(() => {
-        this.initializeMap(latLng, 14, true);
-        
-      })
-      
-    },(err) => {
-      
-      this.platform.ready().then(()=>{
-        this.presentAlert();
-        let LatLng = new google.maps.LatLng(37.6872, -97.3301 );
-        this.initializeMap(LatLng, 12,);
-      })
-      console.log(err);
-    });
+          this.initializeMap(latLng, 18);
+            var imageBounds = {
+              north: 37.7224,
+              south: 37.7156,
+              east: -97.2806,
+              west: -97.2990
+            };
+            this.campusOverlay = new google.maps.GroundOverlay(
+              '../../assets/imgs/Campus_Map.png',
+              imageBounds);
+            this.campusOverlay.setMap(this.map);
+        })
 
-    
-    //subscribe to updated user locations from details pages
-    this.events.subscribe('user-location', posData => {
-      let LatLng = new google.maps.LatLng(posData[0], posData[1] );
-      this.userPositionMarker.setPosition(LatLng);
-      console.log('user position updated');
-    });
+      //subscribe to updated user locations from details pages
+      this.events.subscribe('user-location', posData => {
+        let LatLng = new google.maps.LatLng(posData[0], posData[1] );
+        this.userPositionMarker.setPosition(LatLng);
+        console.log('user position updated');
+      });
 
-    this.loader.dismiss();
-    
-    
-  }
-
-  async getPositionCenterMap(){
-    this.showLoading();
-    await this.geolocation.getCurrentPosition({
+  await this.geolocation.getCurrentPosition({
       timeout: 5000,
       enableHighAccuracy: true
     }).then((position)=>{
@@ -100,7 +97,43 @@ export class HomePage implements OnDestroy {
           scaledSize: new google.maps.Size(20, 20),
         }
       })
-      this.map.setCenter(latLng);
+      if ((37.7224 >= position.coords.latitude && position.coords.latitude >= 37.7156) && (-97.2806 >= position.coords.longitude && position.coords.longitude >= -97.2990 )){
+        this.map.setCenter(latLng);
+      }
+    },(err) => {
+      this.presentAlert();
+      console.log(err);
+    })
+    this.loader.dismiss();
+  }
+
+  async getPositionCenterMap(){
+    this.showLoading();
+    this.deleteMarkers();
+    await this.geolocation.getCurrentPosition({
+      timeout: 5000,
+      enableHighAccuracy: true
+    }).then((position)=>{
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        if (this.userPositionMarker){
+          this.userPositionMarker.setPosition(latLng);
+          this.map.setCenter(latLng);
+          console.log("no new marker");
+        } else {
+        this.userPositionMarker = new google.maps.Marker({
+          position: latLng,
+          map: this.map,
+          icon: {
+            url: 'assets/imgs/position.png',
+            scaledSize: new google.maps.Size(20, 20),
+          }
+        })
+        this.map.setCenter(latLng);
+      }
+
+      this.setMarkers();
+
+
     },(err) => {
       this.presentAlert();
       console.log(err);
@@ -119,38 +152,27 @@ export class HomePage implements OnDestroy {
 
   presentAlert() {
     let alert = this.alertCtrl.create({
-      title: 'Location Error',
-      subTitle: "Where you at bro? We can't find you",
+      title: 'HOUSTON WE HAVE A PROBLEM',
+      subTitle: "You are lost in space - update your location with refresh button",
       buttons: ['Dismiss']
     });
     alert.present();
   }
 
-  toggleMap(){
-    console.log(this.markers)
-    if (this.hideMap){
-      this.hideMap = false;
-    } else {
-      this.hideMap = true;
-    }
-  }
-
   //initialize map, subscribe to foodtrucks, place markers, add click event to markers
-  initializeMap(latLng: google.maps.LatLng, zoomLevel, haveUsrPos?: boolean){
-    
-
+  initializeMap(latLng: google.maps.LatLng, zoomLevel){
     var styledMapType = new google.maps.StyledMapType(
       [
         {
           "elementType": "geometry",
           "stylers": [
             {
-              "color": "#212121"
+              "color": "#1d2c4d"
             }
           ]
         },
         {
-          "elementType": "labels.icon",
+          "elementType": "labels",
           "stylers": [
             {
               "visibility": "off"
@@ -161,7 +183,7 @@ export class HomePage implements OnDestroy {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#757575"
+              "color": "#8ec3b9"
             }
           ]
         },
@@ -169,31 +191,13 @@ export class HomePage implements OnDestroy {
           "elementType": "labels.text.stroke",
           "stylers": [
             {
-              "color": "#212121"
+              "color": "#1a3646"
             }
           ]
         },
         {
           "featureType": "administrative",
           "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#757575"
-            }
-          ]
-        },
-        {
-          "featureType": "administrative",
-          "elementType": "labels.text.fill",
-          "stylers": [
-            {
-              "color": "#c20051"
-            }
-          ]
-        },
-        {
-          "featureType": "administrative",
-          "elementType": "labels.text.stroke",
           "stylers": [
             {
               "visibility": "off"
@@ -202,10 +206,10 @@ export class HomePage implements OnDestroy {
         },
         {
           "featureType": "administrative.country",
-          "elementType": "labels.text.fill",
+          "elementType": "geometry.stroke",
           "stylers": [
             {
-              "color": "#9e9e9e"
+              "color": "#4b6878"
             }
           ]
         },
@@ -218,11 +222,63 @@ export class HomePage implements OnDestroy {
           ]
         },
         {
-          "featureType": "administrative.locality",
+          "featureType": "administrative.land_parcel",
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#bdbdbd"
+              "color": "#64779e"
+            }
+          ]
+        },
+        {
+          "featureType": "administrative.neighborhood",
+          "stylers": [
+            {
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "featureType": "administrative.province",
+          "elementType": "geometry.stroke",
+          "stylers": [
+            {
+              "color": "#4b6878"
+            }
+          ]
+        },
+        {
+          "featureType": "landscape.man_made",
+          "elementType": "geometry.stroke",
+          "stylers": [
+            {
+              "color": "#334e87"
+            }
+          ]
+        },
+        {
+          "featureType": "landscape.natural",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#023e58"
+            }
+          ]
+        },
+        {
+          "featureType": "poi",
+          "stylers": [
+            {
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "featureType": "poi",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#283d6a"
             }
           ]
         },
@@ -231,43 +287,60 @@ export class HomePage implements OnDestroy {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#757575"
+              "color": "#6f9ba5"
             }
           ]
         },
         {
-          "featureType": "poi.park",
-          "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#181818"
-            }
-          ]
-        },
-        {
-          "featureType": "poi.park",
-          "elementType": "labels.text.fill",
-          "stylers": [
-            {
-              "color": "#616161"
-            }
-          ]
-        },
-        {
-          "featureType": "poi.park",
+          "featureType": "poi",
           "elementType": "labels.text.stroke",
           "stylers": [
             {
-              "color": "#1b1b1b"
+              "color": "#1d2c4d"
+            }
+          ]
+        },
+        {
+          "featureType": "poi.park",
+          "elementType": "geometry.fill",
+          "stylers": [
+            {
+              "color": "#023e58"
+            }
+          ]
+        },
+        {
+          "featureType": "poi.park",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#3C7680"
             }
           ]
         },
         {
           "featureType": "road",
-          "elementType": "geometry.fill",
           "stylers": [
             {
-              "color": "#373737"
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#304a7d"
+            }
+          ]
+        },
+        {
+          "featureType": "road",
+          "elementType": "labels.icon",
+          "stylers": [
+            {
+              "visibility": "off"
             }
           ]
         },
@@ -276,24 +349,16 @@ export class HomePage implements OnDestroy {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#8a8a8a"
+              "color": "#98a5be"
             }
           ]
         },
         {
-          "featureType": "road.arterial",
-          "elementType": "geometry",
+          "featureType": "road",
+          "elementType": "labels.text.stroke",
           "stylers": [
             {
-              "color": "#373737"
-            }
-          ]
-        },
-        {
-          "featureType": "road.highway",
-          "stylers": [
-            {
-              "weight": 1.5
+              "color": "#1d2c4d"
             }
           ]
         },
@@ -302,46 +367,42 @@ export class HomePage implements OnDestroy {
           "elementType": "geometry",
           "stylers": [
             {
-              "color": "#3c3c3c"
+              "color": "#2c6675"
             }
           ]
         },
         {
           "featureType": "road.highway",
-          "elementType": "geometry.fill",
+          "elementType": "geometry.stroke",
           "stylers": [
             {
-              "color": "#0082ca"
-            },
-            {
-              "visibility": "on"
+              "color": "#255763"
             }
           ]
         },
         {
-          "featureType": "road.highway.controlled_access",
-          "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#4e4e4e"
-            }
-          ]
-        },
-        {
-          "featureType": "road.highway.controlled_access",
-          "elementType": "geometry.fill",
-          "stylers": [
-            {
-              "color": "#0082ca"
-            }
-          ]
-        },
-        {
-          "featureType": "road.local",
+          "featureType": "road.highway",
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#616161"
+              "color": "#b0d5ce"
+            }
+          ]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "labels.text.stroke",
+          "stylers": [
+            {
+              "color": "#023e58"
+            }
+          ]
+        },
+        {
+          "featureType": "transit",
+          "stylers": [
+            {
+              "visibility": "off"
             }
           ]
         },
@@ -350,7 +411,34 @@ export class HomePage implements OnDestroy {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#757575"
+              "color": "#98a5be"
+            }
+          ]
+        },
+        {
+          "featureType": "transit",
+          "elementType": "labels.text.stroke",
+          "stylers": [
+            {
+              "color": "#1d2c4d"
+            }
+          ]
+        },
+        {
+          "featureType": "transit.line",
+          "elementType": "geometry.fill",
+          "stylers": [
+            {
+              "color": "#283d6a"
+            }
+          ]
+        },
+        {
+          "featureType": "transit.station",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#3a4762"
             }
           ]
         },
@@ -359,7 +447,7 @@ export class HomePage implements OnDestroy {
           "elementType": "geometry",
           "stylers": [
             {
-              "color": "#000000"
+              "color": "#0e1626"
             }
           ]
         },
@@ -368,40 +456,93 @@ export class HomePage implements OnDestroy {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#3d3d3d"
+              "color": "#4e6d70"
             }
           ]
         }
       ]
-        
-        ,
-      {name: 'Styled Map'});
+             , {name: 'Styled Map'});
 
-    this.map = new
-    google.maps.Map(document.getElementById('map_canvas'), {
-      zoom: zoomLevel,
-      center: latLng,
-      mapTypeControl: false,
-      streetViewControl: false,
-      disableDefaultUI: true,
-      fullscreenControl: false,
-      clickableIcons: false,
-      minZoom: 10,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      mapTypeControlOptions: {
-        mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
-                'styled_map']
-      }      
-    })
+    this.map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom: zoomLevel,
+            center: latLng,
+            mapTypeControl: false,
+            streetViewControl: false,
+            disableDefaultUI: true,
+            fullscreenControl: false,
+            clickableIcons: false,
+            minZoom: 16,
+            maxZoom: 19,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+                      'styled_map']
+            }      
+          })
 
     this.map.mapTypes.set('styled_map', styledMapType);
     this.map.setMapTypeId('styled_map');
+    this.setMarkers();
 
+}
 
+setMapOnAll(map) {
+  for (var i = 0; i < this.markers.length; i++) {
+    this.markers[i].setMap(map);
+  }
+}
 
-   this.foodtruckSubscription = this.dbProvider.getFoodtrucks().subscribe((OBtrucks)=>{
-    
-    for (let truck of OBtrucks){
+clearMarkers() {
+  this.setMapOnAll(null);
+}
+
+deleteMarkers() {
+  this.clearMarkers();
+  this.markers = [];
+}
+
+auraDescending(a, b) {
+  return a.aura > b.aura ? -1 : 1
+}
+
+ngOnDestroy(){
+  if (this.foodtruckSubscription){
+    this.foodtruckSubscription.unsubscribe();
+  }
+  this.events.unsubscribe('user-location');
+}
+
+ionViewDidLeave(){
+  if (this.foodtruckSubscription){
+    this.foodtruckSubscription.unsubscribe();
+  }
+  
+}
+
+navToDetails(foodtruck: FoodTruck){
+  this.navCtrl.push('DetailsPage', {
+    truckData: foodtruck
+    })
+}
+
+minsRemaining(time){
+  return Math.floor((time + 5*3600000 - this.currentTime)/60000)
+}
+
+flipMap(){
+  document.querySelector('.map').classList.toggle('is-flipped');
+  if (this.hideMap){
+    this.hideMap = false;
+  } else {
+    this.hideMap = true;
+  }
+}
+
+setMarkers(){
+  this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
+    data.sort(this.auraDescending);
+
+    for (let truck of data){
       let truckMarker: google.maps.Marker = new FoodTruckMarker(truck) 
       truckMarker.setOptions({
         position: new google.maps.LatLng(truck.lat, truck.long),
@@ -425,50 +566,10 @@ export class HomePage implements OnDestroy {
 
     }
 
-    this.markers = OBtrucks.sort(this.auraDescending);
-    console.log(this.markers);
-
+    return data;
   })
 
-  if(haveUsrPos){
-    this.userPositionMarker = new google.maps.Marker({
-      position: latLng,
-      map: this.map,
-      icon: {
-        url: 'assets/imgs/position.png',
-        scaledSize: new google.maps.Size(20, 20),
-      }
-    })
-  }
-
-
-}
-
-setMapOnAll(map) {
-  for (var i = 0; i < this.markers.length; i++) {
-    this.markers[i].setMap(map);
-  }
-}
-
-auraDescending(a, b) {
-  return a.aura > b.aura ? -1 : 1
-}
-
-ngOnDestroy(){
-  this.foodtruckSubscription.unsubscribe();
-  this.events.unsubscribe('user-location', ()=>{
-    console.log('Unsubscribed from user location updates');
-  });
-}
-
-ionViewDidLeave(){
-  this.foodtruckSubscription.unsubscribe();
-}
-
-navToDetails(foodtruck: FoodTruck){
-  this.navCtrl.push('DetailsPage', {
-    truckData: foodtruck
-    })
+  console.log(this.markers);
 }
 
  

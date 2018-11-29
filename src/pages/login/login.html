@@ -1,105 +1,35 @@
-<ion-header >
-  <ion-navbar color="clear">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-  </ion-navbar>
-</ion-header>
 
-<ion-content padding class="background">
 
-  <img class="logo" src="assets/imgs/LOCALHOLIC-1.png">
+<ion-content padding class="login-background">
+
+  <img class="logo" src="assets/imgs/Logo-w-Shadow.png">
 
   <form #loginForm="ngForm" novalidate>
 
-    <ion-grid class="grid-1">
-      <ion-col>
-        <ion-row>
-          <ion-col col-1>
-              <ion-icon color="light" class="ion-icons" name="ios-mail-outline"></ion-icon>
-          </ion-col>
-          <ion-col col-11>
-              <ion-item class="login-input">    
-                  <ion-label floating color="light" >Email</ion-label>
-                  <ion-input  [(ngModel)]="account.email" class="input" type="email"  name="email" 
-                  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"></ion-input>
-              </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <!--
-        <div padding class="error">
-            <span>Email Address must be a valid email</span>
-          </div>
-          -->
-
-        <ion-row>
-            <ion-col col-1>
-                <ion-icon color="light" class="ion-icons" name="ios-lock-outline"></ion-icon>
-            </ion-col>
-            <ion-col col-11>
-                <ion-item class="login-input">
-                    <ion-label floating color="light" >Password</ion-label>
-                    <ion-input [(ngModel)]="account.password" type="password"  name="password" 
-                     required pattern="(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$"></ion-input>
-                  </ion-item>
-            </ion-col>
-          </ion-row>
-          <ion-row padding>
-                  <button class="astext" >Forgot Password?</button>
-          </ion-row>
-          <!--
-          <div padding class="error">
-              <span>Password must be at least 6 characters and have one uppercase character</span>
-            </div>
-            -->
-            
-      </ion-col>
-    </ion-grid>
-
-
- <ion-grid class="login-buttons">
-   <ion-row>
-      <button  long round class="long-button1"  ion-button  [disabled]="loginForm.invalid" (click)="login()" >Log In</button>
-   </ion-row>
-   <ion-row>
-      <button long round outline class="long-button" ion-button  color="light" (click)="navigateToRegisterPage()">Sign Up</button>
-   </ion-row>
- </ion-grid>
-
+ 
+              
+                  <input id="top-input" class="login-input" [(ngModel)]="account.email" placeholder="EMAIL" type="email"  name="email" 
+                  required pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}">
+              
   
 
+
+                
+                    
+                    <input  class="login-input" [(ngModel)]="account.password" placeholder="PASSWORD" type="password"  name="password" 
+                     required pattern="(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$">
+                  
+                 
+                    <button  class="long-button1"   [disabled]="loginForm.invalid" (click)="login()" >LOG IN</button>
+
+        
+          
+                  <button class="astext" (click)="passwordReset()" >Forgot Password?</button>
+
+            
+
+
+
+      <button class="long-button" (click)="navigateToRegisterPage()">REGISTER</button>
   </form>
-
-<ion-grid class="grid-2">
-  <ion-row >
-    <ion-col></ion-col>
-    <ion-col>
-  <ion-fab>
-    <div style="text-align:center;">
-  <button  ion-fab round class="twitter" color="clear">
-    <ion-icon name="logo-facebook"></ion-icon>
-  </button>
-    </div>
-  </ion-fab>
-    </ion-col>
-
-    <ion-col>
-<ion-fab>
-  <div style="text-align:center;">
-  <button ion-fab round class="twitter" color="clear">
-    <ion-icon name="logo-googleplus"></ion-icon>
-  </button>
-  </div>
-</ion-fab>
-    </ion-col>
-    <ion-col></ion-col>
-
-  </ion-row>
-</ion-grid>
-
-<!--
-<ion-label color="primary" class="card-extention">Sign In with Social Media</ion-label>
--->
-
 </ion-content>

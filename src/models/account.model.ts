@@ -8,4 +8,5 @@ export interface Account {
     profilePicName: string;
     aura: number;
     eventCheckInTimer: number;
+    dateOfBirth: string;
 }

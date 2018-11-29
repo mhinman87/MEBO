@@ -32,7 +32,7 @@ export class AuthService {
       console.log(result);
       this.events.publish('user:login');
       this.toast.create({
-        message: "Welcome to Localholic!",
+        message: "Welcome to MEBO!",
         duration: 3000
       }).present();
       return true
@@ -123,6 +123,10 @@ export class AuthService {
         }
       ]
     }).present();
+  }
+
+  sendPasswordResetEmail(accountEmail){
+    return this.afAuth.auth.sendPasswordResetEmail(accountEmail);
   }
     
   

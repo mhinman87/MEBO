@@ -1,13 +1,3 @@
-<!--
-  Generated template for the SubmitPostPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-
-
-
-
 <ion-content style="background: #42A880"> 
     <img style="width: 10%;
                 margin-top: 15px; 
@@ -30,7 +20,19 @@
       <textarea style="height: 7em;" class="event-input" id="myInput" [(ngModel)]='foodtruck.details' formControlName="details" type="text" clearOnEdit="false" 
                          required placeholder="DETAILS"></textarea>
 
-       <textarea readonly class="event-input">HOURS: {{foodtruck.duration / 2}}</textarea>
+                         <ion-item class="date-picker">
+                            <ion-label>Date</ion-label>
+                            <ion-datetime required displayFormat="YYYY-MMMM-D" min="2018" max="2021-12-31" [(ngModel)]="eventDate" formControlName="startDate">
+                            </ion-datetime>
+                          </ion-item>
+
+                          <ion-item class="date-picker">
+                              <ion-label>Time</ion-label>
+                              <ion-datetime required displayFormat="h:mm a" [(ngModel)]="eventTime" formControlName="startTime">
+                              </ion-datetime>
+                            </ion-item>
+
+      <textarea readonly class="event-input">HOURS: {{foodtruck.duration / 2}}</textarea>
                                         
                 
     </form>

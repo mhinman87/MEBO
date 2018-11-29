@@ -2,84 +2,53 @@ page-register {
     .logo{
         margin: 0 auto;
         display: block;
-        margin-top: 30px;
-        margin-bottom: 20px;
-        width: 80%;
+        padding-top: 30%;
+        width: 60%;
     }
-    .ion-icons{
+
+    #top-input {
+        margin-top: 60px;
+    }
+
+    ::placeholder {
+        color: black;
+    }
+
+    .long-button {
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #FCB622;
+        width: 70%;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
         text-align: center;
-        font-size: 30px;
-        margin-top: 33px;
-        
+        box-shadow: 0 0 0 2pt black;
     }
 
-    .toolbar-title {
-        color: #f4f4f4;
-    }
-
-    .input{
-      color: #f4f4f4;
-    }
-
-    .long-button{
-        width: 90%;
-        position: absolute;
-        bottom: 20px;
-        background: linear-gradient(270deg, #CE0058, #0085CA);
-        color: white;
-    }
-
-    .ion-col.col{
-        padding: 0px;
-    }
-
-    .ion-username-icon {
-        text-align: center;
-        font-size: 30px;
-        margin-top: 33px;
-    }
-
-    .ion-mail-icon {
-        text-align: center;
-        font-size: 30px;
-        margin-top: 40px;
-
-    }
 
     .astext {
-    color: #f4f4f4;
-    width: 90%;
-    margin:0;
-    background:none;
-    position: absolute;
-    bottom: 200px;
+        
+            width: 90%;
+            position: absolute;
+            bottom: 10px;
+            color: #f4f4f4;
+            margin:0;
+            height: 40px;
+            font-size: 20px;
+            background: none;
+            //border: none;
+            text-align: center;
+            font-weight: bold;
 }
 
 
 
-    .ion-lock-icon{
-        text-align: center;
-        font-size: 30px;
-        margin-top: 440%;
-        padding-left: 2px;
-    }
 
-    .buttonz-container{
-        width: 100%;
-        margin-top: 10px;
-        margin-left: 70px;
-        
-    }
-
-
-    .twitter{
-        margin-top: 35px;
-        box-shadow: 0 0 0 1pt #f4f4f4;
-    }
-
-    .facebook{
-        margin-top: 30px;
-    }
 
     .error {
         font-size: 12pt;
@@ -94,31 +63,75 @@ page-register {
         
     }
 
-    .grid{
-        padding: 0px;
-        margin: 0px;
-    }
-
-    .login-card{
-        background-color: transparent;
-    }
 
     .login-input{
-        background-color: transparent;
+
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: white;
+        width: 70%;
+        height: 40px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
     }
 
     .notification-is-danger {
-        color: red;
-        margin-left: 50px;
+        color: #E22547;
+        margin: 0 auto;
+        display: block;
+        padding-top: 0;
+        text-align: center;
+        margin-top: -10px;
+        font-size: 1.4em;
+        font-weight: bold;
     }
 
     .notification-is-success{
-        color: #3DD969;
-        margin-left: 50px;
+        color: #FBB525;
+        margin: 0 auto;
+        display: block;
+        text-align: center;
+        margin-top: -10px;
+        font-size: 1.4em;
+        font-weight: bold;
     }
 
     .notification-is-info {
-        color: #0085CA;
-        margin-left: 50px;
+        color: black;
+        margin: 0 auto;
+        display: block;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 1.4em;
+        font-weight: bold;
     }
+
+
+    input[type=date]::-webkit-calendar-picker-indicator {
+        -webkit-appearance: none;
+        display: none;
+    }
+
+
+    .passwordIcon{
+        color: #f4f4f4;
+        font-size:2.8rem !important;
+        position: relative !important;
+        top: 22px !important;
+        margin: 0 auto !important;
+     }
+
+     .login-background {
+        // background: #eb01a5;
+        //background-image: url("../../assets/imgs/logo.png"); /* fallback */
+        background-image: linear-gradient(transparent, #27B3C0, #27B3C0), url("../../assets/imgs/Mebo-Sign-In-Background-Cropped.jpg"); 
+        background-size: 100%;
+        background-repeat: no-repeat;
+      }
 }

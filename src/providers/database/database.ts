@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { Account } from '../../models/account.model';
 import { User } from 'firebase/app';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { dateDataSortValue } from 'ionic-angular/umd/util/datetime-util';
 
 
 
@@ -32,6 +33,11 @@ export class DatabaseProvider {
    account.aura = account.aura + 1;
    foodtruck.aura ++;
    let now = new Date().getTime()
+   this.afs.collection('accounts').doc(foodtruck.ownerId).ref.get().then((data)=>{
+     let newAura = data.data().aura +1
+     this.afs.collection('accounts').doc(foodtruck.ownerId).update({aura: newAura});
+   })
+   
    this.afs.collection('accounts').doc(account.uid).update({aura: account.aura, eventCheckInTimer: now + 300000})
    this.afs.collection('foodtrucks').doc(foodtruck.id).update({aura: foodtruck.aura});
   }
@@ -49,30 +55,43 @@ export class DatabaseProvider {
     }) //reference
     //
 
-    this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions => { 
-      let now = new Date().getTime() - 5*3600000;      
+    // this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions => { 
+    //   let now = new Date().getTime() - 5*3600000;      
+    //   return actions.map(a => {
+    //     const data = a.payload.doc.data() as FoodTruck;
+    //     data.id = a.payload.doc.id;
+    //     return data
+    //   });
+    // });
+    
+
+    //This filters the returned foodtrucks (whos endTime has not passed - see above query) and returns 
+    //only foodtrucks who startTime is also passed (RESULT: Active foodtrucks only)
+    this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions =>{
+      let now = new Date().getTime() - 5*3600000;
+      return actions.filter(b => b.payload.doc.data().eventStart < now).map(a => {
+            let data = a.payload.doc.data() as FoodTruck;
+            data.id = a.payload.doc.id;
+            return data
+          });
+    })
+
+    return this.foodTrucks;
+  }
+
+  getUpcomingEvents(){
+    this.foodTruckCollection = this.afs.collection('foodtrucks', ref => {
+      return ref.where('eventStart', '>=', Date.now()- 5*3600000);
+    }); 
+
+    this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions =>{
+      let now = new Date().getTime() - 5*3600000;
       return actions.map(a => {
-        const data = a.payload.doc.data() as FoodTruck;
-        data.id = a.payload.doc.id;
-        return data
-      });
-    });
-    
-
-    // SPECIAL SAUCE BITCH!!!! Perform more filtering on returned results
-
-    // this.foodTrucks = this.foodTruckCollection.valueChanges().map(actions =>{
-    //   let now = new Date().getTime() - 5*3600000;
-    //   const data = [] as Array<FoodTruck>;
-    //   for (var i = 0; i < actions.length; i++){
-    //     if (actions[i].eventEnd < now){
-    //       data.push(actions[i]);
-    //     }
-    //   }
-    //   return data;
-    // })
-    
-
+            let data = a.payload.doc.data() as FoodTruck;
+            data.id = a.payload.doc.id;
+            return data
+          });
+    })
     return this.foodTrucks;
   }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, AlertController, ToastController } from 'ionic-angular';
 import { Account } from '../../models/account.model';
 import { AuthService } from '../../providers/auth/auth.service';
 
@@ -23,7 +23,9 @@ export class LoginPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private auth: AuthService,
-              private loadingCrtl: LoadingController) {
+              private loadingCrtl: LoadingController,
+              private alertCtrl: AlertController,
+              private toast: ToastController) {
   }
 
   navigateToRegisterPage(){
@@ -47,6 +49,39 @@ export class LoginPage {
     this.loader.present();
   }
 
+  passwordReset(){
+    this.alertCtrl.create({
+      title: 'Forgot Password?',
+      subTitle: 'A password reset email will be sent to your email address.',
+      buttons: [{
+        text:'Send Email',
+        handler: data =>{
+          try {
+            this.auth.sendPasswordResetEmail(this.account.email).then(()=>{
+            this.toast.create({
+              message: 'A Password Reset Email has been Sent',
+              duration: 3000
+            }).present();
+          }, (err)=>{
+            this.toast.create({
+              message: 'That email is not registered',
+              duration: 3000
+            }).present();
+          })
+          } catch(e){
+            this.toast.create({
+              message: 'You must enter a valid email',
+              duration: 3000
+            }).present();
+          }
+        }
+      }, 
+      {
+          text: 'Cancel',
+          role: 'Cancel'
+        }]
+    }).present();
+    }
 
 
   async getUid(){

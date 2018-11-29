@@ -4,19 +4,11 @@ page-login {
     .logo{
         margin: 0 auto;
         display: block;
-        width: 40%;
+        padding-top: 30%;
+        width: 60%;
     }
 
-    .statusbar{
-        color:white;
-    }
-
-
-    .grid-2 {
-    position: absolute;
-    bottom: 36%;
-    left: 4%;
-    }
+    
 
     .input{
       color: #f4f4f4;
@@ -27,44 +19,50 @@ page-login {
         width: 90%;
         position: absolute;
         bottom: 10px;
+        color: #f4f4f4;
+        margin:0;
+        height: 40px;
+        font-size: 20px;
+        background: none;
+        //border: none;
+        text-align: center;
+        font-weight: bold;
     }
 
     .long-button1 {
-        width: 90%;
-        position: absolute;
-        bottom: 70px;
-        background: linear-gradient(270deg, #CE0058, #0085CA);
-        color: white;
-    }
-
-    .ion-col.col{
-        padding: 0px;
-    }
-
-    .ion-icons{
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #FCB622;
+        width: 70%;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
         text-align: center;
-        font-size: 30px;
-        margin-top: 33px;
-
+        box-shadow: 0 0 0 2pt black;
     }
+
+    #top-input {
+        margin-top: 90px;
+    }
+
 
     .astext {
-    box-shadow: 0 0 0 1pt transparent;
     color: #f4f4f4;
     margin:0;
-    height: 23px;
+    height: 40px;
     width: 100%;
+    font-size: 15px;
     background: none;
-    border: none;
+    //border: none;
     text-align: center;
 }
 
-      .ion-icons1{
-        text-align: center;
-        font-size: 30px;
-        margin-top: 530%;
-        padding-left: 2px;
-    }
+
 
     .buttonz-container{
         width: 100%;
@@ -111,7 +109,33 @@ page-login {
         background-color: transparent;
     }
 
-    .login-input{
-        background-color: transparent;
+    ::placeholder {
+        color: black;
     }
+
+    .login-input{
+
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: white;
+        width: 70%;
+        height: 40px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+    }
+
+    .login-background {
+        // background: #eb01a5;
+        //background-image: url("../../assets/imgs/logo.png"); /* fallback */
+        background-image: linear-gradient(transparent, #27B3C0, #27B3C0), url("../../assets/imgs/Mebo-Sign-In-Background-Cropped.jpg"); 
+        background-size: 100%;
+        background-repeat: no-repeat;
+      }
+      
 }

@@ -6,7 +6,7 @@ import { FoodTruck } from '../../models/foodtruck.model';
 import { Account } from '../../models/account.model';
 
 /**
- * Generated class for the SubmitPostPage page.
+ * Generated class for the SchedulePostPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -14,10 +14,10 @@ import { Account } from '../../models/account.model';
 
 @IonicPage()
 @Component({
-  selector: 'page-submit-post',
-  templateUrl: 'submit-post.html',
+  selector: 'page-schedule-post',
+  templateUrl: 'schedule-post.html',
 })
-export class SubmitPostPage implements OnInit{
+export class SchedulePostPage implements OnInit {
 
   foodtruck = {} as FoodTruck;
   account = {} as Account;
@@ -26,20 +26,24 @@ export class SubmitPostPage implements OnInit{
   inputFileName = "" as string;
   myForm: FormGroup;
   times: Array<{title: string, length: number}>;
-  
+  eventDate: string;
+  eventTime: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private database: DatabaseProvider,
               private loadingCtrl: LoadingController,
               private fb: FormBuilder) {
+
                 this.foodtruck.lat = this.navParams.get('lat');
                 this.foodtruck.long = this.navParams.get('lng');
                 this.foodtruck.image = 'foodtruck'; 
                 this.foodtruck.duration = 1;
                 this.account = this.navParams.get('account');
+  }
 
-              
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad SchedulePostPage');
   }
 
   ngOnInit(){
@@ -49,24 +53,23 @@ export class SubmitPostPage implements OnInit{
       Validators.required],
       type: '',
       duration: '',
-      details: ''
+      details: '',
+      startDate: '',
+      startTime: ''
     })
 
     this.myForm.valueChanges.subscribe(console.log);
   }
 
-  ionViewDidLoad() {
-    
-  }
-
-
-
   async saveFoodtruck(foodtruck: FoodTruck){
     this.showLoading();
     this.foodtruck.type = "foodtruck";
     this.foodtruck.aura = 0;
-    this.foodtruck.eventStart = Date.now() - 5*3600000;
     this.foodtruck.ownerId = this.account.uid;
+    // var date = new Date(this.eventDate); // some mock date
+    // var milliseconds = date.getTime();
+    this.foodtruck.eventStart = Date.parse(this.eventDate + ":" + this.eventTime) - 5*3600000;
+
     // var file = (document.getElementById('file') as HTMLInputElement).files[0];
     // this.account.profilePicName = file.name;
     // this.foodtruck.imgName = file.name;
@@ -89,22 +92,5 @@ export class SubmitPostPage implements OnInit{
     })
     this.loader.present();
   }
-
-  clickFile(){
-    this.picInput = (document.getElementById('file') as HTMLInputElement);
-    document.getElementById('file').click();
-    
-  }
-
-  readURL(input) {
-    var reader = new FileReader();
-    reader.onload = function (e: any) {
-      (document.getElementById('post-pic') as any).src = e.target.result;
-    };
-    var inp = document.getElementById('file') as HTMLInputElement;
-    this.inputFileName = inp.files.item(0).name;
-    console.log(this.inputFileName);
-    reader.readAsDataURL((document.getElementById('file') as HTMLInputElement).files[0]);
-}
 
 }

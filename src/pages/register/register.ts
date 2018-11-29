@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Loading, LoadingController, IonicFormInput } from 'ionic-angular';
 import { Account } from '../../models/account.model';
 import { AuthService } from '../../providers/auth/auth.service';
 import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
@@ -24,6 +24,9 @@ export class RegisterPage implements OnInit {
   account = {} as Account;
   loader: Loading;
   myForm: FormGroup;
+  passwordConfirm: string;
+  DOBType: string = 'text';
+  //passwordIcon: string = 'eye-outline';
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -31,6 +34,7 @@ export class RegisterPage implements OnInit {
               private auth: AuthService,
               private fb: FormBuilder,
               private afs: AngularFirestore) {
+                
   }
 
   ngOnInit(){
@@ -39,11 +43,22 @@ export class RegisterPage implements OnInit {
       Validators.required,
       CustomValidator.username(this.afs)],
       email: '',
-      password: ''
+      password: '',
+      dob: ''
     })
 
     this.myForm.valueChanges.subscribe(console.log);
   }
+
+  navigateToLogin(){
+    this.navCtrl.push("LoginPage");
+    this.navCtrl.remove(0);
+  }
+
+  hideShowPassword() {
+    this.DOBType = this.DOBType === 'text' ? 'date' : 'date';
+   // this.passwordIcon = this.passwordIcon === 'eye-off-outline' ? 'eye-outline' : 'eye-off-outline';
+}
 
   get email() {
     return this.myForm.get('email')

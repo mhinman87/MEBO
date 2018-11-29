@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, Loading, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, Loading, LoadingController, AlertController } from 'ionic-angular';
 import { FoodTruck } from '../../models/foodtruck.model';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AuthService } from '../../providers/auth/auth.service';
 import { User } from 'firebase/app';
 import { Account } from '../../models/account.model';
-import { Geolocation } from '@ionic-native/geolocation'
 
 /**
  * Generated class for the AddFoodtruckPage page.
@@ -26,6 +25,11 @@ export class AddFoodtruckPage {
   loader: Loading;
   authenticatedUser: User;
   account: Account;
+  campusOverlay: any;
+  bounds = new google.maps.LatLngBounds( 
+    new google.maps.LatLng(37.715370977172995, -97.29908267172995),
+    new google.maps.LatLng(37.72261431997561, -97.28076715924516)
+   );
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -33,7 +37,7 @@ export class AddFoodtruckPage {
               private platform: Platform,
               private loadingCtrl: LoadingController,
               private auth: AuthService,
-              private geolocation: Geolocation,) {
+              private alertCtrl: AlertController) {
 
                 this.auth.getAuthenticatedUser().subscribe((user: User)=>{
                   if (user){
@@ -48,22 +52,30 @@ export class AddFoodtruckPage {
 
   async ionViewDidLoad() {
     this.showLoading();
-    await this.geolocation.getCurrentPosition({
-      timeout: 5000
-    }).then((position)=>{
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+      let latLng = new google.maps.LatLng(37.71814898706639, -97.28986489422863 );
       this.platform.ready().then(() => {
         this.initializeMap(latLng);
+        var imageBounds = {
+          north: 37.7224,
+          south: 37.7156,
+          east: -97.2806,
+          west: -97.2990
+        };
+        this.campusOverlay = new google.maps.GroundOverlay(
+          '../../assets/imgs/Campus_Map.jpg',
+          imageBounds);
+        this.campusOverlay.setMap(this.map);
       })
-    },(err) => {
-      this.platform.ready().then(()=>{
-        let wichita = new google.maps.LatLng(37.6872, -97.3301 );
-        this.initializeMap(wichita);
-      })
-      console.log(err);
-    });
-
     this.loader.dismiss();
+  }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Outside Campus',
+      subTitle: "Breh... You can't launch events outside campus",
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 
   setAccount(account: Account){
@@ -71,28 +83,51 @@ export class AddFoodtruckPage {
   }
 
   navigateToSubmitPage(){
-    this.navCtrl.push('SubmitPostPage', {lat: this.map.getCenter().lat(), 
-                                         lng: this.map.getCenter().lng(),
-                                         account: this.account});
+    let lat = this.map.getCenter().lat();
+    let lng = this.map.getCenter().lng();
+    let markerPos = new google.maps.LatLng(lat, lng)
+    if (this.bounds.contains(markerPos)){
+      this.navCtrl.push('SubmitPostPage', {lat: lat,
+        lng: lng,
+        account: this.account});
+    } else {
+      this.presentAlert();
+    }
+   
+  }
+
+  navigateToSchedulePostPage(){
+    let lat = this.map.getCenter().lat();
+    let lng = this.map.getCenter().lng();
+    let markerPos = new google.maps.LatLng(lat, lng)
+    if (this.bounds.contains(markerPos)){
+      this.navCtrl.push('SchedulePostPage', {lat: lat,
+        lng: lng,
+        account: this.account});
+    } else {
+      this.presentAlert();
+    }
+   
   }
 
 
 
   initializeMap(latLng: google.maps.LatLng){
-    let zoomLevel = 14;
+    let zoomLevel = 16;
 
     var styledMapType = new google.maps.StyledMapType(
+      
       [
         {
           "elementType": "geometry",
           "stylers": [
             {
-              "color": "#212121"
+              "color": "#1d2c4d"
             }
           ]
         },
         {
-          "elementType": "labels.icon",
+          "elementType": "labels",
           "stylers": [
             {
               "visibility": "off"
@@ -103,7 +138,7 @@ export class AddFoodtruckPage {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#757575"
+              "color": "#8ec3b9"
             }
           ]
         },
@@ -111,31 +146,13 @@ export class AddFoodtruckPage {
           "elementType": "labels.text.stroke",
           "stylers": [
             {
-              "color": "#212121"
+              "color": "#1a3646"
             }
           ]
         },
         {
           "featureType": "administrative",
           "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#757575"
-            }
-          ]
-        },
-        {
-          "featureType": "administrative",
-          "elementType": "labels.text.fill",
-          "stylers": [
-            {
-              "color": "#c20051"
-            }
-          ]
-        },
-        {
-          "featureType": "administrative",
-          "elementType": "labels.text.stroke",
           "stylers": [
             {
               "visibility": "off"
@@ -144,10 +161,10 @@ export class AddFoodtruckPage {
         },
         {
           "featureType": "administrative.country",
-          "elementType": "labels.text.fill",
+          "elementType": "geometry.stroke",
           "stylers": [
             {
-              "color": "#9e9e9e"
+              "color": "#4b6878"
             }
           ]
         },
@@ -160,11 +177,63 @@ export class AddFoodtruckPage {
           ]
         },
         {
-          "featureType": "administrative.locality",
+          "featureType": "administrative.land_parcel",
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#bdbdbd"
+              "color": "#64779e"
+            }
+          ]
+        },
+        {
+          "featureType": "administrative.neighborhood",
+          "stylers": [
+            {
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "featureType": "administrative.province",
+          "elementType": "geometry.stroke",
+          "stylers": [
+            {
+              "color": "#4b6878"
+            }
+          ]
+        },
+        {
+          "featureType": "landscape.man_made",
+          "elementType": "geometry.stroke",
+          "stylers": [
+            {
+              "color": "#334e87"
+            }
+          ]
+        },
+        {
+          "featureType": "landscape.natural",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#023e58"
+            }
+          ]
+        },
+        {
+          "featureType": "poi",
+          "stylers": [
+            {
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "featureType": "poi",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#283d6a"
             }
           ]
         },
@@ -173,43 +242,60 @@ export class AddFoodtruckPage {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#757575"
+              "color": "#6f9ba5"
             }
           ]
         },
         {
-          "featureType": "poi.park",
-          "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#181818"
-            }
-          ]
-        },
-        {
-          "featureType": "poi.park",
-          "elementType": "labels.text.fill",
-          "stylers": [
-            {
-              "color": "#616161"
-            }
-          ]
-        },
-        {
-          "featureType": "poi.park",
+          "featureType": "poi",
           "elementType": "labels.text.stroke",
           "stylers": [
             {
-              "color": "#1b1b1b"
+              "color": "#1d2c4d"
+            }
+          ]
+        },
+        {
+          "featureType": "poi.park",
+          "elementType": "geometry.fill",
+          "stylers": [
+            {
+              "color": "#023e58"
+            }
+          ]
+        },
+        {
+          "featureType": "poi.park",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#3C7680"
             }
           ]
         },
         {
           "featureType": "road",
-          "elementType": "geometry.fill",
           "stylers": [
             {
-              "color": "#373737"
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#304a7d"
+            }
+          ]
+        },
+        {
+          "featureType": "road",
+          "elementType": "labels.icon",
+          "stylers": [
+            {
+              "visibility": "off"
             }
           ]
         },
@@ -218,24 +304,16 @@ export class AddFoodtruckPage {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#8a8a8a"
+              "color": "#98a5be"
             }
           ]
         },
         {
-          "featureType": "road.arterial",
-          "elementType": "geometry",
+          "featureType": "road",
+          "elementType": "labels.text.stroke",
           "stylers": [
             {
-              "color": "#373737"
-            }
-          ]
-        },
-        {
-          "featureType": "road.highway",
-          "stylers": [
-            {
-              "weight": 1.5
+              "color": "#1d2c4d"
             }
           ]
         },
@@ -244,46 +322,42 @@ export class AddFoodtruckPage {
           "elementType": "geometry",
           "stylers": [
             {
-              "color": "#3c3c3c"
+              "color": "#2c6675"
             }
           ]
         },
         {
           "featureType": "road.highway",
-          "elementType": "geometry.fill",
+          "elementType": "geometry.stroke",
           "stylers": [
             {
-              "color": "#0082ca"
-            },
-            {
-              "visibility": "on"
+              "color": "#255763"
             }
           ]
         },
         {
-          "featureType": "road.highway.controlled_access",
-          "elementType": "geometry",
-          "stylers": [
-            {
-              "color": "#4e4e4e"
-            }
-          ]
-        },
-        {
-          "featureType": "road.highway.controlled_access",
-          "elementType": "geometry.fill",
-          "stylers": [
-            {
-              "color": "#0082ca"
-            }
-          ]
-        },
-        {
-          "featureType": "road.local",
+          "featureType": "road.highway",
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#616161"
+              "color": "#b0d5ce"
+            }
+          ]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "labels.text.stroke",
+          "stylers": [
+            {
+              "color": "#023e58"
+            }
+          ]
+        },
+        {
+          "featureType": "transit",
+          "stylers": [
+            {
+              "visibility": "off"
             }
           ]
         },
@@ -292,7 +366,34 @@ export class AddFoodtruckPage {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#757575"
+              "color": "#98a5be"
+            }
+          ]
+        },
+        {
+          "featureType": "transit",
+          "elementType": "labels.text.stroke",
+          "stylers": [
+            {
+              "color": "#1d2c4d"
+            }
+          ]
+        },
+        {
+          "featureType": "transit.line",
+          "elementType": "geometry.fill",
+          "stylers": [
+            {
+              "color": "#283d6a"
+            }
+          ]
+        },
+        {
+          "featureType": "transit.station",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#3a4762"
             }
           ]
         },
@@ -301,7 +402,7 @@ export class AddFoodtruckPage {
           "elementType": "geometry",
           "stylers": [
             {
-              "color": "#000000"
+              "color": "#0e1626"
             }
           ]
         },
@@ -310,12 +411,11 @@ export class AddFoodtruckPage {
           "elementType": "labels.text.fill",
           "stylers": [
             {
-              "color": "#3d3d3d"
+              "color": "#4e6d70"
             }
           ]
         }
       ]
-        
         ,
       {name: 'Styled Map'});
 
@@ -327,7 +427,8 @@ export class AddFoodtruckPage {
       streetViewControl: false,
       disableDefaultUI: true,
       clickableIcons: false,
-      minZoom: 10,
+      minZoom: 16,
+      maxZoom: 19,
       backgroundColor: "#1A1E2A",
       mapTypeId: google.maps.MapTypeId.ROADMAP
     })

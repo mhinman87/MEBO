@@ -17,14 +17,40 @@
 
 
 .menu-profile-img {
-    border-radius: 100%;
-    height: 125px;
-    width: 125px;
+    //border-radius: 100%;
+    width: 60%;
     display: block;
     margin: 0 auto;
-    box-shadow: 0 0 0 1pt #f4f4f4;
+    //box-shadow: 0 0 0 1pt #f4f4f4;
     margin-top: 15px;
 }
+
+.btn-group button {
+    background-color: goldenrod; /* Green background */
+    border: 2px solid black; /* Green border */
+    font-size: 1.4em;
+    height: 60px;
+    color: black; /* White text */
+    padding: 10px 24px; /* Some padding */
+    width: 100%; /* Set a width if needed */
+    display: block; /* Make the buttons appear below each other */
+}
+
+.btn-group {
+    margin-top: 50px;
+}
+
+.btn-group button:not(:last-child) {
+    border-bottom: none; /* Prevent double borders */
+}
+
+.btn-group button:nth-child(1) { background: #E42547; }
+
+.btn-group button:nth-child(2) { background: #42A880; }
+
+.btn-group button:nth-child(3) { background: #FCB622; }
+
+.btn-group button:nth-child(4) { background: #F2682A; }
 
 .view-profile{
     color: white;
@@ -38,18 +64,111 @@
 }
 
 .menu-profile-username {
-    color: white;
+    color: black;
     padding: 5px;
     font-weight: bold;
     font-size: 25px;
-    margin-top: 0px;
+    margin-top: -20px;
 }
 
-.logout-button {
-    display: block;
-    margin: 0 auto;
+.menu-aura {
+    color: black;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+    //font-style: italic;
 }
+
+
 
 .hidden {
     display: none;
 }
+
+.logout-button{
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+    color: #f4f4f4;
+    margin:0;
+    height: 40px;
+    font-size: 20px;
+    background: none;
+    //border: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+.scene {
+    height: 100px;
+    perspective: 600px;
+  }
+  
+  .card {
+    width: 100%;
+    height: 100%;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .card.is-flipped {
+    transform: rotateY(180deg);
+  }
+  
+  .card__face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 90px;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    backface-visibility: hidden;
+  }
+  
+  .card__face--front {
+    background-image:  url('../../assets/imgs/Logo-w-Shadow.png');
+    background-size: 70% 90%;
+    background-repeat: no-repeat;
+    background-position: center; 
+  }
+  
+  .card__face--back {
+    transform: rotateY(180deg);
+  }
+
+  .alert-ios .alert-head {
+    text-align: center;
+    padding: 12px 16px 7px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 12px 12px 0 0;
+    border-bottom-style: none;
+}
+
+.alert-ios .alert-message:empty {
+    padding: 0 0 12px;
+    border-color: black;
+    border-style: solid;
+    border-top: none;
+    border-bottom: none;
+}
+
+.alert-ios .alert-button:last-child {
+    border-right: 0;
+    font-weight: bold;
+    border-color: black;
+    border-style: solid;
+    border-radius: 0 0 12px 12px;
+    border-width: 3px;
+    border-top-width: 1px;
+    border-top-color: grey;
+}
+
+@import url('https://fonts.googleapis.com/css?family=K2D');
+@import "noto-sans";
+$font-family-base: "K2D", sans-serif; 

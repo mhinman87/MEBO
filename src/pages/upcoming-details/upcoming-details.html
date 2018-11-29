@@ -1,0 +1,29 @@
+<!--
+  Generated template for the UpcomingDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+
+
+<ion-content [ngClass]="{item: foodtruck.image == 'foodtruck', item2: foodtruck.image == 'burger-gif'}">
+    <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+
+    <img style="width: 70%;
+    height: 30%;
+    display: block;
+    margin: 0 auto;
+    margin-top: 5%;"  src="../../assets/imgs/{{foodtruck.image}}.gif">
+
+  <p class="title">{{foodtruck.name}}</p>
+  <p class="aura">{{foodtruck.aura}}</p>
+
+  <textarea style="height: 7em;" class="event-input" [(ngModel)]='foodtruck.details' type="text" readonly ></textarea>
+
+  <textarea readonly class="event-duration">DURATION: {{foodtruck.duration / 2}} HOURS</textarea>
+
+  <p class="btn-countdown">T-MINUS: <br> {{minsRemaining(foodtruck.eventStart)}} Mins</p>
+
+
+</ion-content>

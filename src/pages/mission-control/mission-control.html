@@ -1,0 +1,27 @@
+
+<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
+
+
+
+
+<ion-content style="background-color: #FCB622;">
+  <p class="page-title">UPCOMING EVENTS</p>
+    <div class="btn-group2" >
+        <button  *ngFor="let event of events$ | async" color="clear" (click)="navToDetails(event)" 
+        [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
+          
+        <div class="row">
+            <div class="column-1">
+                <img class="btn-image" src="assets/imgs/{{event.image}}.gif" alt="Avatar">
+            </div>
+            <div class="column-2">
+                <p class="btn-title">{{event.name}}</p>
+                <p class="btn-aura">Aura: {{event.aura}}</p>
+                <p class="btn-countdown">T-MINUS: {{minsRemaining(event.eventStart)}} Mins</p>
+            </div>
+          </div>
+        </button>
+        
+      </div>
+
+</ion-content>

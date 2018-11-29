@@ -21,6 +21,14 @@ page-add-foodtruck {
         margin-top: -18px; //bottom of image is centered
     }
 
+    .menu-button {
+        position: absolute; 
+        top: 15px; 
+        left: 15px; 
+        z-index: 99;
+        width: 10%;
+    }
+
    
     // textarea {
     //     height: 6em;
@@ -31,15 +39,55 @@ page-add-foodtruck {
     // }
 
     .post-button{
-        background: linear-gradient(270deg, #CE0058, #0085CA);
+        
         width: 90%;
         position: absolute;
         bottom: 15px;
         left: 5%;
         right: 5%;
-        color: white;
+        color: black;
         display: block;
         margin: 0 auto;
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #FCB622;
+        width: 90%;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
+    }
+
+    .post-later-button{
+        
+        width: 90%;
+        position: absolute;
+        bottom: 60px;
+        left: 5%;
+        right: 5%;
+        color: black;
+        display: block;
+        margin: 0 auto;
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #FCB622;
+        width: 90%;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
     }
 
 

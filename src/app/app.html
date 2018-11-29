@@ -1,32 +1,25 @@
-<ion-menu [content]="content">
-  <ion-header >
-    <ion-toolbar color="dark">
-      <ion-title >Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-menu [content]="content" [swipeEnabled]="false">
 
   <ion-content class="background" >
-    <div menuClose [ngClass]="{hidden: authenticatedUser == undefined}" class="menu-header" (click)="navToProfile()">
-        <img  class="menu-profile-img"  src="{{account.profilePic}}" alt="Avatar" >
-        <h3 text-center class="menu-profile-username"  >{{account.username}}</h3>
-        <p class="view-profile">View Profile</p>
-    </div>
+    <div [ngClass]="{hidden: authenticatedUser == undefined}" class="menu-header" (click)="navToProfile()">
+      <h6 text-center>YOUR FUTURE IS BRIGHT</h6>
+      <h3 text-center class="menu-profile-username"  >{{account.username}}</h3>
+      <div class="scene">
+          <div class="card">
+            <div class="card__face card__face--front"></div>
+            <div class="card__face card__face--back">{{account.aura}} Aura</div>
+          </div>
+        </div>
+
+      <!-- <h3 text-center class="menu-aura"  >{{account.aura}} Aura</h3> -->
       
+    </div>
 
-    <ion-list>
-      <button class="background" color="primary" menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        <ion-icon style="padding-right: 10px;
-                         padding-top: 10px;
-                         font-size: 2.0em;
-                         float: left;" name="{{p.icon}}"></ion-icon>
+    <div class="btn-group" >
+      <button menuClose *ngFor="let p of pages"  (click)="openPage(p)">{{p.title}}</button>
+    </div>
 
-                         <div style="float: left;
-                              padding-top: 16px;
-                              padding-left: 5px;">{{p.title}}</div>
-      </button>
-    </ion-list>
-
-    <button ion-button round outline class="logout-button" (click)="logout()" [ngClass]="{hidden: authenticatedUser == undefined}">Logout</button>
+    <button class="logout-button" menuClose (click)="logout()" [ngClass]="{hidden: authenticatedUser == undefined}">LOG OUT</button>
   </ion-content>
 
 </ion-menu>
