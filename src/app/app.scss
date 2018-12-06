@@ -37,7 +37,7 @@
 }
 
 .btn-group {
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 .btn-group button:not(:last-child) {
@@ -101,7 +101,7 @@
 }
 
 .scene {
-    height: 100px;
+    height: 180px;
     perspective: 600px;
   }
   
@@ -131,8 +131,8 @@
   }
   
   .card__face--front {
-    background-image:  url('../../assets/imgs/Logo-w-Shadow.png');
-    background-size: 70% 90%;
+    background-image:  url('../../assets/imgs/MEBOcircle.png');
+    background-size: 65% 100%;
     background-repeat: no-repeat;
     background-position: center; 
   }

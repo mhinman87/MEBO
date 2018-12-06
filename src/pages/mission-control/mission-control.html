@@ -6,6 +6,11 @@
 
 <ion-content style="background-color: #FCB622;">
   <p class="page-title">UPCOMING EVENTS</p>
+
+  <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">Aura</label>
+  <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">Launch</label>
+
+
     <div class="btn-group2" >
         <button  *ngFor="let event of events$ | async" color="clear" (click)="navToDetails(event)" 
         [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">

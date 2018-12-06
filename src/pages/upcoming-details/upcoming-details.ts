@@ -42,5 +42,6 @@ export class UpcomingDetailsPage {
   minsRemaining(time){
     return Math.floor((time + 5*3600000 - this.currentTime)/60000)
   }
+  
 
 }

@@ -56,13 +56,13 @@ export class AddFoodtruckPage {
       this.platform.ready().then(() => {
         this.initializeMap(latLng);
         var imageBounds = {
-          north: 37.7224,
-          south: 37.7156,
-          east: -97.2806,
-          west: -97.2990
+          north: 37.72375,
+          south: 37.71365,
+          east: -97.28048505979406,
+          west: -97.30031
         };
         this.campusOverlay = new google.maps.GroundOverlay(
-          '../../assets/imgs/Campus_Map.jpg',
+          '../../assets/imgs/MEBO-Map.gif',
           imageBounds);
         this.campusOverlay.setMap(this.map);
       })

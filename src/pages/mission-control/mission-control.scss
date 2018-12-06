@@ -33,6 +33,27 @@ page-mission-control {
         margin: 0 auto;
         margin-bottom: 3px;
     }
+
+    .sort-button {
+        background-color: #FCB622;
+        width: 20%;
+        height: 25px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
+        color: black; 
+    }
+
+    .sort-container {
+        widows: 70%;
+        display: block;
+        margin: 0 auto;
+    }
     
     .page-title {
         text-align: center;
@@ -81,5 +102,33 @@ page-mission-control {
         display: table;
         clear: both;
     }
+
+    label {
+        display: inline-block;
+        vertical-align: middle;
+        margin-bottom: 10px; 
+        margin-left: 13%;
+        font-size: 1.5em;
+        text-align: center;
+        width: 30%;
+        padding: 5px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        box-shadow: 0 0 0 2pt black;
+        transition: all 0.3s;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        background-color: #FCB622;
+
+      }
+
+      input[type="radio"] {
+        display: none;
+      }
+
+      input[type="radio"]:checked + label {
+        background-color: #E42547;
+      }
 
 }

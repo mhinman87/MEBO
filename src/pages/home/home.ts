@@ -65,14 +65,14 @@ export class HomePage implements OnDestroy {
       let latLng = new google.maps.LatLng(37.71814898706639, -97.28986489422863 );
       this.platform.ready().then(() => {
           this.initializeMap(latLng, 18);
-            var imageBounds = {
-              north: 37.7224,
-              south: 37.7156,
-              east: -97.2806,
-              west: -97.2990
-            };
+          var imageBounds = {
+            north: 37.72375,
+            south: 37.71365,
+            east: -97.28048505979406,
+            west: -97.30031
+          };
             this.campusOverlay = new google.maps.GroundOverlay(
-              '../../assets/imgs/Campus_Map.png',
+              '../../assets/imgs/MEBO-Map.gif',
               imageBounds);
             this.campusOverlay.setMap(this.map);
         })
@@ -93,8 +93,8 @@ export class HomePage implements OnDestroy {
         position: latLng,
         map: this.map,
         icon: {
-          url: 'assets/imgs/position.png',
-          scaledSize: new google.maps.Size(20, 20),
+          url: 'assets/imgs/MeboWave.gif',
+          scaledSize: new google.maps.Size(37.5, 50),
         }
       })
       if ((37.7224 >= position.coords.latitude && position.coords.latitude >= 37.7156) && (-97.2806 >= position.coords.longitude && position.coords.longitude >= -97.2990 )){
@@ -124,8 +124,8 @@ export class HomePage implements OnDestroy {
           position: latLng,
           map: this.map,
           icon: {
-            url: 'assets/imgs/position.png',
-            scaledSize: new google.maps.Size(20, 20),
+            url: 'assets/imgs/MeboWave.gif',
+            scaledSize: new google.maps.Size(37.5, 50),
           }
         })
         this.map.setCenter(latLng);
@@ -505,6 +505,10 @@ auraDescending(a, b) {
   return a.aura > b.aura ? -1 : 1
 }
 
+timeDescending(a, b){
+  return a.eventStart < b.eventStart ? -1 : 1;
+}
+
 ngOnDestroy(){
   if (this.foodtruckSubscription){
     this.foodtruckSubscription.unsubscribe();
@@ -570,6 +574,24 @@ setMarkers(){
   })
 
   console.log(this.markers);
+}
+
+sortEventsByAura(){
+  this.showLoading()
+  this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
+    data.sort(this.auraDescending);
+    return data;
+  })
+  this.loader.dismiss()
+}
+
+sortUntilLaunch(){
+  this.showLoading();
+  this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
+    data.sort(this.timeDescending);
+    return data;
+  })
+  this.loader.dismiss();
 }
 
  

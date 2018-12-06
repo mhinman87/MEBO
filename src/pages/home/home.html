@@ -35,6 +35,8 @@
           <div class="map__face map__face--back">
               <img src="assets/imgs/Map-Shadow.png" button (click)="flipMap()" class="map-button">
               <h1 class="page-title">CURRENT EVENTS</h1>
+              <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">Aura</label>
+              <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">Launch</label>
               <div class="btn-group3" >
                   <button  *ngFor="let event of trucks$ | async" (click)="navToDetails(event)"
                   [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
