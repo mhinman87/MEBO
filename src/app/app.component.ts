@@ -7,7 +7,8 @@ import { User } from 'firebase/app';
 import { DatabaseProvider } from '../providers/database/database';
 import { Account } from '../models/account.model';
 import { HomePage } from '../pages/home/home';
-import { AddFoodtruckPage } from '../pages/add-foodtruck/add-foodtruck'
+import { AddFoodtruckPage } from '../pages/add-foodtruck/add-foodtruck';
+import { sum, values } from 'lodash';
 
 
 
@@ -23,7 +24,9 @@ export class MyApp {
   isVendor: boolean;
   private authenticatedUser: User;
   account = {} as Account;
-  latLng: google.maps.LatLng
+  latLng: google.maps.LatLng;
+  userAura: number = 0;
+  subscription;
 
 
   constructor(public platform: Platform, 
@@ -33,7 +36,6 @@ export class MyApp {
               public auth: AuthService,
               public database: DatabaseProvider) {
 
-                
                 //subscribe to login/logout events
                 events.subscribe('user:login', () => {
                   this.nav.setRoot('HomePage')
@@ -42,6 +44,7 @@ export class MyApp {
                   this.nav.setRoot('LoginPage')
                 })
 
+                //Set Pages
                 this.pages = [
                   { title: 'TAKE ME HOME', component: 'HomePage'},
                   { title: 'LAUNCH EVENT', component: 'AddFoodtruckPage'},
@@ -50,24 +53,28 @@ export class MyApp {
                 ];
                 this.rootPage = 'HomePage';
 
-                
-                
-
-                
-
-                
-                //Check to see if the user is logged in and set menu pages based on user level
+                //Check to see if the user is logged in and set aura
                 this.auth.getAuthenticatedUser().subscribe((user: User)=>{
                   if (user){
                     this.authenticatedUser = user;
                     this.database.getAccountInfo(user.uid).subscribe((account)=>{
                       this.setAccount(account);
+                      this.subscription = this.database.getUserVotes(user.uid)
+                      .subscribe(upvotes => {
+                        let auraSum = 0;
+                        values(upvotes).forEach(uniqueUsers =>{
+                          auraSum += sum(values(uniqueUsers))
+                        }) 
+                        this.userAura = auraSum;
+                      })
                     })
                     
                   } else {
                     this.rootPage = 'LoginPage'
                   }
                 })
+
+               
                 
                 this.initializeApp();
 

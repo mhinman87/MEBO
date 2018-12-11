@@ -28,6 +28,8 @@
   <img id="image-1" src="assets/imgs/{{foodtruck.image}}.gif" alt="" />
   <img id="image-1" src="{{foodtruck.img}}" alt="" />
 
+  <p>{{foodtruck.details}}</p>
+
 
 
           <div class="container">
@@ -41,8 +43,7 @@
             </ul>
           </div>
 
-          <h2 class="truck-title">{{foodtruck.aura}}</h2>
-
+          <upvote-button class="upvote-counter" [itemId]="foodtruck.id" [userId]="authenticatedUser.uid" [ownerId]="foodtruck.ownerId"></upvote-button>
           
 
           <div *ngIf="account$ | async; let user">

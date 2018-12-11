@@ -5,6 +5,9 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs';
 import { FoodTruck } from '../../models/foodtruck.model';
+import { AuthService } from '../../providers/auth/auth.service';
+import { User } from 'firebase/app';
+import { sum, values } from 'lodash';
 
  
 
@@ -32,6 +35,8 @@ export class HomePage implements OnDestroy {
   campusOverlay: any;
   currentTime: number;
   x: any;
+  authenticatedUser = {} as User;
+  accountSubscription: any;
  
   
   
@@ -43,13 +48,20 @@ export class HomePage implements OnDestroy {
               private geolocation: Geolocation,
               private loadingCrtl: LoadingController,
               private events: Events,
-              private alertCtrl: AlertController ) {
+              private alertCtrl: AlertController,
+              private auth: AuthService ) {
                 this.markers = [];
                 this.hideMap = false;
-                this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
-                  data.sort(this.auraDescending);
-                  return data;
-                })
+                this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
+                  if (user != null){
+                   try {
+                     this.authenticatedUser = user;
+                     console.log(this.authenticatedUser);
+                   } catch(e) {
+                     console.error(e);
+                   }
+                  }
+                 }) 
                 const second = 1000;
                 this.x = setInterval(() => {
                   this.currentTime = new Date().getTime();
@@ -492,16 +504,13 @@ setMapOnAll(map) {
   }
 }
 
-clearMarkers() {
-  this.setMapOnAll(null);
-}
 
 deleteMarkers() {
-  this.clearMarkers();
+  this.setMapOnAll(null);
   this.markers = [];
 }
 
-auraDescending(a, b) {
+auraDescending(a: FoodTruck, b: FoodTruck) {
   return a.aura > b.aura ? -1 : 1
 }
 
@@ -544,6 +553,7 @@ flipMap(){
 
 setMarkers(){
   this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
+    console.log(data)
     data.sort(this.auraDescending);
 
     for (let truck of data){
@@ -562,7 +572,7 @@ setMarkers(){
         let selectedMarker: any = truckMarker;
         this.navCtrl.push('DetailsPage', {
           truckData: selectedMarker.truckData
-          })
+          }) 
         this.map.setCenter(truckMarker.getPosition());
       })
 

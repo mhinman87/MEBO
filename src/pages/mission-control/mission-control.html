@@ -24,6 +24,7 @@
                 <p class="btn-aura">Aura: {{event.aura}}</p>
                 <p class="btn-countdown">T-MINUS: {{minsRemaining(event.eventStart)}} Mins</p>
             </div>
+            <upvote-button [itemId]="event?.id"></upvote-button>
           </div>
         </button>
         

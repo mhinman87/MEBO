@@ -1,0 +1,27 @@
+upvote-button {
+
+    .votebox {
+        height: 60px;
+        width: 40px;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        font-size: 0.7em;
+      
+        // .vote {
+        //   cursor: pointer;
+        //   &:hover {
+        //     color: orange;
+        //   }
+        // }
+      
+        .active.up {
+            color: green;
+          }
+      
+        .active.down {
+           color: red;
+         }
+      
+      }
+}

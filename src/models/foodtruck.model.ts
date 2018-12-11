@@ -9,6 +9,7 @@ export interface FoodTruck {
     id: string;
     aura: number;
 
+
     //Location Info
     lat: number;
     long: number;

@@ -27,8 +27,8 @@ export class AddFoodtruckPage {
   account: Account;
   campusOverlay: any;
   bounds = new google.maps.LatLngBounds( 
-    new google.maps.LatLng(37.715370977172995, -97.29908267172995),
-    new google.maps.LatLng(37.72261431997561, -97.28076715924516)
+    new google.maps.LatLng(37.71365, -97.30031),
+    new google.maps.LatLng(37.72375, -97.28048505979406)
    );
 
   constructor(public navCtrl: NavController, 

@@ -35,21 +35,21 @@
           <div class="map__face map__face--back">
               <img src="assets/imgs/Map-Shadow.png" button (click)="flipMap()" class="map-button">
               <h1 class="page-title">CURRENT EVENTS</h1>
-              <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">Aura</label>
-              <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">Launch</label>
+              <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">AURA</label>
+              <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">COUNTDOWN</label>
               <div class="btn-group3" >
-                  <button  *ngFor="let event of trucks$ | async" (click)="navToDetails(event)"
+                  <button  *ngFor="let event of trucks$ | async" 
                   [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
                     
-                  <div class="row">
+                  <div class="row" >
                       <div class="column-1">
                           <img class="btn-image" src="assets/imgs/{{event.image}}.gif" alt="Avatar">
                       </div>
-                      <div class="column-2">
+                      <div class="column-2" (click)="navToDetails(event)">
                           <p class="btn-title">{{event.name}}</p>
-                          <p class="btn-aura">Aura: {{event.aura}}</p>
                           <p class="btn-countdown">{{minsRemaining(event.eventEnd)}} Mins Left</p>
                       </div>
+                      <upvote-button class="column-3" [itemId]="event.id" [userId]="authenticatedUser.uid" [ownerId]="event.ownerId"></upvote-button>
                     </div>
                   </button>
                   

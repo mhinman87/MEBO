@@ -68,7 +68,8 @@ export class SchedulePostPage implements OnInit {
     this.foodtruck.ownerId = this.account.uid;
     // var date = new Date(this.eventDate); // some mock date
     // var milliseconds = date.getTime();
-    this.foodtruck.eventStart = Date.parse(this.eventDate + ":" + this.eventTime) - 5*3600000;
+    
+    
 
     // var file = (document.getElementById('file') as HTMLInputElement).files[0];
     // this.account.profilePicName = file.name;
@@ -82,6 +83,16 @@ export class SchedulePostPage implements OnInit {
       this.navCtrl.setRoot('HomePage');
     })
     
+  }
+
+  submit(){
+    this.foodtruck.eventStart = Date.parse(this.eventDate + ":" + this.eventTime) - 5*3600000;
+    if (this.foodtruck.eventStart <= Date.now() + 19*3600000){
+      this.saveFoodtruck(this.foodtruck)
+    } else {
+      console.log('failure')
+    }
+
   }
 
   showLoading(){

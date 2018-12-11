@@ -73,8 +73,6 @@ export class RegisterPage implements OnInit {
   async register(){
     this.showLoading();
       this.account.isVendor = false;
-      this.account.profilePic = "assets/imgs/logo.png";
-      this.account.aura = 0;
       await this.auth.showEmailVerificationDialog(this.account);
     this.loader.dismiss();
   }

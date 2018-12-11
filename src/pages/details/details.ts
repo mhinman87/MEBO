@@ -7,6 +7,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { Account } from '../../models/account.model';
 import { User } from 'firebase/app';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { sum, values } from 'lodash'
 
 /**
  * Generated class for the DetailsPage page.
@@ -31,8 +32,12 @@ export class DetailsPage {
   account$: Observable<Account>;
   authenticatedUser = {} as User;
   accountSubscription: any;
+  checkInCountSubscription;
+  userCheckInSubscription;
+  checkInCount: number;
   isUserCloseEnough: boolean;
   loactionCd: number;
+  authtenticatedUserCheckIns: number;
   
 
   constructor(public navCtrl: NavController, 
@@ -43,24 +48,33 @@ export class DetailsPage {
               private geolocation: Geolocation,
               private alertCtrl: AlertController,
               private events: Events) {
-    this.foodtruck = {} as FoodTruck;
+    this.foodtruck = this.navParams.get('truckData');
     this.showLoading();
+    this.checkInCountSubscription = this.database.getItemVotes(this.foodtruck.id).subscribe(allUserVotes =>{
+     this.checkInCount = allUserVotes['checkIns']
+    })
     this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
-
-     if (user != null){
-      try {
-        this.authenticatedUser = user;
-        console.log(this.authenticatedUser);
-        this.account$ = this.database.getAccountInfo(user.uid);
-        this.database.getAccountInfo(user.uid).subscribe((account) =>{
-        this.setAccount(account);
-        })
-      } catch(e) {
-        console.error(e);
+      if (user != null){
+        try {
+          this.authenticatedUser = user;
+          this.account$ = this.database.getAccountInfo(user.uid);
+          this.database.getAccountInfo(user.uid).subscribe((account) =>{
+          this.setAccount(account);
+          this.userCheckInSubscription = this.database.getUserVotes(this.authenticatedUser.uid).subscribe(allVotes => {
+           values(allVotes).forEach(uniqueUsers => {
+             this.authtenticatedUserCheckIns = sum(values(uniqueUsers))
+           })
+          })
+          })
+        } catch(e) {
+          console.error(e);
+        }
       }
-     }
-    }) 
+    })
+    
+
   }
+  
 
   //there is an error in this code - if position isn't returned
   async canUserCheckIn(){
@@ -149,6 +163,8 @@ export class DetailsPage {
     clearInterval(this.x);
     this.isUserCloseEnough = undefined;
     this.accountSubscription.unsubscribe();
+    this.checkInCountSubscription.unsubscribe();
+    this.userCheckInSubscription.unsubscribe();
   }
 
   showLoading(){
@@ -170,8 +186,8 @@ export class DetailsPage {
 
   checkIn(){
     if(this.isUserCloseEnough){
-      this.database.userCheckIn(this.account, this.foodtruck);
-    console.log(this.account)
+     
+    this.database.userCheckIn(this.foodtruck.id, this.authenticatedUser.uid, this.foodtruck.ownerId, this.checkInCount, this.authtenticatedUserCheckIns);
     } else {
       this.alertCtrl.create({
         title: 'You are not close enough',

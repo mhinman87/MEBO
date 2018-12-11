@@ -19,6 +19,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 
 import { DatabaseProvider } from '../providers/database/database';
 
+
 @NgModule({
   declarations: [
     MyApp,
