@@ -4,27 +4,30 @@
 
 
 
-<ion-content style="background-color: #FCB622;">
+<ion-content style="background-color: #27B3C0;">
   <p class="page-title">UPCOMING EVENTS</p>
 
-  <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">Aura</label>
-  <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">Launch</label>
-
+   <div class="radio-btn-container">
+      <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">AURA</label>
+      <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">COUNTDOWN</label>
+      <input type="radio" id="fresh" name="type"  value="fresh" (click)="sortFFFreshness()" ><label for="fresh">F-F-FRESH</label>
+   </div>
 
     <div class="btn-group2" >
-        <button  *ngFor="let event of events$ | async" color="clear" (click)="navToDetails(event)" 
+        <button  *ngFor="let event of events" color="clear" 
         [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
           
         <div class="row">
-            <div class="column-1">
-                <img class="btn-image" src="assets/imgs/{{event.image}}.gif" alt="Avatar">
-            </div>
-            <div class="column-2">
-                <p class="btn-title">{{event.name}}</p>
-                <p class="btn-aura">Aura: {{event.aura}}</p>
+                <div class="column-1">
+                        <img class="btn-image" src="assets/imgs/{{event.image}}.gif" alt="Avatar">
+                    </div>
+            <div class="column-2" (click)="navToDetails(event)" >
+                <p class="btn-title">{{truncateText(event.name, 20)}}</p>
+                <p id="details-text">{{truncateText(event.details, 120)}}</p>
                 <p class="btn-countdown">T-MINUS: {{minsRemaining(event.eventStart)}} Mins</p>
             </div>
-            <upvote-button [itemId]="event?.id"></upvote-button>
+            <upvote-button class="column-3" [itemId]="event.id" [userId]="authenticatedUser.uid" [ownerId]="event.ownerId"></upvote-button>
+            
           </div>
         </button>
         

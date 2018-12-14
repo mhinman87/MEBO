@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FoodTruck } from '../../models/foodtruck.model';
+import { User } from 'firebase/app';
+import { AuthService } from '../../providers/auth/auth.service';
 
 /**
  * Generated class for the UpcomingDetailsPage page.
@@ -19,16 +21,30 @@ export class UpcomingDetailsPage {
   foodtruck: FoodTruck;
   x: any;
   currentTime: number;
+  accountSubscription: any;
+  authenticatedUser = {} as User;
 
   constructor(public navCtrl: NavController, 
-              public navParams: NavParams) {
-    this.foodtruck = this.navParams.get('truckData');
-    const second = 1000;
-                this.x = setInterval(() => {
-                  this.currentTime = new Date().getTime();
-                    }, second)
-                    setTimeout(()=>{
-                    }, 1000);
+              public navParams: NavParams,
+              private auth: AuthService) {
+                    this.foodtruck = this.navParams.get('truckData');
+                    const second = 1000;
+                                this.x = setInterval(() => {
+                                  this.currentTime = new Date().getTime();
+                                    }, second)
+                                    setTimeout(()=>{
+                                    }, 1000);
+
+                    this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
+                      if (user != null){
+                       try {
+                         this.authenticatedUser = user;
+                         console.log(this.authenticatedUser);
+                       } catch(e) {
+                         console.error(e);
+                       }
+                      }
+                     }) 
   }
 
   ionViewDidLoad() {
@@ -42,6 +58,5 @@ export class UpcomingDetailsPage {
   minsRemaining(time){
     return Math.floor((time + 5*3600000 - this.currentTime)/60000)
   }
-  
 
 }

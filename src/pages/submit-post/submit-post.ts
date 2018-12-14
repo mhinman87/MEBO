@@ -67,6 +67,7 @@ export class SubmitPostPage implements OnInit{
     this.foodtruck.aura = 0;
     this.foodtruck.eventStart = Date.now() - 5*3600000;
     this.foodtruck.ownerId = this.account.uid;
+    this.foodtruck.ownerName = this.account.username;
     // var file = (document.getElementById('file') as HTMLInputElement).files[0];
     // this.account.profilePicName = file.name;
     // this.foodtruck.imgName = file.name;

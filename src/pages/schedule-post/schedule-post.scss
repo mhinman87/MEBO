@@ -168,5 +168,52 @@ page-schedule-post {
         margin-bottom: 10px;
     }
 
+    .container {
+		color: white;
+		text-align: center;
+		
+	  }
+
+    li {
+		display: inline-block;
+		font-size: 0.9em;
+		list-style-type: none;
+		padding: 10px;
+		text-transform: uppercase;
+		margin: 0 auto;
+	  }
+	  
+	  li span {
+		display: block;
+		font-size: 3.9rem;
+		color: black;
+		margin: 0 auto;
+		text-align: center;
+		background: #27B4C0;
+        width: 80px;
+		height: 80px;
+		padding-top: 14px;
+		border-radius: 60px;
+		margin-bottom: 10px;
+		font-weight: bold;
+		box-shadow: 0 0 0 1pt rgb(0, 0, 0);
+	  }
+
+	  .time-text {
+		  font-size: 1em;
+		  display: float;
+		  margin-top: -30px;
+		  color: black;
+		  font-weight: lighter;
+      }
+      
+      .countdown-text {
+        font-size: 0.9em;
+        display: float;
+        margin-bottom: -22px;
+        color: black;
+        font-weight: lighter;
+    }
+
 
 }

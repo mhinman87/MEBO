@@ -10,20 +10,22 @@
 <ion-content [ngClass]="{item: foodtruck.image == 'foodtruck', item2: foodtruck.image == 'burger-gif'}">
     <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
 
-    <img style="width: 70%;
-    height: 30%;
-    display: block;
-    margin: 0 auto;
-    margin-top: 5%;"  src="../../assets/imgs/{{foodtruck.image}}.gif">
 
-  <p class="title">{{foodtruck.name}}</p>
-  <p class="aura">{{foodtruck.aura}}</p>
+    
+  <img id="image-1" src="assets/imgs/{{foodtruck.image}}.gif" alt="" />
 
-  <textarea style="height: 7em;" class="event-input" [(ngModel)]='foodtruck.details' type="text" readonly ></textarea>
+  <h1 class="event-title">{{foodtruck.name}}</h1>
+  <p class="event-owner">@{{foodtruck.ownerName}}</p>
+  <div class="container">
+      <ul style="padding: 0;">
+        <li><p class="countdown-text">T-MINUS</p><span id="minutes">{{minsRemaining(foodtruck.eventStart)}}</span><p class="time-text">MINS</p></li>
+        <li><p class="countdown-text">DURATION</p><span id="minutes">{{foodtruck.duration / 2}}</span><p class="time-text">HOURS</p></li>
+      </ul>
+  </div>
+  <p class="event-details">{{foodtruck.details}}</p>
 
-  <textarea readonly class="event-duration">DURATION: {{foodtruck.duration / 2}} HOURS</textarea>
-
-  <p class="btn-countdown">T-MINUS: <br> {{minsRemaining(foodtruck.eventStart)}} Mins</p>
+  <upvote-button class="upvote-counter" [itemId]="foodtruck.id" [userId]="authenticatedUser.uid" [ownerId]="foodtruck.ownerId"></upvote-button>
+          
 
 
 </ion-content>

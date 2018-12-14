@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { FoodTruck } from '../../models/foodtruck.model';
 import { AuthService } from '../../providers/auth/auth.service';
 import { User } from 'firebase/app';
-import { sum, values } from 'lodash';
+
 
  
 
@@ -31,7 +31,7 @@ export class HomePage implements OnDestroy {
   loader: Loading;
   userPositionMarker: google.maps.Marker;
   hideMap: boolean;
-  trucks$: Observable<FoodTruck[]>;
+  trucks: FoodTruck[];
   campusOverlay: any;
   currentTime: number;
   x: any;
@@ -69,11 +69,13 @@ export class HomePage implements OnDestroy {
                     setTimeout(()=>{
                     }, 1000);
                 
+                    
   }
  
   //Initialize Map on page load
   async ionViewDidLoad() {
     this.showLoading();
+    
       let latLng = new google.maps.LatLng(37.71814898706639, -97.28986489422863 );
       this.platform.ready().then(() => {
           this.initializeMap(latLng, 18);
@@ -510,12 +512,51 @@ deleteMarkers() {
   this.markers = [];
 }
 
+ffFreshness(a: FoodTruck, b: FoodTruck){
+  let time = new Date().getTime();
+  let timePasseda = Math.abs(a.eventStart + 5*3600000 - time)
+  let signA = Math.abs(a.aura)
+  if (signA > 0){
+    signA = 1
+  } else if (signA < 0){
+    signA = -1
+  } else {
+    signA = 0
+  }
+  let valueA = Math.abs(a.aura)
+  if (a.aura < 0){
+    valueA = 1
+  }
+
+  let timePassedb = Math.abs(b.eventStart + 5*3600000 - time)
+  let signB = Math.abs(b.aura)
+  if (signB > 0){
+    signB = 1
+  } else if (signB < 0){
+    signB = -1
+  } else {
+    signB = 0
+  }
+  let valueB = Math.abs(b.aura)
+  if (b.aura < 0){
+    valueB = 1
+  }
+  
+  console.log(valueA + " a here")
+  console.log(valueB + " b here")
+  return (Math.log10(valueA) + 4500000/(timePasseda * signA)) > (Math.log10(valueB) + 4500000/(timePassedb * signB)) ? 1 : -1
+}
+
 auraDescending(a: FoodTruck, b: FoodTruck) {
   return a.aura > b.aura ? -1 : 1
 }
 
+// fireDescending(a, b) {
+//   return a.fireRating > b.fireRating ? -1 : 1
+// }
+
 timeDescending(a, b){
-  return a.eventStart < b.eventStart ? -1 : 1;
+  return a.eventEnd < b.eventEnd ? -1 : 1;
 }
 
 ngOnDestroy(){
@@ -547,14 +588,19 @@ flipMap(){
   if (this.hideMap){
     this.hideMap = false;
   } else {
-    this.hideMap = true;
+    var that = this;
+    setTimeout(function(){
+      that.hideMap =  true;
+      }
+      , 1000)   
   }
 }
 
 setMarkers(){
-  this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
+  this.foodtruckSubscription = this.dbProvider.getFoodtrucks().subscribe((data)=>{
     console.log(data)
-    data.sort(this.auraDescending);
+    this.trucks = data.sort(this.auraDescending);
+    
 
     for (let truck of data){
       let truckMarker: google.maps.Marker = new FoodTruckMarker(truck) 
@@ -587,22 +633,24 @@ setMarkers(){
 }
 
 sortEventsByAura(){
-  this.showLoading()
-  this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
-    data.sort(this.auraDescending);
-    return data;
-  })
-  this.loader.dismiss()
+  this.trucks.sort(this.auraDescending)
 }
 
 sortUntilLaunch(){
-  this.showLoading();
-  this.trucks$ = this.dbProvider.getFoodtrucks().map((data)=>{
-    data.sort(this.timeDescending);
-    return data;
-  })
-  this.loader.dismiss();
+  this.trucks.sort(this.timeDescending)
 }
+
+sortFFFreshness(){
+  this.trucks.sort(this.ffFreshness)
+}
+
+truncateText(text, maxlength) {
+  if (text.length > maxlength) {
+      text = text.substr(0,maxlength) + '...';
+  }
+  return text;
+}
+
 
  
   

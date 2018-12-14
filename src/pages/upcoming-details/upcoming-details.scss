@@ -8,8 +8,46 @@ page-upcoming-details {
         transform: rotate(180deg);
     }
 
+    #image-1 {
+		margin: 0 auto;
+		margin-top: 8%;
+		width: 50%;
+		display: block;
+
+    }
+    
+    .event-title{
+		color: black;
+		text-align: center;
+		font-size: 45px;
+		margin-top: -10px;
+		font-weight: bold;
+	}
+	
+	.event-owner {
+		width: 70%;
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		margin-top: -8px;
+		font-size: 1.5em;
+		margin-bottom: -10px;
+		
+	}
+
+	.event-details {
+		width: 80%;
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		font-size: 1.5em;
+        font-style: italic;
+        margin-top: -20px;
+        margin-bottom: 10px;
+	}
+
     .item {
-        background-color: #F2682A;
+        background-color: #E42547;
     }
 
     .item2 {
@@ -36,7 +74,7 @@ page-upcoming-details {
         font-size: 1.3em;
         margin: 0 auto;
         display: block;
-        background-color: white;
+        background-color: #FCB622;
         width: 70%;
         height: 40px;
         -moz-border-radius: 60px;
@@ -48,23 +86,60 @@ page-upcoming-details {
         text-align: center;
     }
 
-    .title {
-        font-size: 3.8em;
-        margin: 0 auto;
-        display: block;
-        width: 70%;
-        text-align: center;
-        font-weight: bold;
+    .container {
+		color: white;
+		text-align: center;
+		
+	  }
+	  
+	  li {
+		display: inline-block;
+		font-size: 0.9em;
+		list-style-type: none;
+		padding: 10px;
+		text-transform: uppercase;
+		margin: 0 auto;
+	  }
+	  
+	  li span {
+		display: block;
+		font-size: 3.9rem;
+		color: black;
+		margin: 0 auto;
+		text-align: center;
+		background: #27B4C0;
+        width: 80px;
+		height: 80px;
+		padding-top: 14px;
+		border-radius: 60px;
+		margin-bottom: 10px;
+		font-weight: bold;
+		box-shadow: 0 0 0 1pt rgb(0, 0, 0);
+	  }
+
+	  .time-text {
+		  font-size: 1em;
+		  display: float;
+		  margin-top: -30px;
+		  color: black;
+		  font-weight: lighter;
+      }
+      
+      .countdown-text {
+        font-size: 0.9em;
+        display: float;
+        margin-bottom: -22px;
+        color: black;
+        font-weight: lighter;
     }
 
-    .aura {
-        font-size: 2.8em;
-        margin: 0 auto;
-        display: block;
-        width: 70%;
-        text-align: center;
-        margin-bottom: 5%;
-        font-weight: bold;
-    }
+    .upvote-counter {
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		width: 25%;
+		margin-bottom: 3%;
+	  }
+
 
 }

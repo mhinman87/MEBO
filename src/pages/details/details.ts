@@ -118,6 +118,10 @@ export class DetailsPage {
     this.canUserCheckIn();
   }
 
+  goBack(){
+    this.navCtrl.pop();
+  }
+
 
   ionViewDidLoad() {
     this.foodtruck = this.navParams.get('truckData');

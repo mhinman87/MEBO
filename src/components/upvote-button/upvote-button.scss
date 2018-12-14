@@ -1,12 +1,13 @@
 upvote-button {
 
     .votebox {
-        height: 60px;
-        width: 40px;
-        display: flex;
-        text-align: center;
-        flex-direction: column;
+        height: 30px;
+        width: 100%;
+        // display: flex;
+        // text-align: center;
+        // flex-direction: column;
         font-size: 0.7em;
+        text-align: center;
       
         // .vote {
         //   cursor: pointer;
@@ -14,14 +15,48 @@ upvote-button {
         //     color: orange;
         //   }
         // }
+
+        .vote-count {
+          font-size: 3em;
+          line-height: 1em;
+        }
       
         .active.up {
-            color: green;
+            border: solid #FCB622;
+            border-width: 0 5px 5px 0;
+            display: inline-block;
+            padding: 5px;
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
           }
       
         .active.down {
-           color: red;
+            border: solid #FCB622;
+            border-width: 0 5px 5px 0;
+            display: inline-block;
+            padding: 5px;
+            margin-top: -0.5%;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
          }
+
+         i {
+          border: solid black;
+          border-width: 0 5px 5px 0;
+          display: inline-block;
+          padding: 5px;
+        }
+
+        .up {
+          transform: rotate(-135deg);
+          -webkit-transform: rotate(-135deg);
+        }
+
+        .down {
+          transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
+          margin-top: -30%;
+        }
       
       }
 }

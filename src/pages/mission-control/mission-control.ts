@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
+import { AuthService } from '../../providers/auth/auth.service'
 import { Observable } from 'rxjs';
 import { FoodTruck } from '../../models/foodtruck.model';
+import { User } from 'firebase/app';
 
 /**
  * Generated class for the MissionControlPage page.
@@ -16,22 +18,37 @@ import { FoodTruck } from '../../models/foodtruck.model';
   selector: 'page-mission-control',
   templateUrl: 'mission-control.html',
 })
-export class MissionControlPage {
+export class MissionControlPage implements OnDestroy {
 
-  events$: Observable<FoodTruck[]>;
+  events: FoodTruck[];
   x: any;
   currentTime: number;
   loader: Loading;
+  accountSubscription: any;
+  eventsSubscription: any;
+  authenticatedUser = {} as User;
   
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private dbProvider: DatabaseProvider,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController,
+              private auth: AuthService) {
                 this.showLoading()
 
-                this.events$ = this.dbProvider.getUpcomingEvents().map((data)=>{
-                  data.sort(this.auraDescending);
+                this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
+                  if (user != null){
+                   try {
+                     this.authenticatedUser = user;
+                     console.log(this.authenticatedUser);
+                   } catch(e) {
+                     console.error(e);
+                   }
+                  }
+                 }) 
+
+                this.eventsSubscription = this.dbProvider.getUpcomingEvents().subscribe((data)=>{
+                  this.events = data.sort(this.auraDescending);
                   return data;
                 })
                 const second = 1000;
@@ -68,31 +85,37 @@ export class MissionControlPage {
     return Math.floor((time + 5*3600000 - this.currentTime)/60000)
   }
 
-sortEventsByAura(){
-  this.showLoading()
-  this.events$ = this.dbProvider.getUpcomingEvents().map((data)=>{
-    data.sort(this.auraDescending);
-    return data;
-  })
-  this.loader.dismiss()
-}
+  sortEventsByAura(){
+    this.events.sort(this.auraDescending)
+  }
 
-sortUntilLaunch(){
-  this.showLoading();
-  this.events$ = this.dbProvider.getUpcomingEvents().map((data)=>{
-    data.sort(this.timeDescending);
-    return data;
-  })
-  this.loader.dismiss();
-}
+  sortUntilLaunch(){
+    this.events.sort(this.timeDescending)
+  }
 
-showLoading(){
-  this.loader = this.loadingCtrl.create({
-    content: `<img src="assets/imgs/loading.gif" />`,
-    showBackdrop: false,
-    spinner: 'hide'
-  })
-  this.loader.present();
-}
+  sortFFFreshness(){
+
+  }
+
+  showLoading(){
+    this.loader = this.loadingCtrl.create({
+      content: `<img src="assets/imgs/loading.gif" />`,
+      showBackdrop: false,
+      spinner: 'hide'
+    })
+    this.loader.present();
+  }
+
+  truncateText(text, maxlength) {
+    if (text.length > maxlength) {
+        text = text.substr(0,maxlength) + '...';
+    }
+    return text;
+  }
+
+  ngOnDestroy(){
+    this.accountSubscription.unsubscribe();
+    this.eventsSubscription.unsubscribe();
+  }
 
 }

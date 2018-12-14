@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import { Account } from '../../models/account.model';
 import { User } from 'firebase/app';
 import { AngularFireStorage } from 'angularfire2/storage';
-import {sum, values } from 'lodash';
+import {sum, values} from 'lodash';
 
 
 
@@ -65,10 +65,7 @@ export class DatabaseProvider {
     data3[userId] = data2 
     this.afs.collection('accounts').doc(userId).update({eventCheckInTimer: now + 300000})
     this.afs.collection(`accounts/${userId}/votes`).doc('votes').update(data3);
-    // let data4 = {}
-    // data4['checkIns'] = 3;
     let data5 = {}
-    //changed from data4 to data
     data5[itemId] = data;
     this.afs.collection(`accounts/${ownerId}/votes`).doc('votes').update(data5)
   }
@@ -81,6 +78,8 @@ export class DatabaseProvider {
     this.foodTruckCollection = this.afs.collection('foodtrucks'); //reference
     let docRef = await this.foodTruckCollection.add(foodtruck);
     this.afs.collection(`foodtrucks/${docRef.id}/votes`).doc('votes').set(data);
+    foodtruck.id = docRef.id
+    docRef.update(foodtruck);
   }
 
 
@@ -90,33 +89,23 @@ export class DatabaseProvider {
     }) //reference
     //
 
-    
-
     //This filters the returned foodtrucks (whos endTime has not passed - see above query) and returns 
     //only foodtrucks who startTime is also passed (RESULT: Active foodtrucks only)
     //this forEach break is not very elegant and i actually don't know if it helps me
-    this.foodTrucks = this.foodTruckCollection.snapshotChanges().map(actions =>{
+    return this.foodTruckCollection.snapshotChanges().map(actions =>{
       let now = new Date().getTime() - 5*3600000;
       return actions.filter(b => b.payload.doc.data().eventStart < now).map(a => {
             let data = a.payload.doc.data() as FoodTruck;
             data.id = a.payload.doc.id;
-            var keepGoing = true;
-            var i = 0;
-            this.getItemVotes(data.id).forEach(votes =>{
-              if (keepGoing){
-                if (i < actions.length) {
-                  data.aura = sum(values(votes))
-                } else {
-                  keepGoing = false
-                }
-                i++
-              }
+            this.getItemVotes(data.id).forEach(allUserVotes => {
+              data.aura = sum(values(allUserVotes))
+              console.log('ruunnninnnggg')
             })
             return data
-          });
+          })
     })
 
-    return this.foodTrucks;
+    
   }
 
   getUpcomingEvents(){
@@ -128,8 +117,12 @@ export class DatabaseProvider {
       return actions.map(a => {
             let data = a.payload.doc.data() as FoodTruck;
             data.id = a.payload.doc.id;
+            this.getItemVotes(data.id).forEach(allUserVotes => {
+              data.aura = sum(values(allUserVotes))
+              console.log('ruunnninnnggg')
+            })
             return data
-          });
+          })
     })
     return this.foodTrucks;
   }

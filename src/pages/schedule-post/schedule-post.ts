@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FoodTruck } from '../../models/foodtruck.model';
@@ -33,7 +33,8 @@ export class SchedulePostPage implements OnInit {
               public navParams: NavParams,
               private database: DatabaseProvider,
               private loadingCtrl: LoadingController,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private alertCtrl: AlertController) {
 
                 this.foodtruck.lat = this.navParams.get('lat');
                 this.foodtruck.long = this.navParams.get('lng');
@@ -66,6 +67,7 @@ export class SchedulePostPage implements OnInit {
     this.foodtruck.type = "foodtruck";
     this.foodtruck.aura = 0;
     this.foodtruck.ownerId = this.account.uid;
+    this.foodtruck.ownerName = this.account.username;
     // var date = new Date(this.eventDate); // some mock date
     // var milliseconds = date.getTime();
     
@@ -90,7 +92,7 @@ export class SchedulePostPage implements OnInit {
     if (this.foodtruck.eventStart <= Date.now() + 19*3600000){
       this.saveFoodtruck(this.foodtruck)
     } else {
-      console.log('failure')
+      this.presentAlert();
     }
 
   }
@@ -102,6 +104,14 @@ export class SchedulePostPage implements OnInit {
       spinner: 'hide'
     })
     this.loader.present();
+  }
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Too Far in Advance',
+      subTitle: "Breh... You can't schedule events more than a day in advance. Keep it f-f-fresh.",
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 
 }
