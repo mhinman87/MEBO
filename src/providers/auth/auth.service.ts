@@ -83,7 +83,7 @@ export class AuthService {
 
 
   getAuthenticatedUser() {
-    return this.afAuth.authState;
+    return this.afAuth.authState
   }
 
   async logOut(){

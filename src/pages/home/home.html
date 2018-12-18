@@ -17,22 +17,22 @@
 
 <img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
 
-<img [ngClass]="{hidden: hideMap == false}" src="assets/imgs/Map-Shadow.png" button (click)="flipMap()" class="map-button">
+<img src="assets/imgs/Map-Shadow.png" button (click)="flipMap()" class="map-button">
 
 
 
 
 
 
-<ion-content >
-    <div class="scene-map">
+<ion-content menuClose>
+    <div menuClose class="scene-map">
         <div class="map">
           <div class="map__face map__face--front">
               <img src="assets/imgs/Refresh-Button.png" button (click)="getPositionCenterMap()" class="ref-button">
               <img src="assets/imgs/List-Shadow.png" button (click)="flipMap()" class="list-button">
-              <div id="map_canvas" allow="geolocation"></div>
+              <div menuClose id="map_canvas" allow="geolocation"></div>
           </div>
-          <div class="map__face map__face--back">
+          <div menuClose class="map__face map__face--back">
               <h1 class="page-title">CURRENT EVENTS</h1>
                 <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">AURA</label>
                 <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">COUNTDOWN</label>

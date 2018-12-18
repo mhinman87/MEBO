@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events, ViewController } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthService } from '../providers/auth/auth.service';
@@ -22,9 +22,7 @@ export class MyApp {
   pages: Array<{title: string, component: any}>;
   isUser: boolean;
   isVendor: boolean;
-  private authenticatedUser: User;
   account = {} as Account;
-  latLng: google.maps.LatLng;
   userAura: number = 0;
   subscription;
 
@@ -37,12 +35,13 @@ export class MyApp {
               public database: DatabaseProvider) {
 
                 //subscribe to login/logout events
-                events.subscribe('user:login', () => {
-                  this.nav.setRoot('HomePage')
-                });     
-                events.subscribe('user:logout', () => {
-                  this.nav.setRoot('LoginPage')
-                })
+                // events.subscribe('user:login', () => {
+                //   this.nav.setRoot('HomePage')
+                //   console.log('set Homepage from events sub')
+                // });     
+                // events.subscribe('user:logout', () => {
+                //   this.nav.setRoot('LoginPage')
+                // })
 
                 //Set Pages
                 this.pages = [
@@ -51,39 +50,40 @@ export class MyApp {
                   { title: 'MISSION CONTROL', component: 'MissionControlPage'},
                   { title: 'S.O.S. (HELP)', component: 'ProfilePage'}
                 ];
-                this.rootPage = 'HomePage';
-
-                //Check to see if the user is logged in and set aura
-                this.auth.getAuthenticatedUser().subscribe((user: User)=>{
-                  if (user){
-                    this.authenticatedUser = user;
-                    this.database.getAccountInfo(user.uid).subscribe((account)=>{
-                      this.setAccount(account);
-                      this.subscription = this.database.getUserVotes(user.uid)
-                      .subscribe(upvotes => {
-                        let auraSum = 0;
-                        values(upvotes).forEach(uniqueUsers =>{
-                          auraSum += sum(values(uniqueUsers))
-                        }) 
-                        this.userAura = auraSum;
-                      })
-                    })
-                    
-                  } else {
-                    this.rootPage = 'LoginPage'
-                  }
-                })
-
-               
+                               
                 
                 this.initializeApp();
 
   }
 
-  initializeApp() {
+ initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+      
+      
+      this.subscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
+        if (user){
+          this.rootPage = 'HomePage';
+          console.log('set Homepage from app.component.ts subscription')
+          this.database.getAccountInfo(user.uid).subscribe((account)=>{
+            this.setAccount(account);
+            this.subscription = this.database.getUserVotes(user.uid)
+            .subscribe(upvotes => {
+              let auraSum = 0;
+              values(upvotes).forEach(uniqueUsers =>{
+                auraSum += sum(values(uniqueUsers))
+              }) 
+              this.userAura = auraSum;
+            })
+          })
+          // this.subscription.unsubscribe();
+        } else {
+          this.rootPage = 'LoginPage';
+          // this.subscription.unsubscribe();
+        }
+      })
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
@@ -103,6 +103,7 @@ export class MyApp {
   async logout(){
    await this.auth.logOut();
   }
+
 
 
   navToProfile(){

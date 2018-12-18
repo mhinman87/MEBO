@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, Platform, Loading, LoadingControll
 import { FoodTruckMarker } from '../../models/foodtruck-marker.model';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Geolocation } from '@ionic-native/geolocation';
-import { Observable } from 'rxjs';
 import { FoodTruck } from '../../models/foodtruck.model';
 import { AuthService } from '../../providers/auth/auth.service';
 import { User } from 'firebase/app';
@@ -57,9 +56,12 @@ export class HomePage implements OnDestroy {
                    try {
                      this.authenticatedUser = user;
                      console.log(this.authenticatedUser);
+                     this.accountSubscription.unsubscribe();
                    } catch(e) {
                      console.error(e);
                    }
+                  } else {
+                    this.accountSubscription.unsubscribe();
                   }
                  }) 
                 const second = 1000;
@@ -73,9 +75,7 @@ export class HomePage implements OnDestroy {
   }
  
   //Initialize Map on page load
-  async ionViewDidLoad() {
-    this.showLoading();
-    
+  async ionViewDidLoad() {  
       let latLng = new google.maps.LatLng(37.71814898706639, -97.28986489422863 );
       this.platform.ready().then(() => {
           this.initializeMap(latLng, 18);
@@ -97,32 +97,11 @@ export class HomePage implements OnDestroy {
         this.userPositionMarker.setPosition(LatLng);
         console.log('user position updated');
       });
-
-  await this.geolocation.getCurrentPosition({
-      timeout: 5000,
-      enableHighAccuracy: true
-    }).then((position)=>{
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      this.userPositionMarker = new google.maps.Marker({
-        position: latLng,
-        map: this.map,
-        icon: {
-          url: 'assets/imgs/MeboWave.gif',
-          scaledSize: new google.maps.Size(37.5, 50),
-        }
-      })
-      if ((37.7224 >= position.coords.latitude && position.coords.latitude >= 37.7156) && (-97.2806 >= position.coords.longitude && position.coords.longitude >= -97.2990 )){
-        this.map.setCenter(latLng);
-      }
-    },(err) => {
-      this.presentAlert();
-      console.log(err);
-    })
-    this.loader.dismiss();
+    this.getPositionCenterMap();
   }
 
   async getPositionCenterMap(){
-    this.showLoading();
+    this.showLoading("Get Position Loader");
     this.deleteMarkers();
     await this.geolocation.getCurrentPosition({
       timeout: 5000,
@@ -149,25 +128,27 @@ export class HomePage implements OnDestroy {
 
 
     },(err) => {
-      this.presentAlert();
+      this.presentAlert(err);
       console.log(err);
-    });
-    this.loader.dismiss();
+    })
+    this.loader.dismiss();  
+    
   }
 
-  showLoading(){
+  showLoading(string1){
     this.loader = this.loadingCrtl.create({
       content: `<img src="assets/imgs/loading.gif" />`,
       showBackdrop: false,
       spinner: 'hide'
     })
+    console.log(string1)
     this.loader.present();
   }
 
-  presentAlert() {
+  presentAlert(err) {
     let alert = this.alertCtrl.create({
       title: 'HOUSTON WE HAVE A PROBLEM',
-      subTitle: "You are lost in space - update your location with refresh button",
+      subTitle: err,
       buttons: ['Dismiss']
     });
     alert.present();
@@ -496,7 +477,6 @@ export class HomePage implements OnDestroy {
 
     this.map.mapTypes.set('styled_map', styledMapType);
     this.map.setMapTypeId('styled_map');
-    this.setMarkers();
 
 }
 
@@ -505,6 +485,7 @@ setMapOnAll(map) {
     this.markers[i].setMap(map);
   }
 }
+
 
 
 deleteMarkers() {
@@ -563,6 +544,7 @@ ngOnDestroy(){
   if (this.foodtruckSubscription){
     this.foodtruckSubscription.unsubscribe();
   }
+  this.accountSubscription.unsubscribe();
   this.events.unsubscribe('user-location');
 }
 
@@ -570,7 +552,8 @@ ionViewDidLeave(){
   if (this.foodtruckSubscription){
     this.foodtruckSubscription.unsubscribe();
   }
-  
+  this.accountSubscription.unsubscribe();
+  this.events.unsubscribe('user-location');
 }
 
 navToDetails(foodtruck: FoodTruck){
@@ -584,21 +567,21 @@ minsRemaining(time){
 }
 
 flipMap(){
+  document.querySelector('.map-button').classList.toggle('is-flipped');
   document.querySelector('.map').classList.toggle('is-flipped');
-  if (this.hideMap){
-    this.hideMap = false;
-  } else {
-    var that = this;
-    setTimeout(function(){
-      that.hideMap =  true;
-      }
-      , 1000)   
-  }
+  // if (this.hideMap){
+  //   this.hideMap = false;
+  // } else {
+  //   var that = this;
+  //   setTimeout(function(){
+  //     that.hideMap =  true;
+  //     }
+  //     , 1000)   
+  // }
 }
 
 setMarkers(){
   this.foodtruckSubscription = this.dbProvider.getFoodtrucks().subscribe((data)=>{
-    console.log(data)
     this.trucks = data.sort(this.auraDescending);
     
 

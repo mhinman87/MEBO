@@ -1,7 +1,7 @@
 <ion-menu [content]="content" [swipeEnabled]="false">
 
   <ion-content class="background" >
-    <div [ngClass]="{hidden: authenticatedUser == undefined}" class="menu-header" (click)="navToProfile()">
+    <div class="menu-header" (click)="navToProfile()">
       <h6 text-center>YOUR FUTURE IS BRIGHT</h6>
       <h3 text-center class="menu-profile-username"  >{{account.username}}</h3>
       <div class="scene">
@@ -18,7 +18,7 @@
       <button menuClose *ngFor="let p of pages"  (click)="openPage(p)">{{p.title}}</button>
     </div>
 
-    <button class="logout-button" menuClose (click)="logout()" [ngClass]="{hidden: authenticatedUser == undefined}">LOG OUT</button>
+    <button class="logout-button" menuClose (click)="logout()">LOG OUT</button>
   </ion-content>
 
 </ion-menu>

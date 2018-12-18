@@ -2,7 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { AuthService } from '../../providers/auth/auth.service'
-import { Observable } from 'rxjs';
 import { FoodTruck } from '../../models/foodtruck.model';
 import { User } from 'firebase/app';
 
