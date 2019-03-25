@@ -1,7 +1,7 @@
 page-upcoming-details {
     .arrow-button {
         position: absolute; 
-        top: 15px; 
+        top: 30px; 
         left: 15px; 
         z-index: 99;
         width: 10%;
@@ -19,7 +19,7 @@ page-upcoming-details {
     .event-title{
 		color: black;
 		text-align: center;
-		font-size: 45px;
+		font-size: 30px;
 		margin-top: -10px;
 		font-weight: bold;
 	}
@@ -103,14 +103,14 @@ page-upcoming-details {
 	  
 	  li span {
 		display: block;
-		font-size: 3.9rem;
+		font-size: 2.6rem;
 		color: black;
 		margin: 0 auto;
 		text-align: center;
 		background: #27B4C0;
         width: 80px;
 		height: 80px;
-		padding-top: 14px;
+		padding-top: 22px;
 		border-radius: 60px;
 		margin-bottom: 10px;
 		font-weight: bold;
@@ -126,7 +126,7 @@ page-upcoming-details {
       }
       
       .countdown-text {
-        font-size: 0.9em;
+        font-size: 0.8em;
         display: float;
         margin-bottom: -22px;
         color: black;
@@ -139,6 +139,19 @@ page-upcoming-details {
 		display: block;
 		width: 25%;
 		margin-bottom: 3%;
+	  }
+
+	  .edit-button {
+        position: absolute; 
+        top: 30px; 
+        right: 15px; 
+        z-index: 99;
+        width: 10%;
+		backface-visibility: hidden;
+	}
+
+	  .hidden {
+		  visibility: hidden;
 	  }
 
 

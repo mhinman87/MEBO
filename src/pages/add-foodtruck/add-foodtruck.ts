@@ -56,13 +56,13 @@ export class AddFoodtruckPage {
       this.platform.ready().then(() => {
         this.initializeMap(latLng);
         var imageBounds = {
-          north: 37.72375,
-          south: 37.71365,
-          east: -97.28048505979406,
-          west: -97.30031
+          north: 37.7269,
+          south: 37.7112,
+          east: -97.27605,
+          west: -97.30445
         };
         this.campusOverlay = new google.maps.GroundOverlay(
-          '../../assets/imgs/MEBO-Map.gif',
+          '../../assets/imgs/Map.png',
           imageBounds);
         this.campusOverlay.setMap(this.map);
       })
@@ -85,14 +85,14 @@ export class AddFoodtruckPage {
   navigateToSubmitPage(){
     let lat = this.map.getCenter().lat();
     let lng = this.map.getCenter().lng();
-    let markerPos = new google.maps.LatLng(lat, lng)
+   let markerPos = new google.maps.LatLng(lat, lng)
     if (this.bounds.contains(markerPos)){
       this.navCtrl.push('SubmitPostPage', {lat: lat,
         lng: lng,
         account: this.account});
-    } else {
-      this.presentAlert();
-    }
+   } else {
+     this.presentAlert();
+   }
    
   }
 

@@ -36,6 +36,10 @@ export class HomePage implements OnDestroy {
   x: any;
   authenticatedUser = {} as User;
   accountSubscription: any;
+  bounds = new google.maps.LatLngBounds( 
+    new google.maps.LatLng(37.71365, -97.30031),
+    new google.maps.LatLng(37.72375, -97.28048505979406)
+   );
  
   
   
@@ -73,6 +77,10 @@ export class HomePage implements OnDestroy {
                 
                     
   }
+
+  ionViewDidEnter(){
+    this.deleteMarkers();
+  }
  
   //Initialize Map on page load
   async ionViewDidLoad() {  
@@ -80,13 +88,13 @@ export class HomePage implements OnDestroy {
       this.platform.ready().then(() => {
           this.initializeMap(latLng, 18);
           var imageBounds = {
-            north: 37.72375,
-            south: 37.71365,
-            east: -97.28048505979406,
-            west: -97.30031
+            north: 37.7269,
+            south: 37.7112,
+            east: -97.27605,
+            west: -97.30445
           };
             this.campusOverlay = new google.maps.GroundOverlay(
-              '../../assets/imgs/MEBO-Map.gif',
+              '../../assets/imgs/Map.png',
               imageBounds);
             this.campusOverlay.setMap(this.map);
         })
@@ -108,6 +116,7 @@ export class HomePage implements OnDestroy {
       enableHighAccuracy: true
     }).then((position)=>{
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      if (this.bounds.contains(latLng)){
         if (this.userPositionMarker){
           this.userPositionMarker.setPosition(latLng);
           this.map.setCenter(latLng);
@@ -124,11 +133,14 @@ export class HomePage implements OnDestroy {
         this.map.setCenter(latLng);
       }
 
+      
+      } else {
+        this.presentAlert("Not on Campus")
+      }
       this.setMarkers();
-
-
     },(err) => {
-      this.presentAlert(err);
+      this.setMarkers();
+      this.presentAlert("You are lost in space!! We can't find you.");
       console.log(err);
     })
     this.loader.dismiss();  
@@ -591,8 +603,8 @@ setMarkers(){
         position: new google.maps.LatLng(truck.lat, truck.long),
         map: this.map,
         icon: {
-          url: `assets/imgs/${truck.image}.gif`,
-          scaledSize: new google.maps.Size(42, 42),
+          url: `assets/imgs/${truck.image}.png`,
+          scaledSize: new google.maps.Size(40, 60),
         },
         animation: google.maps.Animation.DROP
       });

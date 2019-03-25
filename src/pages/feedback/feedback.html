@@ -1,0 +1,72 @@
+<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
+
+<ion-content style="background-color: #F2682A;">
+  <p class="page-title">FEEDBACK</p>
+
+  <form [formGroup]="myForm">
+    
+    <input class="name-input" 
+          id="userName" 
+          [(ngModel)]='feedback.name' 
+          formControlName="name" 
+          type="text" 
+          clearOnEdit="false" 
+          required 
+          placeholder="NAME">
+
+    <p class="feedback-headings">How would you rate our app?</p>
+    <textarea style="height: 7em;" 
+              class="name-input" 
+              id="myDescription" 
+              [(ngModel)]='feedback.rating' 
+              formControlName="rating" 
+              type="text" 
+              clearOnEdit="false" 
+              required 
+              placeholder="RATING">
+    </textarea>
+
+    <p class="feedback-headings">How do you utilize this app? Have you found a unique or unintentional use?</p>
+    <textarea style="height: 7em;" 
+              class="name-input" 
+              id="myDescription" 
+              [(ngModel)]='feedback.utilize' 
+              formControlName="utilize" 
+              type="text" 
+              clearOnEdit="false" 
+              required 
+              placeholder="UTILIZATION">
+    </textarea>
+
+    <p class="feedback-headings">What would you like to see added next?</p>
+    <textarea style="height: 7em;" 
+              class="name-input" 
+              id="myDescription" 
+              [(ngModel)]='feedback.features' 
+              formControlName="features" 
+              type="text" 
+              clearOnEdit="false" 
+              required 
+              placeholder="FEATURES">
+    </textarea>
+
+    <input type="checkbox" 
+          class="swag-checkbox"
+          [(ngModel)]="feedback.contact"
+          formControlName="contact" 
+          value="true"
+          checked>
+
+    <p class="swag-text">
+      Yes, you can contact me for follow up questions.
+    </p>
+    
+  </form>
+
+  
+
+  <button ion-button
+          class="long-button"
+          (click)="saveFeedback(this.feedback)">SUBMIT</button>
+
+</ion-content>

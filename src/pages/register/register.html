@@ -26,25 +26,27 @@
 
 
             <input [(ngModel)]='account.email' class="login-input" type="email"  formControlName="email" placeholder="EMAIL"
-                      required pattern="^[a-zA-Z0-9]+@(wichita\.edu|shockers\.wichita\.edu)">
+                      required pattern="^[a-zA-Z0-9.]+@(wichita\.edu|shockers\.wichita\.edu)">
 
                       <div padding *ngIf="email.invalid && email.dirty" class="notification-is-danger">
                         <span>MUST BE A WSU EMAIL</span>
                       </div>
 
-            <input [(ngModel)]='account.dateOfBirth' class="login-input" required formControlName="dob" placeholder="DATE OF BIRTH" [type]="DOBType" (click)="hideShowPassword()">
+            <!-- <input [(ngModel)]='account.dateOfBirth' class="login-input" required formControlName="dob" placeholder="DATE OF BIRTH" [type]="DOBType" (click)="hideShowPassword()"> -->
                         
             <input class="login-input" id="myInput" [(ngModel)]='account.password' formControlName="password" type="password" clearOnEdit="false" 
                          required placeholder="PASSWORD">
 
             <input class="login-input"[(ngModel)]='passwordConfirm' type="password"  formControlName="password" required placeholder="PASSWORD AGAIN">
-
+            
+            <div padding class="notification-is-danger" *ngIf="account.password != passwordConfirm">
+                <span>Passwords must match</span>
+              </div>
               <!-- pattern="(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$" -->
-      <button class="long-button" [disabled]="myForm.invalid || account.password != passwordConfirm"  (click)="register()">Create Account</button>
+              <!-- [disabled]="myForm.invalid || account.password != passwordConfirm" -->
+      <button class="long-button"  (click)="register()">Create Account</button>
 
-      <div padding class="notification-is-danger" *ngIf="account.password != passwordConfirm">
-        <span>Passwords must match</span>
-      </div>
+      
 
       <button class="astext" (click)='navigateToLogin()'>LOG IN</button>
   </form>

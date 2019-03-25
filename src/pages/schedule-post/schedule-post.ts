@@ -38,7 +38,7 @@ export class SchedulePostPage implements OnInit {
 
                 this.foodtruck.lat = this.navParams.get('lat');
                 this.foodtruck.long = this.navParams.get('lng');
-                this.foodtruck.image = 'foodtruck'; 
+                this.foodtruck.image = 'FoodTruck'; 
                 this.foodtruck.duration = 1;
                 this.account = this.navParams.get('account');
   }
@@ -78,7 +78,11 @@ export class SchedulePostPage implements OnInit {
     // this.foodtruck.imgName = file.name;
     // var url = await this.database.eventUploadFile(this.account.username, file, this.foodtruck.name);
     // this.foodtruck.img = url;
+    //this.presentAlert(Date.parse(this.eventDate));
+
+    this.foodtruck.eventStart = Date.parse(this.eventDate); //- 5*3600000;
     this.foodtruck.eventEnd = this.foodtruck.eventStart + (this.foodtruck.duration*3600000/2);
+    this.foodtruck.eventDate = this.formatDate(new Date(Date.parse(this.eventDate)+5*3600000));
     await this.database.saveFoodtruck(foodtruck);
     
     this.loader.dismiss().then(()=>{
@@ -88,13 +92,7 @@ export class SchedulePostPage implements OnInit {
   }
 
   submit(){
-    this.foodtruck.eventStart = Date.parse(this.eventDate + ":" + this.eventTime) - 5*3600000;
-    if (this.foodtruck.eventStart <= Date.now() + 19*3600000){
       this.saveFoodtruck(this.foodtruck)
-    } else {
-      this.presentAlert();
-    }
-
   }
 
   showLoading(){
@@ -105,13 +103,42 @@ export class SchedulePostPage implements OnInit {
     })
     this.loader.present();
   }
-  presentAlert() {
+  presentAlert(string) {
     let alert = this.alertCtrl.create({
       title: 'Too Far in Advance',
-      subTitle: "Breh... You can't schedule events more than a day in advance. Keep it f-f-fresh.",
+      subTitle: string,
       buttons: ['Dismiss']
     });
     alert.present();
+  }
+
+  formatDate(date: Date) {
+    var monthNames = [
+      "Jan", "Feb", "Mar",
+      "Apr", "May", "Jun", "Jul",
+      "Aug", "Sep", "Oct",
+      "Nov", "Dec"
+    ];
+  
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+    var time = this.formatAMPM(date);
+
+    console.log(time)
+  
+    return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + time;
+  }
+
+  formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
   }
 
 }

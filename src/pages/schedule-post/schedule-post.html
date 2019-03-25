@@ -2,10 +2,10 @@
     <img style="width: 10%;
                 margin-top: 15px; 
                 margin-left: 15px;" src="../../assets/imgs/Hamburger-Menu.png" button menuToggle>
-    <img style="width: 70%;
-                height: 30%;
+    <img style="width: 60%;
+                height: 40%;
                 display: block;
-                margin: 0 auto" [ngClass]="{hidden: foodtruck.image == undefined}" src="../../assets/imgs/{{foodtruck.image}}.gif">
+                margin: 0 auto" [ngClass]="{hidden: foodtruck.image == undefined}" src="../../assets/imgs/{{foodtruck.image}}.png">
 
     <form [formGroup]="myForm">
       <input class="event-input" id="myInput" [(ngModel)]='foodtruck.name' formControlName="title" type="text" clearOnEdit="false" 
@@ -16,37 +16,38 @@
       <input type="radio" id="freeStuff" name="type" [(ngModel)]='foodtruck.image' value="burger-gif" formControlName="type"><label for="freeStuff" >FREE STUFF</label>
      -->
 
-      <select class="event-input" id="durationSelect" form="myForm" type="number" [(ngModel)]='foodtruck.image' formControlName="type" required>
+     <select class="event-input" id="durationSelect" form="myForm" type="number" [(ngModel)]='foodtruck.image' formControlName="type" required>
         <option value="foodtruck" disabled>EVENT TYPE</option>
-        <option value="0.5">Free Food</option>
-        <option value="1">Free Stuff</option>
-        <option value="2">Student Group</option>
-        <option value="3">Spikeball</option>
-        <option value="4">Basketball</option>
-        <option value="5">Volleyball</option>
-        <option value="6">Board Game</option>
-        <option value="7">Study Group</option>
-        <option value="8">Open Event</option>
-        <option value="9">Workshop</option>
-        <option value="10">Bake Sale</option>
-        <option value="foodtruck">Foodtruck</option>
-        <option value="12">Ultimate Frisbee</option>
-      </select>
+      <option value="Food">Free Food</option>
+      <option value="Gaming">Gaming</option>
+      <option value="StudyGroup">Study Group</option>
+      <option value="Greek">Greek</option>
+      <option value="Basketball">Basketball</option>
+      <option value="Volleyball">Volleyball</option>
+      <option value="FoodTruck">Foodtruck</option>
+      <option value="BoardGame">Board Game</option>
+      <option value="PinkFlag">Pink Flag</option>
+      <option value="OrangeFlag">Orange Flag</option>
+      <option value="GreenFlag">Green Flag</option>
+      <option value="YellowFlag">Yellow Flag</option>
+      <option value="BlueFlag">Blue Flag</option>
+      
+    </select>
 
       <textarea maxlength="40000" style="height: 7em;" class="event-input" id="myInput" [(ngModel)]='foodtruck.details' formControlName="details" type="text" clearOnEdit="false" 
                          required placeholder="DETAILS"></textarea>
 
                          <ion-item class="date-picker">
                             <ion-label>Date</ion-label>
-                            <ion-datetime required displayFormat="YYYY-MMMM-D" min="2018" max="2021-12-31" [(ngModel)]="eventDate" formControlName="startDate">
+                            <ion-datetime required displayFormat="D MMM YYYY h:mm a" minuteValues="0,15,30,45" min="2018" max="2021-12-31" [(ngModel)]="this.eventDate" formControlName="startDate">
                             </ion-datetime>
                           </ion-item>
 
-                          <ion-item class="date-picker">
+                          <!-- <ion-item class="date-picker">
                               <ion-label>Time</ion-label>
-                              <ion-datetime required displayFormat="h:mm a" [(ngModel)]="eventTime" formControlName="startTime">
+                              <ion-datetime required displayFormat="hh:mm" minuteValues="0,15,30,45" [(ngModel)]="this.eventTime" formControlName="startTime">
                               </ion-datetime>
-                            </ion-item>                
+                            </ion-item>                 -->
     </form>
 
     <div class="event-input">

@@ -23,6 +23,7 @@ export class UpcomingDetailsPage {
   currentTime: number;
   accountSubscription: any;
   authenticatedUser = {} as User;
+  hideEditButton: boolean;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -44,6 +45,11 @@ export class UpcomingDetailsPage {
                          console.error(e);
                        }
                       }
+                      if (this.authenticatedUser.uid == this.foodtruck.ownerId){
+                        this.hideEditButton = false;
+                      } else {
+                        this.hideEditButton = true;
+                      }
                      }) 
   }
 
@@ -57,6 +63,12 @@ export class UpcomingDetailsPage {
 
   minsRemaining(time){
     return Math.floor((time + 5*3600000 - this.currentTime)/60000)
+  }
+
+  navToEdit(){
+    this.navCtrl.push('EditEventPage', {
+      truckData: this.foodtruck
+      })
   }
 
 }

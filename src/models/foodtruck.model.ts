@@ -8,6 +8,7 @@ export interface FoodTruck {
     type: "foodtruck";
     id: string;
     aura: number;
+    eventDate?: string;
 
 
     //Location Info

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events } from 'ionic-angular';
+import { Nav, Platform, Events, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthService } from '../providers/auth/auth.service';
@@ -32,7 +32,8 @@ export class MyApp {
               public splashScreen: SplashScreen,
               public events: Events,
               public auth: AuthService,
-              public database: DatabaseProvider) {
+              public database: DatabaseProvider,
+              public alertCtrl: AlertController) {
 
                 //subscribe to login/logout events
                 // events.subscribe('user:login', () => {
@@ -47,8 +48,8 @@ export class MyApp {
                 this.pages = [
                   { title: 'TAKE ME HOME', component: 'HomePage'},
                   { title: 'LAUNCH BEACON', component: 'AddFoodtruckPage'},
-                  { title: 'MISSION CONTROL', component: 'MissionControlPage'},
-                  { title: 'S.O.S. (HELP)', component: 'ProfilePage'}
+                  { title: 'UPCOMING EVENTS', component: 'MissionControlPage'},
+                  { title: 'MISSION REPORT', component: 'FeedbackPage'}
                 ];
                                
                 
@@ -64,7 +65,7 @@ export class MyApp {
       
       
       this.subscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
-        if (user){
+        if (user && user.emailVerified){
           this.rootPage = 'HomePage';
           console.log('set Homepage from app.component.ts subscription')
           this.database.getAccountInfo(user.uid).subscribe((account)=>{
@@ -79,8 +80,18 @@ export class MyApp {
             })
           })
           // this.subscription.unsubscribe();
-        } else {
+        } else if (user && user.emailVerified == false){
           this.rootPage = 'LoginPage';
+          this.alertCtrl.create({
+            title: 'Email not Verified!',
+            subTitle: 'All your bases are belong to us',
+            buttons: [{
+              text: "WHOOPS!",
+              role: 'Cancel'
+            }]
+          }).present();
+        } else {
+            this.rootPage = 'LoginPage';
           // this.subscription.unsubscribe();
         }
       })
@@ -92,8 +103,8 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    if(((this.nav.getActive().component == HomePage) && page.component == 'HomePage') || ((this.nav.getActive().component == AddFoodtruckPage) && page.component == 'AddFoodtruckPage')){
-
+    if(((this.nav.getActive().component == HomePage) && page.component == 'HomePage') || 
+    ((this.nav.getActive().component == AddFoodtruckPage) && page.component == 'AddFoodtruckPage')){
     } else {
       this.nav.setRoot(page.component);
     }

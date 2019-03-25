@@ -26,29 +26,28 @@
 
 <ion-content menuClose>
     <div menuClose class="scene-map">
-        <div class="map">
-          <div class="map__face map__face--front">
+        <div menuClose class="map">
+          <div menuClose class="map__face map__face--front">
               <img src="assets/imgs/Refresh-Button.png" button (click)="getPositionCenterMap()" class="ref-button">
               <img src="assets/imgs/List-Shadow.png" button (click)="flipMap()" class="list-button">
               <div menuClose id="map_canvas" allow="geolocation"></div>
           </div>
           <div menuClose class="map__face map__face--back">
               <h1 class="page-title">CURRENT EVENTS</h1>
-                <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">AURA</label>
+                <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">POPULAR</label>
                 <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">COUNTDOWN</label>
-                <input type="radio" id="fresh" name="type"  value="fresh" (click)="sortFFFreshness()" ><label for="fresh">F-F-FRESH</label>
               <div class="btn-group3" >
                   <button  *ngFor="let event of trucks" 
-                  [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
+                  [ngClass]="{hidden: minsRemaining(event.eventEnd) < 0}">
                  
                   <div class="row" >
                       <div class="column-1" (click)="navToDetails(event)">
-                          <img class="btn-image" src="assets/imgs/{{event.image}}.gif" alt="Avatar">
+                          <img class="btn-image" src="assets/imgs/{{event.image}}.png" alt="Avatar">
                       </div>
                       <div class="column-2" (click)="navToDetails(event)">
-                          <p class="btn-title">{{truncateText(event.name, 20)}}</p>
+                          <p id="btn-title">{{truncateText(event.name, 18)}}</p>
                           <p id="details-text">{{truncateText(event.details, 120)}}</p>
-                          <p class="btn-countdown">{{minsRemaining(event.eventEnd)}} Mins Left</p>
+                          <p id="btn-countdown">{{minsRemaining(event.eventEnd)}} Mins Left</p>
                       </div>
                       <upvote-button class="column-3" [itemId]="event.id" [userId]="authenticatedUser.uid" [ownerId]="event.ownerId"></upvote-button>
                       

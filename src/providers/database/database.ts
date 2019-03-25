@@ -7,6 +7,7 @@ import { Account } from '../../models/account.model';
 import { User } from 'firebase/app';
 import { AngularFireStorage } from 'angularfire2/storage';
 import {sum, values} from 'lodash';
+import { Feedback } from '../../models/feedback.model';
 
 
 
@@ -20,8 +21,11 @@ import {sum, values} from 'lodash';
 export class DatabaseProvider {
 
   foodTruckCollection: AngularFirestoreCollection<FoodTruck>;
+  feedbackCollection: AngularFirestoreCollection<Feedback>;
   foodTrucks: Observable<FoodTruck[]>;
   accountDocument: AngularFirestoreDocument<Account>;
+  foodtruckDocument: AngularFirestoreDocument<FoodTruck>;
+  feedbackDocument: AngularFirestoreDocument<Feedback>;
   myUrl: string;
 
   constructor(private afs: AngularFirestore,
@@ -82,6 +86,31 @@ export class DatabaseProvider {
     docRef.update(foodtruck);
   }
 
+  async updateFoodtruck(foodtruck: FoodTruck){
+    try {
+      this.foodtruckDocument = this.afs.collection('foodtrucks').doc(foodtruck.id);
+      await this.foodtruckDocument.update(foodtruck)
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async deleteFoodtruck(foodtruck: FoodTruck){
+    try {
+      this.foodtruckDocument = this.afs.collection('foodtrucks').doc(foodtruck.id);
+      await this.foodtruckDocument.delete();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+
+
+  async saveFeedback(feedback: Feedback){
+    this.feedbackDocument = this.afs.collection('feedback').doc(feedback.name)//reference
+    await this.feedbackDocument.set(feedback);
+  }
+
 
   getFoodtrucks(){
     this.foodTruckCollection = this.afs.collection('foodtrucks', ref => {
@@ -99,7 +128,6 @@ export class DatabaseProvider {
             data.id = a.payload.doc.id;
             this.getItemVotes(data.id).forEach(allUserVotes => {
               data.aura = sum(values(allUserVotes))
-              console.log('ruunnninnnggg')
             })
             return data
           })

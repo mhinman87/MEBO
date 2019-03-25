@@ -5,14 +5,18 @@
   Ionic pages and navigation.
 -->
 
+<img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+
+<img src="assets/imgs/Back-Arrow.png" button (click)="navToEdit()" class="edit-button" [ngClass]="{hidden: hideEditButton == true}">
 
 
-<ion-content [ngClass]="{item: foodtruck.image == 'foodtruck', item2: foodtruck.image == 'burger-gif'}">
-    <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+<ion-content style="background-color:#E42547">
+<!-- <ion-content [ngClass]="{item: foodtruck.image == 'FoodTruck', item2: foodtruck.image == 'Basketball'}"> -->
+    
 
 
     
-  <img id="image-1" src="assets/imgs/{{foodtruck.image}}.gif" alt="" />
+  <img id="image-1" src="assets/imgs/{{foodtruck.image}}.png" alt="" />
 
   <h1 class="event-title">{{foodtruck.name}}</h1>
   <p class="event-owner">@{{foodtruck.ownerName}}</p>

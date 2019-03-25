@@ -25,25 +25,48 @@ export class AuthService {
 
   //Sign in a user with a registered email and password
   async signInWithEmailAndPassword(account: Account){
-
     try {
-      const result = await this.afAuth.auth.signInWithEmailAndPassword(account.email, account.password);
+      
+      await this.afAuth.auth.signInWithEmailAndPassword(account.email, account.password)
+        .then(() =>{
+          this.events.publish('user:login');
+        })
+      } catch(e){
+          console.log(e.message);
 
-      console.log(result);
-      this.events.publish('user:login');
-      this.toast.create({
-        message: "Welcome to MEBO!",
-        duration: 3000
-      }).present();
-      return true
-    }
-    catch(e){
-      console.error(e);
-      this.toast.create({
-        message: e.message,
-        duration: 3000
-      }).present();
-      return false
+          var title = 'Something went wrong 😬';
+          var message = '';
+
+          if (e.message === 'signInWithEmailAndPassword failed: First argument "email" must be a valid string.'){
+            title = "Nothing in Email"
+            message = 'At least enter something in EMAIL. Lawd!'
+          } else if (e.message === 'signInWithEmailAndPassword failed: Second argument "password" must be a valid string.'){
+            message = 'Uhhh you forgot your PASSOWRD breh...'
+            title =  'Nothing in Password'
+          } else if (e.message === 'The email address is badly formatted.'){
+            title =  'Bad Email'
+            message = "What kind of EMAIL is that?? Doesn't look like anything to me 🤖"
+          } else if (e.message === 'The password is invalid or the user does not have a password.'){
+            title = 'WRONG PASSWORD'
+            message = "Who's PASSWORD is that?? Doesn't look like anything to me 🤖"
+          } else if (e.message === 'There is no user record corresponding to this identifier. The user may have been deleted.'){
+            message = "❌ YOU ARE NOT REAL ❌"
+            title = "NO USER RECORD"
+          } else {
+            message = "I don't even know 🤷🏻‍"
+          }
+
+          this.alertCtrl.create({
+            title: title,
+            subTitle: message,
+            buttons: [
+              {
+                text: 'Oh word. Let me fix that!',
+                role: 'Cancel'
+              }
+            ]
+          }).present();
+          return false
     }
   }
 
@@ -57,12 +80,7 @@ export class AuthService {
       user.sendEmailVerification()
       account.uid = user.uid;
       this.database.createProfile(user, account);
-    })
-      this.toast.create({
-        message: "Nice work bro! You're in!",
-        duration: 3000
-      }).present().then(()=>{
-        this.events.publish('user:login');
+      this.events.publish('user:login');
       })
     } 
       catch(e){
@@ -88,8 +106,7 @@ export class AuthService {
 
   async logOut(){
     try {
-      const result = await this.afAuth.auth.signOut();
-      console.log(result);
+      await this.afAuth.auth.signOut();
       this.events.publish('user:logout')
       this.toast.create({
         message: "Goodbye!",

@@ -1,0 +1,81 @@
+<!--
+  Generated template for the EditEventPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+
+
+<ion-content style="background: #E42547">
+
+  <img id="image-1" src="assets/imgs/{{foodtruck.image}}.png" alt="" />
+
+  <form [formGroup]="myForm">
+    <input class="event-input" id="myInput" [(ngModel)]='foodtruck.name' formControlName="title" type="text" clearOnEdit="false" 
+                       required placeholder="GIVE IT A TITLE">
+
+    
+    <!-- <input type="radio" id="freeFood" name="type" [(ngModel)]='foodtruck.image' value="foodtruck" formControlName="type" ><label class="freeFoo" for="freeFood">FREE FOOD</label>
+    <input type="radio" id="freeStuff" name="type" [(ngModel)]='foodtruck.image' value="burger-gif" formControlName="type"><label for="freeStuff" >FREE STUFF</label>
+   -->
+   <select class="event-input" id="durationSelect" form="myForm" type="number" [(ngModel)]='foodtruck.image' formControlName="type" required>
+      <option value="foodtruck" disabled>EVENT TYPE</option>
+    <option value="Food">Free Food</option>
+    <option value="Gaming">Gaming</option>
+    <option value="StudyGroup">Study Group</option>
+    <option value="Greek">Greek</option>
+    <option value="Basketball">Basketball</option>
+    <option value="Volleyball">Volleyball</option>
+    <option value="FoodTruck">Foodtruck</option>
+    <option value="BoardGame">Board Game</option>
+    <option value="PinkFlag">Pink Flag</option>
+    <option value="OrangeFlag">Orange Flag</option>
+    <option value="GreenFlag">Green Flag</option>
+    <option value="YellowFlag">Yellow Flag</option>
+    <option value="BlueFlag">Blue Flag</option>
+    
+  </select>
+
+
+    <textarea style="height: 7em;" class="event-input" id="myInput" [(ngModel)]='foodtruck.details' formControlName="details" type="text" clearOnEdit="false" 
+                       required placeholder="DETAILS"></textarea>
+
+
+                       <ion-item class="date-picker">
+                          <ion-label>Date</ion-label>
+                          <ion-datetime required 
+                          [(ngModel)]="this.eventDate"
+                          displayFormat="D MMM YYYY h:mm a" 
+                          minuteValues="0,15,30,45" 
+                          min="2018" 
+                          max="2021-12-31" 
+                          placeholder="{{this.foodtruck.eventDate}}"
+                          formControlName="startDate"
+                          >
+                          </ion-datetime>
+                      </ion-item>
+                             
+              
+  </form>
+
+  <div class="event-input">
+    <ion-range min="1" max="16" step="1" snaps="true"[(ngModel)]="foodtruck.duration" >
+      <ion-label range-left>0.5</ion-label>
+      <ion-label range-right>8</ion-label>
+    </ion-range>
+  </div>
+
+
+  <div class="container">
+      <ul style="padding: 0;">
+        <li><p class="countdown-text">DURATION</p><span id="minutes">{{foodtruck.duration / 2}}</span><p class="time-text">HOURS</p></li>
+      </ul>
+  </div>
+
+  <button ion-button round long class="save-button" (click)="updateFoodtruck(this.foodtruck)">SAVE</button>
+  <button ion-button round long class="delete-button" (click)="deleteFoodtruck(this.foodtruck)">DELETE</button>
+
+
+
+</ion-content>

@@ -26,6 +26,7 @@ export class SubmitPostPage implements OnInit{
   inputFileName = "" as string;
   myForm: FormGroup;
   times: Array<{title: string, length: number}>;
+  eventDate: string;
   
 
   constructor(public navCtrl: NavController, 
@@ -35,7 +36,7 @@ export class SubmitPostPage implements OnInit{
               private fb: FormBuilder) {
                 this.foodtruck.lat = this.navParams.get('lat');
                 this.foodtruck.long = this.navParams.get('lng');
-                this.foodtruck.image = 'foodtruck'; 
+                this.foodtruck.image = 'FoodTruck'; 
                 this.foodtruck.duration = 1;
                 this.account = this.navParams.get('account');
 
@@ -74,6 +75,7 @@ export class SubmitPostPage implements OnInit{
     // var url = await this.database.eventUploadFile(this.account.username, file, this.foodtruck.name);
     // this.foodtruck.img = url;
     this.foodtruck.eventEnd = this.foodtruck.eventStart + (this.foodtruck.duration*3600000/2);
+    this.foodtruck.eventDate = this.formatDate(new Date(Date.now()));
     await this.database.saveFoodtruck(foodtruck);
     
     this.loader.dismiss().then(()=>{
@@ -106,6 +108,35 @@ export class SubmitPostPage implements OnInit{
     this.inputFileName = inp.files.item(0).name;
     console.log(this.inputFileName);
     reader.readAsDataURL((document.getElementById('file') as HTMLInputElement).files[0]);
+}
+
+formatDate(date: Date) {
+  var monthNames = [
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct",
+    "Nov", "Dec"
+  ];
+
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+  var time = this.formatAMPM(date);
+
+  console.log(time)
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + time;
+}
+
+formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
 }
 
 }

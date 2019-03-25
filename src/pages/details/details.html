@@ -5,13 +5,19 @@
   Ionic pages and navigation.
 -->
 
-<ion-content style="background-color:#E42547">
+<img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+
+<img src="assets/imgs/Back-Arrow.png" button (click)="navToEdit()" class="test-button" [ngClass]="{hidden: hideEditButton == true}">
 
 
-  <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+
+<ion-content style="background-color:#E42547;">
+
+
+  
 
     
-  <img id="image-1" src="assets/imgs/{{foodtruck.image}}.gif" alt="" />
+  <img id="image-1" src="assets/imgs/{{foodtruck.image}}.png" alt="" />
 
   <h1 class="event-title">{{foodtruck.name}}</h1>
   <p class="event-owner">@{{foodtruck.ownerName}}</p>

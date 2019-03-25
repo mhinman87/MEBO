@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController } from 'ionic-angular';
 import { Account } from '../../models/account.model';
 import { AuthService } from '../../providers/auth/auth.service';
 import { FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
@@ -33,7 +33,8 @@ export class RegisterPage implements OnInit {
               private loadingCrtl: LoadingController,
               private auth: AuthService,
               private fb: FormBuilder,
-              private afs: AngularFirestore) {
+              private afs: AngularFirestore,
+              private alertCtrl: AlertController) {
                 
   }
 
@@ -43,8 +44,8 @@ export class RegisterPage implements OnInit {
       Validators.required,
       CustomValidator.username(this.afs)],
       email: '',
-      password: '',
-      dob: ''
+      password: ''
+      // dob: ''
     })
 
     this.myForm.valueChanges.subscribe(console.log);
@@ -71,10 +72,22 @@ export class RegisterPage implements OnInit {
 
 
   async register(){
-    this.showLoading();
-      this.account.isVendor = false;
-      await this.auth.showEmailVerificationDialog(this.account);
-    this.loader.dismiss();
+    if (this.myForm.invalid || this.account.password != this.passwordConfirm){
+      this.alertCtrl.create({
+        title: 'Aaaaand you screwed up.',
+        subTitle: 'Fill out the above info with no errors',
+        buttons:[
+          {text: 'Okay. My B',
+          role: 'Cancel'
+        }]
+      }).present();
+    } else {
+      this.showLoading();
+        this.account.isVendor = false;
+        await this.auth.showEmailVerificationDialog(this.account);
+        this.loader.dismiss();
+        this.navCtrl.push('LoginPage');
+    }
   }
 
   showLoading(){

@@ -38,6 +38,7 @@ export class DetailsPage {
   isUserCloseEnough: boolean;
   loactionCd: number;
   authtenticatedUserCheckIns: number;
+  hideEditButton: boolean;
   
 
   constructor(public navCtrl: NavController, 
@@ -71,8 +72,11 @@ export class DetailsPage {
         }
       }
     })
-    
 
+   
+
+    
+    
   }
   
 
@@ -112,6 +116,11 @@ export class DetailsPage {
 
   setAccount(account: Account){
     this.account = account;
+    if (this.authenticatedUser.uid == this.foodtruck.ownerId || this.account.isVendor){
+      this.hideEditButton = false;
+    } else {
+      this.hideEditButton = true;
+    }
   }
 
   ionViewDidEnter(){
@@ -120,6 +129,12 @@ export class DetailsPage {
 
   goBack(){
     this.navCtrl.pop();
+  }
+
+  navToEdit(){
+    this.navCtrl.push('EditEventPage', {
+      truckData: this.foodtruck
+      })
   }
 
 

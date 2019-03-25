@@ -44,11 +44,11 @@
     border-bottom: none; /* Prevent double borders */
 }
 
-.btn-group button:nth-child(1) { background: #E42547; }
+.btn-group button:nth-child(1) { background: #FCB622 ; }
 
 .btn-group button:nth-child(2) { background: #42A880; }
 
-.btn-group button:nth-child(3) { background: #FCB622; }
+.btn-group button:nth-child(3) { background: #E42547; }
 
 .btn-group button:nth-child(4) { background: #F2682A; }
 
@@ -132,7 +132,7 @@
   
   .card__face--front {
     background-image:  url('../../assets/imgs/MEBOcircle.png');
-    background-size: 65% 100%;
+    background-size: 65%;
     background-repeat: no-repeat;
     background-position: center; 
   }
@@ -165,6 +165,26 @@
     border-style: solid;
     border-radius: 0 0 12px 12px;
     border-width: 3px;
+    border-top-width: 1px;
+    border-top-color: grey;
+}
+
+.alert-ios .alert-button:first-child {
+    font-weight: bold;
+    border-color: black;
+    border-style: solid;
+    border-width: 3px;
+    border-bottom-width: 0px;
+    border-top-width: 1px;
+    border-top-color: grey;
+}
+
+.alert-ios .alert-button:only-child {
+    font-weight: bold;
+    border-color: black;
+    border-style: solid;
+    border-width: 3px;
+    border-bottom-width: 3px;
     border-top-width: 1px;
     border-top-color: grey;
 }

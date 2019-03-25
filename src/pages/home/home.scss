@@ -34,7 +34,7 @@ page-home {
 
     .menu-button {
         position: absolute; 
-        top: 30px; 
+        top: 35px; 
         left: 15px; 
         z-index: 99;
         width: 10%;
@@ -108,7 +108,7 @@ page-home {
         border: 1px solid black; /* Green border */
         color: black; /* White text */
         // border-radius: 15px;
-        height: 98px;
+        height: 120px;
         padding: 0px;
         width: 100%; /* Set a width if needed */
         display: block; /* Make the buttons appear below each other */
@@ -159,30 +159,16 @@ page-home {
     
     .btn-image {
         width: 60%;
+        height: 10%;
         transform: translateY(30%);
     }
 
-    .btn-title {
-        text-align: left;
-        font-weight: bold;
-        font-size: 1.6em;
-        margin: 0;
-        margin-top: 10px;
-    }
+
     
     .btn-aura {
         text-align: left;
         margin-top: 10px;
         margin-bottom: 0px;
-    }
-
-    .btn-countdown {
-        position: absolute;
-        text-align: left;
-        bottom: -5px;
-        left: 20%;
-        font-weight: bold;
-        color: #E42547;
     }
 
     .column-1 {
@@ -255,7 +241,7 @@ page-home {
         border-radius: 15px;
         border-color: black;
         border-width: 3px;
-        background-color: #E42547;
+        background-color: #27B3C0;
 
       }
       
@@ -268,11 +254,32 @@ page-home {
         background-color: #FCB622;
       }
 
+      #btn-title {
+        text-align: left;
+        font-weight: bold;
+        font-size: 1.6em;
+        margin: 0;
+        margin-top: 10px;
+    }
+
       #details-text {
           margin-top: 3px;
           text-align: left;
+          height: 40px;
       }
 
-    
+      #btn-countdown {
+        text-align: left;
+        bottom: -5px;
+        margin-top: 32px;
+        left: 20%;
+        font-weight: bold;
+        color: #E42547;
+    }
+
+    .hidden {
+        visibility: hidden;
+    }
+
     
 }
