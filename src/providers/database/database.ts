@@ -8,6 +8,7 @@ import { User } from 'firebase/app';
 import { AngularFireStorage } from 'angularfire2/storage';
 import {sum, values} from 'lodash';
 import { Feedback } from '../../models/feedback.model';
+import { Beacon } from '../../models/beacon.model';
 
 
 
@@ -21,8 +22,10 @@ import { Feedback } from '../../models/feedback.model';
 export class DatabaseProvider {
 
   foodTruckCollection: AngularFirestoreCollection<FoodTruck>;
+  beaconCollection: AngularFirestoreCollection<Beacon>;
   feedbackCollection: AngularFirestoreCollection<Feedback>;
   foodTrucks: Observable<FoodTruck[]>;
+  beacons: Observable<Beacon[]>;
   accountDocument: AngularFirestoreDocument<Account>;
   foodtruckDocument: AngularFirestoreDocument<FoodTruck>;
   feedbackDocument: AngularFirestoreDocument<Feedback>;
@@ -35,7 +38,13 @@ export class DatabaseProvider {
 
   getItemVotes(itemId): Observable<any>{
     return this.afs.collection(`foodtrucks/${itemId}/votes`).doc('votes').snapshotChanges().map(actions =>{
-      return actions.payload.data()
+      return actions.payload.data();
+    })
+  }
+
+  getBeaconVotes(beaconId): Observable<any> {
+    return this.afs.collection(`beacons/${beaconId}/votes`).doc('votes').snapshotChanges().map(actions =>{
+      return actions.payload.data();
     })
   }
 
@@ -58,20 +67,49 @@ export class DatabaseProvider {
     }
   }
 
+  updateUserBeaconVote(itemId, userId, vote, ownerId): void {
+    let data = {}
+    data[userId] = vote;
+    this.afs.collection(`beacons/${itemId}/votes`).doc('votes').update(data);
+    if (userId != ownerId){
+        let data2 = {}
+        data2[userId] = vote;
+        let data3 = {}
+        data3[itemId] = data2;
+        this.afs.collection(`accounts/${ownerId}/votes`).doc('votes').update(data3);
+    }
+  }
+
   userCheckIn(itemId, userId, ownerId, vote, authUserCheckIns){
     let now = new Date().getTime()
+    //Give the EVENT credit for the checkIn without overwriting the damn upvotes
     let data = {}
     data['checkIns'] = vote + 1;
     this.afs.collection(`foodtrucks/${itemId}/votes`).doc('votes').update(data)
+
+
+
+    //The LOGGED IN USER credit for checking in
+    console.log(authUserCheckIns)
     let data2 = {}
     data2['checkIns'] = authUserCheckIns + 1;
     let data3 = {}
-    data3[userId] = data2 
+    data3[itemId + 'checkIns'] = data2 
     this.afs.collection('accounts').doc(userId).update({eventCheckInTimer: now + 300000})
     this.afs.collection(`accounts/${userId}/votes`).doc('votes').update(data3);
+
+
+
+
+
+    //give the event OWNER credit for checkins without overwriting the damn upvotes
+    if (ownerId != userId) {
+    let data4 = {}
+    data4[userId] = vote + 1;
     let data5 = {}
-    data5[itemId] = data;
+    data5[itemId + "checkIns"] = data4;
     this.afs.collection(`accounts/${ownerId}/votes`).doc('votes').update(data5)
+    }
   }
 
 
@@ -102,6 +140,16 @@ export class DatabaseProvider {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  async saveBeacon(beacon: Beacon){
+    let data = {};
+    data[beacon.ownerId] = 1;
+    this.beaconCollection = this.afs.collection('beacons'); //reference
+    let docRef = await this.beaconCollection.add(beacon);
+    this.afs.collection(`beacons/${docRef.id}/votes`).doc('votes').set(data);
+    beacon.id = docRef.id
+    docRef.update(beacon);
   }
 
 
@@ -147,12 +195,30 @@ export class DatabaseProvider {
             data.id = a.payload.doc.id;
             this.getItemVotes(data.id).forEach(allUserVotes => {
               data.aura = sum(values(allUserVotes))
-              console.log('ruunnninnnggg')
             })
             return data
           })
     })
     return this.foodTrucks;
+  }
+
+  getActiveBeacons(){
+    this.beaconCollection = this.afs.collection('beacons', ref => {
+      return ref.where('activeEnd', '>=', Date.now()- 5*3600000);
+    }); 
+
+    this.beacons = this.beaconCollection.snapshotChanges().map(actions => {
+      let now = new Date().getTime() - 5*3600000;
+      return actions.filter(b => b.payload.doc.data().activeStart < now).map(a => {
+        let data = a.payload.doc.data() as Beacon;
+        data.id = a.payload.doc.id;
+        this.getBeaconVotes(data.id).forEach(allUserVotes => {
+          data.aura = sum(values(allUserVotes))
+        })
+        return data
+      })
+    })
+    return this.beacons
   }
 
   getAccountInfo(uid: string){

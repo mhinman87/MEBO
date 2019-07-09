@@ -23,10 +23,11 @@ page-add-foodtruck {
 
     .menu-button {
         position: absolute; 
-        top: 30px; 
+        top: 35px; 
         left: 15px; 
         z-index: 99;
         width: 10%;
+        backface-visibility: hidden;
     }
 
    

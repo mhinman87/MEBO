@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
 import { FoodTruck } from '../../models/foodtruck.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DatabaseProvider } from '../../providers/database/database';
@@ -21,11 +21,13 @@ export class EditEventPage implements OnInit {
   foodtruck: FoodTruck
   myForm: FormGroup;
   eventDate: string;
+  loader: Loading;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private fb: FormBuilder,
-              private database: DatabaseProvider) {
+              private database: DatabaseProvider,
+              private loadingCtrl: LoadingController) {
 
     
   }
@@ -52,6 +54,7 @@ export class EditEventPage implements OnInit {
   }
 
   async updateFoodtruck(foodtruck: FoodTruck){
+    this.showLoading();
     if (this.eventDate != undefined){
       this.foodtruck.eventStart = Date.parse(this.eventDate); //- 5*3600000;
       this.foodtruck.eventDate = this.formatDate(new Date(Date.parse(this.eventDate)+5*3600000));
@@ -60,6 +63,7 @@ export class EditEventPage implements OnInit {
     await this.database.updateFoodtruck(foodtruck).then(()=>{
       this.navCtrl.popToRoot();
     })
+    this.loader.dismiss();
   }
 
   async deleteFoodtruck(foodtruck: FoodTruck){
@@ -95,6 +99,15 @@ export class EditEventPage implements OnInit {
     minutes = minutes < 10 ? '0'+minutes : minutes;
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
+  }
+
+  showLoading(){
+    this.loader = this.loadingCtrl.create({
+      content: `<img src="assets/imgs/loading.gif" />`,
+      showBackdrop: false,
+      spinner: 'hide'
+    })
+    this.loader.present();
   }
 
 }

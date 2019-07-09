@@ -20,12 +20,14 @@
 
   <h1 class="event-title">{{foodtruck.name}}</h1>
   <p class="event-owner">@{{foodtruck.ownerName}}</p>
+  
   <div class="container">
       <ul style="padding: 0;">
         <li><p class="countdown-text">T-MINUS</p><span id="minutes">{{minsRemaining(foodtruck.eventStart)}}</span><p class="time-text">MINS</p></li>
         <li><p class="countdown-text">DURATION</p><span id="minutes">{{foodtruck.duration / 2}}</span><p class="time-text">HOURS</p></li>
       </ul>
   </div>
+  <h3 class="event-date">{{foodtruck.eventDate}}</h3>
   <p class="event-details">{{foodtruck.details}}</p>
 
   <upvote-button class="upvote-counter" [itemId]="foodtruck.id" [userId]="authenticatedUser.uid" [ownerId]="foodtruck.ownerId"></upvote-button>

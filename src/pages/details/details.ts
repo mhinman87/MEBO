@@ -7,7 +7,7 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { Account } from '../../models/account.model';
 import { User } from 'firebase/app';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { sum, values } from 'lodash'
+//import { sum, values } from 'lodash'
 
 /**
  * Generated class for the DetailsPage page.
@@ -61,10 +61,18 @@ export class DetailsPage {
           this.account$ = this.database.getAccountInfo(user.uid);
           this.database.getAccountInfo(user.uid).subscribe((account) =>{
           this.setAccount(account);
-          this.userCheckInSubscription = this.database.getUserVotes(this.authenticatedUser.uid).subscribe(allVotes => {
-           values(allVotes).forEach(uniqueUsers => {
-             this.authtenticatedUserCheckIns = sum(values(uniqueUsers))
-           })
+          this.userCheckInSubscription = this.database.getUserVotes(this.authenticatedUser.uid).subscribe((allVotes) => {
+            if (allVotes[this.foodtruck.id + "checkIns"] != undefined){
+              this.authtenticatedUserCheckIns = allVotes[this.foodtruck.id + 'checkIns']['checkIns']
+              console.log(this.authtenticatedUserCheckIns)
+            } else {
+              this.authtenticatedUserCheckIns = 0
+              console.log(this.authtenticatedUserCheckIns)
+            }
+            
+          //  values(allVotes).forEach(uniqueUsers => {
+          //    this.authtenticatedUserCheckIns = sum(values(uniqueUsers))
+          //  })
           })
           })
         } catch(e) {
@@ -74,7 +82,7 @@ export class DetailsPage {
     })
 
    
-
+    
     
     
   }
@@ -173,7 +181,7 @@ export class DetailsPage {
       }, second)
       setTimeout(()=>{
         this.loader.dismiss();
-      }, 1000);
+      }, 1500);
 
       
   }

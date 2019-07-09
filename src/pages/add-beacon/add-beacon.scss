@@ -1,0 +1,62 @@
+page-add-beacon {
+    .arrow-button {
+        position: absolute; 
+        top: 35px; 
+        left: 15px; 
+        z-index: 99;
+        width: 10%;
+        transform: rotate(180deg);
+    }
+
+    .event-input{
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: white;
+        width: 70%;
+        height: 40px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black; 
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+    }
+
+    ::placeholder {
+        color: black;
+    }
+
+    .long-button {
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #FCB622;
+        width: 70%;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
+        color: black; 
+    }
+
+    select { 
+        text-align-last: center;
+        padding-left: 20px;
+    }
+
+    #image-1 {
+		margin: 0 auto;
+		margin-top: 8%;
+		width: 50%;
+		display: block;
+        margin-bottom: 8%;
+	}
+
+}

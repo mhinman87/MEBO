@@ -1,0 +1,22 @@
+<div class="votebox">
+
+    <!-- <img src="assets/imgs/Arrow-Yellow.png" button (click)="upvote()" [ngClass]="{'active' : userVote > 0}"> -->
+  <!-- <img button class="fa fa-arrow-up vote up" 
+          (click)="upvote()" 
+          [ngClass]="{'active' : userVote > 0}">Up -->
+  
+          <p (click)="upvote()" style="float: left">
+            <i class="arrow up"[ngClass]="{'active' : userVote > 0}" ></i></p>
+  
+  
+    <span class="vote-count" >{{voteCount}}</span>
+  
+    <!-- <button class="fa fa-arrow-down vote down"
+          (click)="downvote()"
+          [ngClass]="{'active' : userVote < 0}"> </button>-->
+  
+          <p (click)="downvote()" style="float: right">
+              <i class="arrow down"[ngClass]="{'active' : userVote < 0}" ></i></p>
+  
+  
+  </div>

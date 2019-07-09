@@ -22,6 +22,4 @@ export interface FoodTruck {
     eventStart: number;
     duration: number;
     eventEnd: number;
-
-
 }

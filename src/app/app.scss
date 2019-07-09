@@ -139,6 +139,15 @@
   
   .card__face--back {
     transform: rotateY(180deg);
+    background-image:  url('../../assets/imgs/Aura-Coin.png');
+    background-size: 55%;
+    background-repeat: no-repeat;
+    background-position: center; 
+    font-size: 25px;
+  }
+
+  .user-aura-text {
+      padding-top: 15px;
   }
 
   .alert-ios .alert-head {

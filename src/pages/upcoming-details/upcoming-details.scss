@@ -1,7 +1,7 @@
 page-upcoming-details {
     .arrow-button {
         position: absolute; 
-        top: 30px; 
+        top: 35px; 
         left: 15px; 
         z-index: 99;
         width: 10%;
@@ -30,9 +30,20 @@ page-upcoming-details {
 		margin: 0 auto;
 		text-align: center;
 		margin-top: -8px;
-		font-size: 1.5em;
+		font-size: 1.1em;
 		margin-bottom: -10px;
 		
+	}
+
+	.event-date {
+		width: 70%;
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+		margin-top: -28px;
+		font-size: 1.5em;
+		margin-bottom: 30px;
+		font-weight: bold;
 	}
 
 	.event-details {
@@ -143,7 +154,7 @@ page-upcoming-details {
 
 	  .edit-button {
         position: absolute; 
-        top: 30px; 
+        top: 35px; 
         right: 15px; 
         z-index: 99;
         width: 10%;

@@ -139,4 +139,8 @@ formatAMPM(date) {
   return strTime;
 }
 
+goBack(){
+  this.navCtrl.pop();
+}
+
 }

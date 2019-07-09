@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController  } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Feedback } from '../../models/feedback.model';
+import { Component, OnDestroy } from '@angular/core';
+import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthService } from '../../providers/auth/auth.service'
+import { Beacon } from '../../models/beacon.model';
+import { User } from 'firebase/app';
 
 
 /**
@@ -18,31 +18,85 @@ import { AngularFireAuth } from 'angularfire2/auth';
   selector: 'page-feedback',
   templateUrl: 'feedback.html',
 })
-export class FeedbackPage implements OnInit {
-  myForm: FormGroup;
-  feedback = {} as Feedback;
+export class FeedbackPage implements OnDestroy {
+  events: Beacon[];
+  activeEvents: Beacon[];
+  x: any;
+  currentTime: number;
   loader: Loading;
+  accountSubscription: any;
+  eventsSubscription: any;
+  authenticatedUser = {} as User;
+  
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
-              private database: DatabaseProvider,
-              private fb: FormBuilder,
+              private dbProvider: DatabaseProvider,
               private loadingCtrl: LoadingController,
-              private afAuth: AngularFireAuth,
-              private alertCtrl: AlertController) {
+              private auth: AuthService) {
+                this.showLoading()
+
+                this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
+                  if (user != null){
+                   try {
+                     this.authenticatedUser = user;
+                   } catch(e) {
+                     console.error(e);
+                   }
+                  }
+                 }) 
+
+                this.eventsSubscription = this.dbProvider.getActiveBeacons().subscribe((data)=>{
+                  this.events = data.sort(this.auraDescending);
+                  this.activeEvents = data.sort(this.auraDescending);
+                  return data;
+                })
+                const second = 1000;
+                this.x = setInterval(() => {
+                  this.currentTime = new Date().getTime();
+                    }, second)
+                    setTimeout(()=>{
+                    }, 1000);
+
+                this.loader.dismiss();
+  }
+  
+
+  ionViewDidLoad() {
   }
 
-  ngOnInit(){
-    this.myForm = this.fb.group({
-      name: ['',
-      Validators.required],
-      rating: '',
-      utilize: '',
-      features: '',
-      contact: true
-    })
+  auraDescending(a, b) {
+    return a.aura > b.aura ? -1 : 1
+  }
 
-    this.myForm.valueChanges.subscribe(console.log);
+  timeDescending(a, b){
+    return a.activeStart < b.activeStart ? -1 : 1;
+  }
+
+  navToDetails(beacon: Beacon){
+    this.navCtrl.push('BeaconDetailsPage', {
+      beaconData: beacon
+      })
+  }
+
+  navToAddBeacon(){
+    this.navCtrl.push('AddBeaconPage');
+  }
+
+  minsRemaining(time){
+    return Math.floor((time + 5*3600000 - this.currentTime)/60000)
+  }
+
+  sortEventsByAura(){
+    this.activeEvents.sort(this.auraDescending)
+  }
+
+  sortUntilLaunch(){
+    this.activeEvents.sort(this.timeDescending)
+  }
+
+  sortFFFreshness(){
+
   }
 
   showLoading(){
@@ -54,41 +108,23 @@ export class FeedbackPage implements OnInit {
     this.loader.present();
   }
 
-  presentAlert(err) {
-    let alert = this.alertCtrl.create({
-      title: 'HOUSTON WE HAVE A PROBLEM',
-      subTitle: err,
-      buttons: ['Dismiss']
-    });
-    alert.present();
-  }
-
-  async saveFeedback(feedback: Feedback){
-    this.showLoading();
-    this.feedback.email = this.afAuth.auth.currentUser.email;
-    try {
-      if (feedback.rating == undefined){
-        feedback.rating = "";
-      }
-      if (feedback.utilize == undefined){
-        feedback.utilize = "";
-      }
-      if (feedback.features == undefined){
-        feedback.features = "";
-      }
-      if (feedback.contact == undefined){
-        feedback.contact = false;
-      }
-      await this.database.saveFeedback(feedback);
-      this.loader.dismiss().then(()=>{
-        this.navCtrl.setRoot('HomePage');
-      })
-    } catch(e){
-      console.log(e)
-      this.presentAlert('We need dat name breh.')
-      this.loader.dismiss();
+  truncateText(text, maxlength) {
+    if (text.length > maxlength) {
+        text = text.substr(0,maxlength) + '...';
     }
-
+    return text;
   }
 
+  ngOnDestroy(){
+    this.accountSubscription.unsubscribe();
+    this.eventsSubscription.unsubscribe();
+  }
+
+  filter(any){
+    this.activeEvents = this.events.filter(a => a.type == any)
+    if (any === "All"){
+      this.activeEvents = this.events;
+    }
+  }
+  
 }

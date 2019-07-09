@@ -59,7 +59,6 @@ export class HomePage implements OnDestroy {
                   if (user != null){
                    try {
                      this.authenticatedUser = user;
-                     console.log(this.authenticatedUser);
                      this.accountSubscription.unsubscribe();
                    } catch(e) {
                      console.error(e);
@@ -78,9 +77,6 @@ export class HomePage implements OnDestroy {
                     
   }
 
-  ionViewDidEnter(){
-    this.deleteMarkers();
-  }
  
   //Initialize Map on page load
   async ionViewDidLoad() {  
@@ -103,13 +99,13 @@ export class HomePage implements OnDestroy {
       this.events.subscribe('user-location', posData => {
         let LatLng = new google.maps.LatLng(posData[0], posData[1] );
         this.userPositionMarker.setPosition(LatLng);
-        console.log('user position updated');
+        
       });
     this.getPositionCenterMap();
   }
 
   async getPositionCenterMap(){
-    this.showLoading("Get Position Loader");
+    this.showLoading();
     this.deleteMarkers();
     await this.geolocation.getCurrentPosition({
       timeout: 5000,
@@ -120,7 +116,6 @@ export class HomePage implements OnDestroy {
         if (this.userPositionMarker){
           this.userPositionMarker.setPosition(latLng);
           this.map.setCenter(latLng);
-          console.log("no new marker");
         } else {
         this.userPositionMarker = new google.maps.Marker({
           position: latLng,
@@ -147,14 +142,18 @@ export class HomePage implements OnDestroy {
     
   }
 
-  showLoading(string1){
+  showLoading(){
     this.loader = this.loadingCrtl.create({
       content: `<img src="assets/imgs/loading.gif" />`,
       showBackdrop: false,
       spinner: 'hide'
     })
-    console.log(string1)
+    
     this.loader.present();
+  }
+
+  navToAddFlag(){
+    this.navCtrl.push('AddFoodtruckPage');
   }
 
   presentAlert(err) {
@@ -535,8 +534,6 @@ ffFreshness(a: FoodTruck, b: FoodTruck){
     valueB = 1
   }
   
-  console.log(valueA + " a here")
-  console.log(valueB + " b here")
   return (Math.log10(valueA) + 4500000/(timePasseda * signA)) > (Math.log10(valueB) + 4500000/(timePassedb * signB)) ? 1 : -1
 }
 
@@ -581,6 +578,11 @@ minsRemaining(time){
 flipMap(){
   document.querySelector('.map-button').classList.toggle('is-flipped');
   document.querySelector('.map').classList.toggle('is-flipped');
+  document.querySelector('.add-flag-button').classList.toggle('is-flipped');
+  setTimeout(()=>{
+    document.querySelector('.map__face--front').classList.toggle('is-flipped');
+  }, 500)
+  
   // if (this.hideMap){
   //   this.hideMap = false;
   // } else {
@@ -593,6 +595,7 @@ flipMap(){
 }
 
 setMarkers(){
+  this.deleteMarkers();
   this.foodtruckSubscription = this.dbProvider.getFoodtrucks().subscribe((data)=>{
     this.trucks = data.sort(this.auraDescending);
     

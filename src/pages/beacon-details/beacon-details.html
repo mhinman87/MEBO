@@ -1,0 +1,14 @@
+<img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
+
+
+
+
+<ion-content style="background-color:#42A880;">
+  <img id="image-1" src="assets/imgs/{{beacon.img}}.png" alt="" />
+  <h1 class="event-title">{{beacon.name}}</h1>
+  <p class="event-owner">@{{beacon.ownerName}}</p>
+  <p class="event-details">{{beacon.details}}</p>
+
+  <beacon-upvote class="upvote-counter" [itemId]="beacon.id" [userId]="app.account.uid" [ownerId]="beacon.ownerId"></beacon-upvote>
+
+</ion-content>

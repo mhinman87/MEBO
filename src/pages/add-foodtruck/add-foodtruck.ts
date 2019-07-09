@@ -42,7 +42,6 @@ export class AddFoodtruckPage {
                 this.auth.getAuthenticatedUser().subscribe((user: User)=>{
                   if (user){
                     this.authenticatedUser = user;
-                    console.log(this.authenticatedUser);
                     this.database.getAccountInfo(user.uid).subscribe((account) =>{
                     this.setAccount(account);
                   })

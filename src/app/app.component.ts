@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events, AlertController } from 'ionic-angular';
+import { Nav, Platform, Events, AlertController, Keyboard } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthService } from '../providers/auth/auth.service';
@@ -33,7 +33,8 @@ export class MyApp {
               public events: Events,
               public auth: AuthService,
               public database: DatabaseProvider,
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController,
+              public keyboard: Keyboard) {
 
                 //subscribe to login/logout events
                 // events.subscribe('user:login', () => {
@@ -47,9 +48,9 @@ export class MyApp {
                 //Set Pages
                 this.pages = [
                   { title: 'TAKE ME HOME', component: 'HomePage'},
-                  { title: 'LAUNCH BEACON', component: 'AddFoodtruckPage'},
+                  { title: 'BEACON BOARD', component: 'FeedbackPage'},
                   { title: 'UPCOMING EVENTS', component: 'MissionControlPage'},
-                  { title: 'MISSION REPORT', component: 'FeedbackPage'}
+                  { title: 'SET FLAG', component: 'AddFoodtruckPage'},
                 ];
                                
                 
@@ -67,7 +68,6 @@ export class MyApp {
       this.subscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
         if (user && user.emailVerified){
           this.rootPage = 'HomePage';
-          console.log('set Homepage from app.component.ts subscription')
           this.database.getAccountInfo(user.uid).subscribe((account)=>{
             this.setAccount(account);
             this.subscription = this.database.getUserVotes(user.uid)
@@ -84,12 +84,13 @@ export class MyApp {
           this.rootPage = 'LoginPage';
           this.alertCtrl.create({
             title: 'Email not Verified!',
-            subTitle: 'All your bases are belong to us',
+            subTitle: 'You need to verify your email',
             buttons: [{
               text: "WHOOPS!",
               role: 'Cancel'
             }]
           }).present();
+          this.logout()
         } else {
             this.rootPage = 'LoginPage';
           // this.subscription.unsubscribe();
@@ -97,6 +98,7 @@ export class MyApp {
       })
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.keyboard.hideFormAccessoryBar(false);
     });
   }
 

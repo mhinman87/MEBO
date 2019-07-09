@@ -141,4 +141,8 @@ export class SchedulePostPage implements OnInit {
     return strTime;
   }
 
+  goBack(){
+    this.navCtrl.pop();
+  }
+
 }

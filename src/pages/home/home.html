@@ -15,7 +15,7 @@
 
 
 
-<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
+<img src="assets/imgs/Hamburger-MenuWHITE.gif" button menuToggle class="menu-button">
 
 <img src="assets/imgs/Map-Shadow.png" button (click)="flipMap()" class="map-button">
 
@@ -25,6 +25,7 @@
 
 
 <ion-content menuClose>
+    <img src="assets/imgs/White-Plus.png" button (click)="navToAddFlag()" class="add-flag-button">
     <div menuClose class="scene-map">
         <div menuClose class="map">
           <div menuClose class="map__face map__face--front">
@@ -70,19 +71,4 @@
         </div>
       </div>
 
-      
-  <!-- <ion-list [ngClass]="{hidden: hideMap == false}" class="event-list">
-    <button ion-item *ngFor="let event of trucks$ | async" color="clear" (click)="navToDetails(event)" 
-    [ngClass]="{hidden: event.eventEnd + 5*3600000 < currentTime}">
-      <ion-avatar item-left>
-        <img src="assets/imgs/{{event.image}}.gif" alt="Avatar">
-      </ion-avatar>
-      <h2 class="event-title">{{event.name}}</h2>
-      <p>Aura: {{event.aura}} <br>{{minsRemaining(event.eventEnd)}} Mins Left</p>
-    </button>
-    
-  </ion-list>
-  
-
-  <div [ngClass]="{hidden: hideMap == true}" id="map_canvas" allow="geolocation"></div> -->
 </ion-content>
