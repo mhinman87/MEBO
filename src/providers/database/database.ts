@@ -9,6 +9,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import {sum, values} from 'lodash';
 import { Feedback } from '../../models/feedback.model';
 import { Beacon } from '../../models/beacon.model';
+import { UserComment } from '../../models/comment.model';
 
 
 
@@ -23,11 +24,14 @@ export class DatabaseProvider {
 
   foodTruckCollection: AngularFirestoreCollection<FoodTruck>;
   beaconCollection: AngularFirestoreCollection<Beacon>;
+  beaconCommentCollection: AngularFirestoreCollection<UserComment>;
   feedbackCollection: AngularFirestoreCollection<Feedback>;
   foodTrucks: Observable<FoodTruck[]>;
   beacons: Observable<Beacon[]>;
+  comments: Observable<UserComment[]>;
   accountDocument: AngularFirestoreDocument<Account>;
   foodtruckDocument: AngularFirestoreDocument<FoodTruck>;
+  beaconDocument: AngularFirestoreDocument<Beacon>;
   feedbackDocument: AngularFirestoreDocument<Feedback>;
   myUrl: string;
 
@@ -144,10 +148,12 @@ export class DatabaseProvider {
 
   async saveBeacon(beacon: Beacon){
     let data = {};
+    // let data2 = {};
     data[beacon.ownerId] = 1;
     this.beaconCollection = this.afs.collection('beacons'); //reference
     let docRef = await this.beaconCollection.add(beacon);
     this.afs.collection(`beacons/${docRef.id}/votes`).doc('votes').set(data);
+    // this.afs.collection(`beacons/${docRef.id}/comments`).doc('comments').set(data2);
     beacon.id = docRef.id
     docRef.update(beacon);
   }
@@ -291,7 +297,54 @@ export class DatabaseProvider {
     }
   }
 
- 
+  async deleteBeacon(beacon: Beacon){
+    try {
+      this.beaconDocument = this.afs.collection('beacons').doc(beacon.id);
+      await this.beaconDocument.delete();
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
+  async updateBeacon(beacon: Beacon){
+    try {
+      this.beaconDocument = this.afs.collection('beacons').doc(beacon.id);
+      await this.beaconDocument.update(beacon)
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async addUserCommentToBeacon(beacon: Beacon, comment: UserComment){
+
+    this.beaconCommentCollection = this.afs.collection(`beacons/${beacon.id}/comments`) //reference
+    let docRef = await this.beaconCommentCollection.add(comment);
+    comment.id = docRef.id;
+    docRef.update(comment);
+
+  }
+
+  getBeaconComments(beacon: Beacon){
+    this.beaconCommentCollection = this.afs.collection(`beacons/${beacon.id}/comments`)
+
+    this.comments = this.beaconCommentCollection.snapshotChanges().map(actions => {
+
+      return actions.map(a => {
+        let data = a.payload.doc.data() as UserComment;
+        data.id = a.payload.doc.id;
+        return data
+      })
+    })
+    return this.comments
+  }
+
+  async addUserCommentToEvent(foodtruck: FoodTruck, comment: UserComment){
+
+    this.beaconCommentCollection = this.afs.collection(`foodtrucks/${foodtruck.id}/comments`) //reference
+    let docRef = await this.beaconCommentCollection.add(comment);
+    comment.id = docRef.id;
+    docRef.update(comment);
+
+  }
 
 }

@@ -39,6 +39,7 @@ export class AddBeaconPage implements OnInit {
   myForm: FormGroup;
   loader: Loading;
   authenticatedUser: User;
+  beaconDuration: number;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -54,6 +55,8 @@ export class AddBeaconPage implements OnInit {
                   })
                   }
                 })
+
+                this.beaconDuration = 1;
   }
 
   ionViewDidLoad() {
@@ -69,7 +72,7 @@ export class AddBeaconPage implements OnInit {
     this.beacon.activeStart = Date.now() - 5*3600000;
     this.beacon.ownerId = this.account.uid;
     this.beacon.ownerName = this.account.username;
-    this.beacon.duration = 48;
+    this.beacon.duration = this.beaconDuration * 48;
     this.beacon.img = this.beacon.type;
     this.beacon.name = this.beacon.type;
     // var file = (document.getElementById('file') as HTMLInputElement).files[0];

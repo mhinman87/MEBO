@@ -1,9 +1,3 @@
-<!--
-  Generated template for the AddBeaconPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
 
 
@@ -19,28 +13,7 @@
         <option value="Wanted">Wanted</option>
         
       </select>
-    <!-- <input class="event-input" id="myInput" [(ngModel)]='beacon.name' formControlName="title" type="text" clearOnEdit="false" 
-                       required placeholder="GIVE IT A TITLE"> -->
 
-    
-
-   <!-- <select class="event-input" id="durationSelect" form="myForm" type="number" [(ngModel)]='foodtruck.image' formControlName="type" required>
-      <option value="foodtruck" disabled>EVENT TYPE</option>
-    <option value="Food">Free Food</option>
-    <option value="Gaming">Gaming</option>
-    <option value="StudyGroup">Study Group</option>
-    <option value="Greek">Greek</option>
-    <option value="Basketball">Basketball</option>
-    <option value="Volleyball">Volleyball</option>
-    <option value="FoodTruck">Foodtruck</option>
-    <option value="BoardGame">Board Game</option>
-    <option value="PinkFlag">Pink Flag</option>
-    <option value="OrangeFlag">Orange Flag</option>
-    <option value="GreenFlag">Green Flag</option>
-    <option value="YellowFlag">Yellow Flag</option>
-    <option value="BlueFlag">Blue Flag</option>
-    
-  </select> -->
 
 
     <textarea style="height: 7em;" class="event-input" id="myInput" [(ngModel)]='beacon.details' formControlName="details" type="text" clearOnEdit="false" 
@@ -49,8 +22,6 @@
                              
               
   </form>
-
-
 
   
   <div class="event-input">
@@ -67,12 +38,16 @@
 </div>
 
 
-   
-    
+
+
 
 <!-- <button class="post-pic-button" ion-button round color="red" (click)="clickFile()" >Add Image</button> -->
-<button ion-button [disabled]="myForm.invalid" 
-        round class="long-button" color="primary" (click)="saveBeacon(this.beacon)">BLAST OFF</button>
+<!-- <button ion-button [disabled]="myForm.invalid" 
+        round class="long-button" color="primary" (click)="saveBeacon(this.beacon)">BLAST OFF</button> -->
+        <button ion-button round long class="save-button" (click)="updateBeacon(this.beacon)">SAVE</button>
+        <button ion-button round long class="delete-button" (click)="deleteBeacon(this.beacon)">DELETE</button>
+      
 
 
 </ion-content>
+

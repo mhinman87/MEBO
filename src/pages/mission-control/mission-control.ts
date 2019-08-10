@@ -85,7 +85,15 @@ export class MissionControlPage implements OnDestroy {
   }
 
   minsRemaining(time){
-    return Math.floor((time + 5*3600000 - this.currentTime)/60000)
+    let second = 1000,
+    minute = second * 60,
+    hour = minute * 60,
+    day = hour * 24,
+    distance = time + 5*3600000 - this.currentTime;
+
+
+    return Math.floor(distance / (day)).toString() + " Day " + Math.floor((distance % (day)) / (hour)).toString() + " Hour " 
+            + Math.floor((distance % (hour)) / (minute)).toString() + " Min"
   }
 
   sortEventsByAura(){

@@ -1,4 +1,4 @@
-page-add-beacon {
+page-edit-beacon {
     .arrow-button {
         position: absolute; 
         top: 35px; 
@@ -59,6 +59,66 @@ page-add-beacon {
         margin-bottom: 8%;
     }
     
+    .save-button{
+        
+        width: 35%;
+        left: 10%;
+        color: black;
+        float: left;
+        margin: 0 auto;
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #FCB622;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 10px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
+
+    }
+
+    .delete-button{
+        right: 10%;
+        width: 35%;
+        color: black;
+        float: right;
+        margin: 0 auto;
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #E42547;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 10px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
+    }
+
+    .event-input{
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: white;
+        width: 70%;
+        height: 40px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black; 
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+    }
+
     .range-ios {
         padding: 0px; 
         border: solid #000;
@@ -121,5 +181,4 @@ page-add-beacon {
         color: black;
         font-weight: lighter;
     }
-
 }

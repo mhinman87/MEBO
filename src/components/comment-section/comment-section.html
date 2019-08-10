@@ -1,0 +1,12 @@
+<div *ngFor="let q of questions" class="comment-card">
+  <div class="username">{{q.username}} -- </div> <span class="time-since">{{timeSince(q.time)}} ago</span>
+  <div class="text">{{q.text}}</div>
+  <button (click)="showCommentInput(q)" class="reply-button">REPLY</button>
+  <div [ngClass]="{hidden: q.hideReplyTextbox == true}" class="comment-input-section">
+      <textarea  style="height: 7em;" class="event-input" id="myInput" type="text" clearOnEdit="false" 
+      maxlength="5000" [(ngModel)]="commentText" ></textarea>
+      <button ion-button class="save-button" (click)="postComment(account.username, account.uid, commentText, q)">SAVE</button>
+      <button ion-button class="cancel-button" (click)="closeCommentInput(q)">CANCEL</button>
+    </div>
+    <comment-section [questions]="q.answers" [account]="account" [beacon]="beacon"></comment-section>
+ </div>

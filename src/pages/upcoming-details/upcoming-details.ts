@@ -28,13 +28,25 @@ export class UpcomingDetailsPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private auth: AuthService) {
-                    this.foodtruck = this.navParams.get('truckData');
-                    const second = 1000;
-                                this.x = setInterval(() => {
-                                  this.currentTime = new Date().getTime();
-                                    }, second)
-                                    setTimeout(()=>{
-                                    }, 1000);
+                this.foodtruck = this.navParams.get('truckData');
+
+
+                    // this.foodtruck = this.navParams.get('truckData');
+                    // const second = 1000,
+                    // minute = second * 60,
+                    // hour = minute * 60,
+                    // day = hour * 24;
+                    // let now = new Date().getTime();
+                    // let distance = this.foodtruck.eventStart + 5*3600000 - now;
+                    
+                    //             this.x = setInterval(() => {
+                    //               this.currentTime = new Date().getTime();
+                    //               document.getElementById('hours').innerText = Math.floor((distance % (day)) / (hour)).toString()
+                    //               document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)).toString()
+                    //               document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second).toString()
+                    //                 }, second)
+                    //                 setTimeout(()=>{
+                    //                 }, 1000);
 
                     this.accountSubscription = this.auth.getAuthenticatedUser().subscribe((user: User)=>{
                       if (user != null){
@@ -55,6 +67,32 @@ export class UpcomingDetailsPage {
 
   ionViewDidLoad() {
     
+    this.foodtruck = this.navParams.get('truckData');
+    //this.getFoodtruck(this.foodtruck.eventStart);
+    const second = 1000,
+    minute = second * 60,
+    hour = minute * 60,
+    day = hour * 24;
+
+    let countDown = this.foodtruck.eventStart + 5*3600000;
+    this.x = setInterval(() => {
+    this.currentTime = new Date().getTime();
+    let now = new Date().getTime(),
+      distance = countDown - now;
+
+        document.getElementById('days').innerText = Math.floor(distance / (day)).toString();
+        document.getElementById('hours').innerText = Math.floor((distance % (day)) / (hour)).toString()
+        document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)).toString()
+        //document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second).toString()
+
+        
+        //popToRoot page when foodtruck is no longer active
+        if (distance < 0) {
+          this.navCtrl.popToRoot();
+        }
+      }, second)
+      setTimeout(()=>{
+      }, 1500);
   }
 
   goBack(){
@@ -69,6 +107,11 @@ export class UpcomingDetailsPage {
     this.navCtrl.push('EditEventPage', {
       truckData: this.foodtruck
       })
+  }
+
+  ionViewDidLeave(){
+    clearInterval(this.x);
+    this.accountSubscription.unsubscribe();
   }
 
 }

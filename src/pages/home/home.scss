@@ -34,10 +34,10 @@ page-home {
 
     .menu-button {
         position: absolute; 
-        top: 35px; 
+        top: 40px; 
         left: 15px; 
         z-index: 99;
-        width: 10%;
+        width: 12%;
         backface-visibility: hidden;
     }
 
@@ -159,7 +159,6 @@ page-home {
     
     .btn-image {
         width: 60%;
-        height: 10%;
         transform: translateY(30%);
     }
 

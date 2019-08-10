@@ -30,7 +30,7 @@
             <div class="column-2" (click)="navToDetails(event)" >
                 <p id="btn-title">#{{event.type}}</p>
                 <p id="details-text">{{truncateText(event.details, 130)}}</p>
-                <p id="btn-countdown">{{event.eventDate}}</p>
+                <p id="btn-countdown">Posted: {{event.eventDate}}</p>
             </div>
             <beacon-upvote class="column-3" [itemId]="event.id" [userId]="authenticatedUser.uid" [ownerId]="event.ownerId"></beacon-upvote>
             

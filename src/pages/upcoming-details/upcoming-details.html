@@ -7,7 +7,7 @@
 
 <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
 
-<img src="assets/imgs/Back-Arrow.png" button (click)="navToEdit()" class="edit-button" [ngClass]="{hidden: hideEditButton == true}">
+<img src="assets/imgs/Edit-Icon.gif" button (click)="navToEdit()" class="edit-button" [ngClass]="{hidden: hideEditButton == true}">
 
 
 <ion-content style="background-color:#E42547">
@@ -20,13 +20,22 @@
 
   <h1 class="event-title">{{foodtruck.name}}</h1>
   <p class="event-owner">@{{foodtruck.ownerName}}</p>
-  
+
   <div class="container">
+    <ul style="padding: 0;">
+      <li><span id="days"></span><p class="time-text">Days</p></li>
+      <li><span id="hours"></span><p class="time-text">Hours</p></li>
+      <li><span id="minutes"></span><p class="time-text">Minutes</p></li>
+      <!-- <li><span id="seconds"></span><p class="time-text">Seconds</p></li> -->
+    </ul>
+  </div>
+  
+  <!-- <div class="container">
       <ul style="padding: 0;">
         <li><p class="countdown-text">T-MINUS</p><span id="minutes">{{minsRemaining(foodtruck.eventStart)}}</span><p class="time-text">MINS</p></li>
         <li><p class="countdown-text">DURATION</p><span id="minutes">{{foodtruck.duration / 2}}</span><p class="time-text">HOURS</p></li>
       </ul>
-  </div>
+  </div> -->
   <h3 class="event-date">{{foodtruck.eventDate}}</h3>
   <p class="event-details">{{foodtruck.details}}</p>
 
