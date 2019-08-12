@@ -25,6 +25,7 @@ export class DatabaseProvider {
   foodTruckCollection: AngularFirestoreCollection<FoodTruck>;
   beaconCollection: AngularFirestoreCollection<Beacon>;
   beaconCommentCollection: AngularFirestoreCollection<UserComment>;
+  foodtruckCommentCollection: AngularFirestoreCollection<UserComment>;
   feedbackCollection: AngularFirestoreCollection<Feedback>;
   foodTrucks: Observable<FoodTruck[]>;
   beacons: Observable<Beacon[]>;
@@ -338,6 +339,20 @@ export class DatabaseProvider {
     return this.comments
   }
 
+  getFoodtruckComments(foodtruck: FoodTruck){
+    this.foodtruckCommentCollection = this.afs.collection(`foodtrucks/${foodtruck.id}/comments`)
+
+    this.comments = this.foodtruckCommentCollection.snapshotChanges().map(actions => {
+
+      return actions.map(a => {
+        let data = a.payload.doc.data() as UserComment;
+        data.id = a.payload.doc.id;
+        return data
+      })
+    })
+    return this.comments
+  }
+
   async addUserCommentToEvent(foodtruck: FoodTruck, comment: UserComment){
 
     this.beaconCommentCollection = this.afs.collection(`foodtrucks/${foodtruck.id}/comments`) //reference
@@ -345,6 +360,14 @@ export class DatabaseProvider {
     comment.id = docRef.id;
     docRef.update(comment);
 
+  }
+
+  async editUserCommentOnBeacon(beacon: Beacon, comment: UserComment){
+    await this.afs.collection(`beacons/${beacon.id}/comments`).doc(comment.id).update(comment);
+  }
+
+  async editUserCommentOnEvent(foodtruck: FoodTruck, comment: UserComment){
+    await this.afs.collection(`foodtrucks/${foodtruck.id}/comments`).doc(comment.id).update(comment);
   }
 
 }

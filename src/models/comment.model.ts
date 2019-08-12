@@ -4,7 +4,8 @@ export interface UserComment {
     username: string,
     text: string,
     parent_id: number,
-    hideReplyTextbox: true,
+    hideReplyTextbox: boolean,
+    hideInputTextbox: boolean,
     time: number,
     date: string
 }

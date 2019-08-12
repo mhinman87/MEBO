@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController, AlertController, Events } from 'ionic-angular';
 import { FoodTruck } from '../../models/foodtruck.model';
 import { DatabaseProvider } from '../../providers/database/database';
@@ -7,6 +7,8 @@ import { AuthService } from '../../providers/auth/auth.service';
 import { Account } from '../../models/account.model';
 import { User } from 'firebase/app';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { UserComment } from '../../models/comment.model';
+import { MyApp } from '../../app/app.component';
 //import { sum, values } from 'lodash'
 
 /**
@@ -21,7 +23,7 @@ import { Geolocation, Geoposition } from '@ionic-native/geolocation';
   selector: 'page-details',
   templateUrl: 'details.html',
 })
-export class DetailsPage {
+export class DetailsPage implements OnDestroy {
 
   foodtruck: FoodTruck;
   currentTime: number;
@@ -39,6 +41,10 @@ export class DetailsPage {
   loactionCd: number;
   authtenticatedUserCheckIns: number;
   hideEditButton: boolean;
+  commentText: string;
+  comments: Array<UserComment> = [];
+  commentSubscription: any;
+  hideCommentInput: boolean;
   
 
   constructor(public navCtrl: NavController, 
@@ -48,9 +54,11 @@ export class DetailsPage {
               private auth: AuthService,
               private geolocation: Geolocation,
               private alertCtrl: AlertController,
+              public app: MyApp,
               private events: Events) {
     this.foodtruck = this.navParams.get('truckData');
     this.showLoading();
+    this.hideCommentInput = true;
     this.checkInCountSubscription = this.database.getItemVotes(this.foodtruck.id).subscribe(allUserVotes =>{
      this.checkInCount = allUserVotes['checkIns']
     })
@@ -86,6 +94,8 @@ export class DetailsPage {
     
     
   }
+
+
   
 
   //there is an error in this code - if position isn't returned
@@ -183,6 +193,10 @@ export class DetailsPage {
         this.loader.dismiss();
       }, 1500);
 
+      this.commentSubscription = this.database.getFoodtruckComments(this.foodtruck).subscribe((data)=>{
+        this.comments = this.getAnswers(data, null)
+        return data;
+      })
       
   }
 
@@ -230,6 +244,76 @@ export class DetailsPage {
     
   }
 
+  getAnswers(questions:any,id:any)
+  {
+    return questions
+           .filter(i=>i.parent_id==id)
+           .map(q=>{
+             return {...q,
+                     answers:this.getAnswers(questions,q.id)}
+           })
+  }
 
+  postComment(id: string, username: string, userId: string, text: string){
+    let comment: UserComment = {
+      id: id,
+      userId: userId,
+      username: username,
+      text: text,
+      parent_id: null,
+      hideReplyTextbox: true,
+      hideInputTextbox: true,
+      time: Date.now() - 5*3600000,
+      date: this.formatDate(new Date(Date.now()))
+    }
+    this.database.addUserCommentToEvent(this.foodtruck, comment);
+    this.hideCommentInput = true;
+    this.commentText = "";
+  }
+
+  showCommentInput(){
+    this.hideCommentInput = false;
+  }
+
+  closeCommentInput(){
+    this.hideCommentInput = true;
+  }
+
+  logComments(){
+    console.log(this.comments)
+  }
+
+  formatDate(date: Date) {
+    var monthNames = [
+      "Jan", "Feb", "Mar",
+      "Apr", "May", "Jun", "Jul",
+      "Aug", "Sep", "Oct",
+      "Nov", "Dec"
+    ];
+  
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+    var time = this.formatAMPM(date);
+  
+    console.log(time)
+  
+    return day + ' ' + monthNames[monthIndex] + ' ' + year + ' ' + time;
+  }
+
+  formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
+
+  ngOnDestroy(){
+    this.commentSubscription.unsubscribe();
+  }
 
 }

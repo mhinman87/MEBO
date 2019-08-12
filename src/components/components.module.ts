@@ -5,6 +5,7 @@ import { UpvoteButtonComponent } from './upvote-button/upvote-button';
 import { BeaconUpvoteComponent } from './beacon-upvote/beacon-upvote'
 import { IonicModule } from 'ionic-angular'
 import { CommentSectionComponent } from './comment-section/comment-section';
+import { EventCommentSectionComponent } from './event-comment-section/event-comment-section';
 
 
 @NgModule({
@@ -12,12 +13,14 @@ import { CommentSectionComponent } from './comment-section/comment-section';
     ProgressBarComponent,
     UpvoteButtonComponent,
     BeaconUpvoteComponent,
-    CommentSectionComponent],
+    CommentSectionComponent,
+    EventCommentSectionComponent],
 	imports: [IonicModule],
 	exports: [GoogleMapsComponent,
     ProgressBarComponent,
     UpvoteButtonComponent,
     BeaconUpvoteComponent,
-    CommentSectionComponent]
+    CommentSectionComponent,
+    EventCommentSectionComponent]
 })
 export class ComponentsModule {}

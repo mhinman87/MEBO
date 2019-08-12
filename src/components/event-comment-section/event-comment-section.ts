@@ -4,13 +4,13 @@ import { UserComment } from '../../models/comment.model';
 
 
 @Component({
-  selector: 'comment-section',
-  templateUrl: 'comment-section.html'
+  selector: 'event-comment-section',
+  templateUrl: 'event-comment-section.html'
 })
-export class CommentSectionComponent {
+export class EventCommentSectionComponent {
   @Input() questions: any;
   @Input() account: any;
-  @Input() beacon: any;
+  @Input() foodtruck: any;
 
   commentText = "";
   editText = "";
@@ -52,14 +52,14 @@ export class CommentSectionComponent {
       time: Date.now() - 5*3600000,
       date: this.formatDate(new Date(Date.now()))
     }
-    this.database.addUserCommentToBeacon(this.beacon, comment)
+    this.database.addUserCommentToEvent(this.foodtruck, comment)
     this.commentText = "";
   }
 
   editComment(q: UserComment){
     q.text = this.editText+ "\n\n  **EDITED COMMENT**";
     q.hideInputTextbox = true;
-    this.database.editUserCommentOnBeacon(this.beacon, q);
+    this.database.editUserCommentOnEvent(this.foodtruck, q);
   }
 
   formatDate(date: Date) {
@@ -120,6 +120,5 @@ export class CommentSectionComponent {
     }
     return Math.floor(seconds) + " seconds";
   }
-
 
 }

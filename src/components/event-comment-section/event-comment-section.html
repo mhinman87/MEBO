@@ -15,5 +15,5 @@
       <button ion-button class="save-button" (click)="editComment(q)">SAVE</button>
       <button ion-button class="cancel-button" (click)="closeCommentInput(q)">CANCEL</button>
     </div>
-    <comment-section [questions]="q.answers" [account]="account" [beacon]="beacon"></comment-section>
+    <event-comment-section [questions]="q.answers" [account]="account" [foodtruck]="this.foodtruck"></event-comment-section>
  </div>

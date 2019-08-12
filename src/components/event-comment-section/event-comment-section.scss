@@ -1,14 +1,14 @@
-comment-section {
+event-comment-section {
     div.comment-card:nth-child(n) { 
-        background: rgb(168, 238, 210); 
+        background: rgb(224, 115, 135); 
         div.comment-card:nth-child(n) { 
-            background: #42A880; 
+            background: #E42547; 
             div.comment-card:nth-child(n) { 
-                background: rgb(168, 238, 210); 
+                background: rgb(224, 115, 135); 
                 div.comment-card:nth-child(n) { 
-                    background: #42A880;
+                    background: #E42547;
                     div.comment-card:nth-child(n) { 
-                        background: rgb(168, 238, 210); 
+                        background: rgb(224, 115, 135); 
                         min-width: 200px;
                         .reply-button {
                             display: none;
@@ -93,7 +93,7 @@ comment-section {
 	}
 	
 	.comment-input-section {
-        background-color: #F2682A;
+        background-color: #27B4C0;
         box-shadow: 12px 14px 12px 12px rgba(0,0,0,0.2);
         border-radius: 15px;
         padding: 18px;
@@ -151,7 +151,7 @@ comment-section {
         margin-left: 3%;
         width: 55px;
         color: black;
-        background-color: #E42547;
+        background-color: #27B4C0;
         font-size: 0.9em;
         height: 25px;
         -moz-border-radius: 60px;
@@ -165,4 +165,5 @@ comment-section {
         vertical-align: -webkit-baseline-middle;
         box-shadow: 0 0 0 2pt black;
     }
+
 }

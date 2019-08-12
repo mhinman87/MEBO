@@ -97,6 +97,7 @@ export class BeaconDetailsPage implements OnDestroy {
       text: text,
       parent_id: null,
       hideReplyTextbox: true,
+      hideInputTextbox: true,
       time: Date.now() - 5*3600000,
       date: this.formatDate(new Date(Date.now()))
     }
