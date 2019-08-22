@@ -52,8 +52,7 @@ export class RegisterPage implements OnInit {
   }
 
   navigateToLogin(){
-    this.navCtrl.push("LoginPage");
-    this.navCtrl.remove(0);
+    this.navCtrl.pop();
   }
 
   hideShowPassword() {

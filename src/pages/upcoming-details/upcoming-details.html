@@ -5,15 +5,15 @@
   Ionic pages and navigation.
 -->
 
-<img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
-
-<img src="assets/imgs/Edit-Icon.gif" button (click)="navToEdit()" class="edit-button" [ngClass]="{hidden: hideEditButton == true}">
-
 
 <ion-content style="background-color:#E42547">
 <!-- <ion-content [ngClass]="{item: foodtruck.image == 'FoodTruck', item2: foodtruck.image == 'Basketball'}"> -->
     
+  <img src="assets/imgs/Back-Arrow.png" button (click)="goBack()" class="arrow-button">
 
+  <img src="assets/imgs/Edit-Icon.gif" button (click)="navToEdit()" class="edit-button" [ngClass]="{hidden: hideEditButton == true}">
+  
+  
 
     
   <img id="image-1" src="assets/imgs/{{foodtruck.image}}.png" alt="" />
@@ -40,7 +40,15 @@
   <p class="event-details">{{foodtruck.details}}</p>
 
   <upvote-button class="upvote-counter" [itemId]="foodtruck.id" [userId]="authenticatedUser.uid" [ownerId]="foodtruck.ownerId"></upvote-button>
-          
-
+   
+  <button ion-button (click)="showCommentInput()" [ngClass]="{hidden: hideCommentInput == false}" class="comment-button">COMMENT</button>
+  <div [ngClass]="{hidden: hideCommentInput == true}" class="comment-input-section-2">
+    <textarea  style="height: 9em;" class="event-input-2" id="myInput" type="text" clearOnEdit="false" 
+    maxlength="5000" [(ngModel)]="commentText" ></textarea>
+    <button ion-button class="save-button" (click)="postComment(comments.length, app.account.username, app.account.uid, commentText)">SAVE</button>
+    <button ion-button class="cancel-button" (click)="closeCommentInput()">CANCEL</button>
+  </div>
+  <h3>Comments</h3>
+  <event-comment-section [questions]="this.comments" [account]="app.account" [foodtruck]="this.foodtruck"></event-comment-section>
 
 </ion-content>

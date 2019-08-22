@@ -1,25 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Account } from '../../models/account.model';
 import { Beacon } from '../../models/beacon.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../providers/auth/auth.service';
+import { MyApp } from '../../app/app.component';
 import { User } from 'firebase/app';
+import { sum, values } from 'lodash';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { AngularFireStorage } from 'angularfire2/storage';
 
-/**
- * Generated class for the AddBeaconPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
   selector: 'page-add-beacon',
   templateUrl: 'add-beacon.html',
 })
-export class AddBeaconPage implements OnInit {
+export class AddBeaconPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.myForm = this.fb.group({
       title: [''],
@@ -33,19 +31,30 @@ export class AddBeaconPage implements OnInit {
   }
 
   beacon = {
-    type: "MEBOcircle"
+    type: "MEBOcircle",
+    userPhoto: ''
   } as Beacon;
   account = {} as Account;
   myForm: FormGroup;
   loader: Loading;
   authenticatedUser: User;
   beaconDuration: number;
+  accountSubscription: any;
+  userAura = 0;
+  imgFile: File;
+  
+
+
+  image: string; // base64
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private database: DatabaseProvider,
               private fb: FormBuilder,
               private loadingCtrl: LoadingController,
+              private app: MyApp,
+              private camera: Camera,
+              private afStorage: AngularFireStorage,
               private auth: AuthService) {
                 this.auth.getAuthenticatedUser().subscribe((user: User)=>{
                   if (user){
@@ -60,6 +69,14 @@ export class AddBeaconPage implements OnInit {
   }
 
   ionViewDidLoad() {
+    this.accountSubscription = this.database.getUserVotes(this.app.account.uid)
+    .subscribe(upvotes => {
+      let auraSum = 0;
+      values(upvotes).forEach(uniqueUsers =>{
+        auraSum += sum(values(uniqueUsers))
+      }) 
+      this.userAura = auraSum;
+    })
   }
 
   setAccount(account: Account){
@@ -75,19 +92,17 @@ export class AddBeaconPage implements OnInit {
     this.beacon.duration = this.beaconDuration * 48;
     this.beacon.img = this.beacon.type;
     this.beacon.name = this.beacon.type;
-    // var file = (document.getElementById('file') as HTMLInputElement).files[0];
-    // this.account.profilePicName = file.name;
-    // this.foodtruck.imgName = file.name;
-    // var url = await this.database.eventUploadFile(this.account.username, file, this.foodtruck.name);
-    // this.foodtruck.img = url;
+
     this.beacon.activeEnd = this.beacon.activeStart + (this.beacon.duration*3600000/2);
     this.beacon.eventDate = this.formatDate(new Date(Date.now()));
-    await this.database.saveBeacon(beacon);
-    
-    this.loader.dismiss().then(()=>{
-      this.navCtrl.setRoot('HomePage');
-    })
-    
+    await this.uploadImage()
+    .then(()=>this.database.saveBeacon(beacon))
+      .then(()=>{
+        this.loader.dismiss()
+        .then(()=>{
+          this.navCtrl.setRoot('HomePage');
+        })
+      })
   }
 
   goBack(){
@@ -131,5 +146,51 @@ export class AddBeaconPage implements OnInit {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
   }
+
+  ngOnDestroy(){
+    this.accountSubscription.unsubscribe();
+  }
+
+  // async takePicture(): Promise<any> {
+  //   const options: CameraOptions = {
+  //     quality: 100,
+  //     destinationType: this.camera.DestinationType.DATA_URL,
+  //     encodingType: this.camera.EncodingType.JPEG,
+  //     mediaType: this.camera.MediaType.PICTURE
+  //   }
+  //   try {
+  //     this.imgFile = await this.camera.getPicture(options)
+  //     let image = 'data:image/jpeg;base64,' + this.imgFile
+  //     this.beacon.userPhoto = image
+  //   } catch(e){
+  //     console.error(e);
+  //   }
+  // }
+
+  async captureImage() {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      correctOrientation: true
+    }
+
+    return await this.camera.getPicture(options)
+}
+
+async uploadImage() {
+  if (this.image != undefined) {
+    this.beacon.userPhoto = `${this.app.account.username}/${ new Date().getTime() }.jpg`;
+    this.afStorage.ref(this.beacon.userPhoto).putString(this.image, 'data_url')
+  }
+}
+
+async setFile() {
+  const file = await this.captureImage();
+  this.image = 'data:image/jpg;base64,' + file;
+  
+}
 
 }

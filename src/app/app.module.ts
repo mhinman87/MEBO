@@ -15,6 +15,7 @@ import { AuthService} from '../providers/auth/auth.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Camera } from '@ionic-native/camera';
 
 
 import { DatabaseProvider } from '../providers/database/database';
@@ -44,7 +45,8 @@ import { DatabaseProvider } from '../providers/database/database';
     DatabaseProvider,
     AngularFireDatabase,
     AngularFireStorage,
-    Geolocation
+    Geolocation,
+    Camera
   ]
 })
 export class AppModule {}

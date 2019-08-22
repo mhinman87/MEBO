@@ -261,8 +261,8 @@ export class DatabaseProvider {
     this.afs.collection(`accounts/${user.uid}/votes`).doc('votes').set(data3);
   }
 
-  async uploadFile(username: string, file, uid) {
-    var fileRef = this.afStorage.storage.ref("profilePics/");
+  async uploadFile(file, uid) {
+    var fileRef = this.afStorage.storage.ref("beaconPics/");
     var dbfile = await fileRef.child(`${uid}/` + file.name).put(file);
 
     this.myUrl = await dbfile.ref.getDownloadURL();
@@ -272,7 +272,7 @@ export class DatabaseProvider {
   }
 
   async eventUploadFile(username: string, file, eventName: string) {
-    var fileRef = this.afStorage.storage.ref("eventPics/");
+    var fileRef = this.afStorage.storage.ref("beaconPics/");
     var dbfile = await fileRef.child(`${username}/${eventName}/` + file.name).put(file);
 
     this.myUrl = await dbfile.ref.getDownloadURL();

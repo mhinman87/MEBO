@@ -26,7 +26,7 @@
 
 
             <input [(ngModel)]='account.email' class="login-input" type="email"  formControlName="email" placeholder="EMAIL"
-                      required pattern="^[a-zA-Z0-9.]+@(wichita\.edu|shockers\.wichita\.edu)">
+                      required pattern="^[a-zA-Z0-9-.]+@(wichita\.edu|shockers\.wichita\.edu)">
 
                       <div padding *ngIf="email.invalid && email.dirty" class="notification-is-danger">
                         <span>MUST BE A WSU EMAIL</span>
@@ -44,11 +44,11 @@
               </div>
               <!-- pattern="(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{6,}$" -->
               <!-- [disabled]="myForm.invalid || account.password != passwordConfirm" -->
-      <button class="long-button"  (click)="register()">Create Account</button>
+      <button class="long-button"  (click)="register()">CREATE ACCOUNT</button>
 
       
 
-      <button class="astext" (click)='navigateToLogin()'>LOG IN</button>
+      <button class="go-back-btn" (click)='navigateToLogin()'>GO BACK</button>
   </form>
 
 </ion-content>

@@ -9,6 +9,8 @@ export interface Beacon {
     eventDate?: string;
     img?: string;
     imgName?: string;
+    userPhoto?: string;
+    userPhotoName?: string;
 
     //Operation Hours
     activeStart: number;

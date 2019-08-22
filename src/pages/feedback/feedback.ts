@@ -58,7 +58,15 @@ export class FeedbackPage implements OnDestroy {
                     setTimeout(()=>{
                     }, 1000);
 
-                this.loader.dismiss();
+                    setTimeout(()=>{
+                      if(this.activeEvents != undefined){
+                        this.sortEventsByAura()
+                        this.loader.dismiss();
+                      } else {
+                        this.loader.dismiss();
+                      }
+                    },3000)
+
   }
   
 
@@ -70,7 +78,7 @@ export class FeedbackPage implements OnDestroy {
   }
 
   timeDescending(a, b){
-    return a.activeStart < b.activeStart ? -1 : 1;
+    return a.activeStart > b.activeStart ? -1 : 1;
   }
 
   navToDetails(beacon: Beacon){

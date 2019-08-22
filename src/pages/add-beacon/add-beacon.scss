@@ -122,4 +122,47 @@ page-add-beacon {
         font-weight: lighter;
     }
 
+    .post-pic-btn {
+        font-size: 1.8em;
+        margin: 0 auto;
+        display: block;
+        background-color: #F2682A;
+        width: 70%;
+        height: 35px;
+        -moz-border-radius: 60px;
+        -webkit-border-radius: 60px;
+        border-radius: 15px;
+        border-color: black;
+        border-width: 3px;
+        margin-bottom: 10px; 
+        text-align: center;
+        box-shadow: 0 0 0 2pt black;
+        color: black; 
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .beacon-photo {
+        box-shadow: 4px 4px 2px 1px rgba(0,0,0,0.2);
+        border-radius: 15px;
+		margin: 0 auto;
+		margin-top: 8%;
+		width: 70%;
+		display: block;
+        margin-bottom: 8%;
+    }
+
+    .aura-needed-text {
+        width: 80%;
+		display: block;
+		margin: 0 auto;
+        margin-top: 10%;
+        margin-bottom: 10%;
+		text-align: center;
+		font-size: 1.5em;
+		font-style: italic;
+    }
+
 }

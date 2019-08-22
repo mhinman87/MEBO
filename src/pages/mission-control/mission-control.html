@@ -1,11 +1,12 @@
 
-<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
-<img src="assets/imgs/Black-Plus.png" button (click)="navToAddFlag()" class="add-flag-button">
+
 
 
 
 
 <ion-content style="background-color: #E42547;;">
+  <img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
+  <img src="assets/imgs/Black-Plus.png" button (click)="navToAddFlag()" class="add-flag-button">
   <p class="page-title">UPCOMING EVENTS</p>
 
    <div class="radio-btn-container">
@@ -18,11 +19,11 @@
         [ngClass]="{item: event.image == 'foodtruck', item2: event.image == 'burger-gif'}">
           
         <div class="row">
-                <div class="column-1">
+                <div class="column-1" (click)="navToDetails(event)">
                         <img class="btn-image" src="assets/imgs/{{event.image}}.png" alt="Avatar">
                     </div>
             <div class="column-2" (click)="navToDetails(event)" >
-                <p id="btn-title">{{truncateText(event.name, 16)}}</p>
+                <p id="btn-title">{{truncateText(event.name, 50)}}</p>
                 <p id="details-text">{{truncateText(event.details, 120)}}</p>
                 <p id="btn-countdown">T-MINUS: {{minsRemaining(event.eventStart)}}</p>
             </div>

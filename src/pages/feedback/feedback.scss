@@ -57,7 +57,8 @@ page-feedback {
         border: 1px solid black; /* Green border */
         color: black; /* White text */
         // border-radius: 15px;
-        height: 120px;
+        overflow: auto;
+        min-height: 25%;
         padding: 0px;
         width: 100%; /* Set a width if needed */
         display: block; /* Make the buttons appear below each other */
@@ -102,7 +103,6 @@ page-feedback {
     .btn-image {
         // margin-top: 10%;
         width: 150%;
-        transform: translateY(30%);
     }
 
     .btn-title {
@@ -152,7 +152,9 @@ page-feedback {
         content: "";
         display: table;
         clear: both;
+        min-height: 150px;
         height: 100%;
+        position:relative;
     }
 
     label {
@@ -193,7 +195,6 @@ page-feedback {
 
 
     #btn-title {
-        height: 17px;
         text-align: left;
         font-weight: bold;
         font-size: 1.6em;
@@ -204,7 +205,6 @@ page-feedback {
       #details-text {
           margin-top: 3px;
           text-align: left;
-          height: 57px;
           font-size: 1.2em;
       }
 
@@ -214,6 +214,8 @@ page-feedback {
         left: 20%;
         font-weight: bold;
         color: rgb(240, 60, 93);
+        position:absolute;
+        bottom:0;
     }
 
 }

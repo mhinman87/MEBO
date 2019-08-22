@@ -48,9 +48,9 @@ export class MyApp {
                 //Set Pages
                 this.pages = [
                   { title: 'TAKE ME HOME', component: 'HomePage'},
-                  { title: 'BEACON BOARD', component: 'FeedbackPage'},
+                  { title: 'FLYERS', component: 'FeedbackPage'},
                   { title: 'UPCOMING EVENTS', component: 'MissionControlPage'},
-                  { title: 'SET FLAG', component: 'AddFoodtruckPage'},
+                  { title: 'CREATE EVENT', component: 'AddFoodtruckPage'},
                 ];
                                
                 

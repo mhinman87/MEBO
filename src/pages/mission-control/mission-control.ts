@@ -20,6 +20,7 @@ import { User } from 'firebase/app';
 export class MissionControlPage implements OnDestroy {
 
   events: FoodTruck[];
+  $events: any;
   x: any;
   currentTime: number;
   loader: Loading;
@@ -39,17 +40,21 @@ export class MissionControlPage implements OnDestroy {
                   if (user != null){
                    try {
                      this.authenticatedUser = user;
-                     console.log(this.authenticatedUser);
                    } catch(e) {
                      console.error(e);
                    }
                   }
                  }) 
 
-                this.eventsSubscription = this.dbProvider.getUpcomingEvents().subscribe((data)=>{
-                  this.events = data.sort(this.auraDescending);
-                  return data;
-                })
+                this.getEvents()
+                
+
+                // this.eventsSubscription = this.dbProvider.getUpcomingEvents().subscribe((data)=>{
+                //   this.events = data
+                //   return this.events
+                // })
+
+
                 const second = 1000;
                 this.x = setInterval(() => {
                   this.currentTime = new Date().getTime();
@@ -58,12 +63,30 @@ export class MissionControlPage implements OnDestroy {
                     }, 1000);
 
                     
-                this.loader.dismiss();
+                setTimeout(()=>{
+                  if(this.events != undefined){
+                    this.sortEventsByAura()
+                    this.loader.dismiss();
+                  } else {
+                    this.loader.dismiss();
+                  }
+                },3000)
+                
+
   }
   
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MissionControlPage');
+    
+  }
+
+  async getEvents(){
+    await this.dbProvider.getUpcomingEvents().map((data) => {
+      this.events = data.sort((a, b) => {
+          return a.aura < b.aura ? -1 : 1;
+       });
+      return data;
+   }).toPromise();
   }
 
   auraDescending(a, b) {
@@ -126,7 +149,7 @@ export class MissionControlPage implements OnDestroy {
 
   ngOnDestroy(){
     this.accountSubscription.unsubscribe();
-    this.eventsSubscription.unsubscribe();
+    //this.eventsSubscription.unsubscribe();
   }
 
 }

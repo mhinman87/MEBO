@@ -1,15 +1,16 @@
-<img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
-<img src="assets/imgs/Black-Plus.png" button (click)="navToAddBeacon()" class="add-beacon-button">
+
 
 
 
 
 <ion-content style="background-color: #42A880;">
-  <p class="page-title">CAMPUS BEACONS</p>
+  <p class="page-title">CAMPUS FLYERS</p>
+  <img src="assets/imgs/Hamburger-Menu.png" button menuToggle class="menu-button">
+  <img src="assets/imgs/Black-Plus.png" button (click)="navToAddBeacon()" class="add-beacon-button">
 
    <div class="radio-btn-container">
       <input type="radio" id="aura" name="type" checked="checked" value="aura" (click)="sortEventsByAura()" ><label for="aura">POPULAR</label>
-      <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">COUNTDOWN</label>
+      <input type="radio" id="tMinus" name="type"  value="tMinus" (click)="sortUntilLaunch()" ><label for="tMinus">NEW</label>
    </div>
 
    <select class="event-input" (change)="filter($event.target.value)">

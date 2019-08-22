@@ -26,7 +26,7 @@ page-mission-control {
         border: 1px solid black; /* Green border */
         color: black; /* White text */
         // border-radius: 15px;
-        height: 120px;
+        overflow: auto;
         padding: 0px;
         width: 100%; /* Set a width if needed */
         display: block; /* Make the buttons appear below each other */
@@ -35,7 +35,7 @@ page-mission-control {
 
     .btn-group2 button:nth-child(n) { background: rgb(236, 137, 155);; }
 
-    .btn-group2 button:nth-child(2n) { background: #E42547; }
+    .btn-group2 button:nth-child(2n) { background: rgba(248, 195, 145, 0.664); }
 
     
 
@@ -70,7 +70,8 @@ page-mission-control {
 
     .btn-image {
         width: 60%;
-        transform: translateY(30%);
+       // height: inherit 80%;
+        //transform: translateY(30%);
     }
 
     .btn-title {
@@ -117,10 +118,12 @@ page-mission-control {
     
     /* Clear floats after the columns */
     .row {
+        min-height: 150px;
         content: "";
         display: table;
         clear: both;
         height: 100%;
+        position:relative;
     }
 
     label {
@@ -161,7 +164,6 @@ page-mission-control {
 
 
     #btn-title {
-        height: 17px;
         text-align: left;
         font-weight: bold;
         font-size: 1.6em;
@@ -172,15 +174,17 @@ page-mission-control {
       #details-text {
           margin-top: 3px;
           text-align: left;
-          height: 57px;
       }
 
       #btn-countdown {
         text-align: left;
         bottom: -5px;
         left: 20%;
+        font-size: 13px;
         font-weight: bold;
         color: black;
+        position:absolute;
+        bottom:0;
     }
 
 

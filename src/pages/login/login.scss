@@ -143,17 +143,19 @@ page-login {
       
 }
 
-.astext2 {
-        
-    width: 90%;
+.register-btn{
+    font-size: 0.8em;
+    margin: 0 auto;
     display: block;
-    color: #f4f4f4;
-    margin:0 auto;
-    margin-top: 40%;
-    height: 40px;
-    font-size: 20px;
-    background: none;
-    //border: none;
+    background-color: #E42547;
+    width: 40%;
+    height: 25px;
+    -moz-border-radius: 60px;
+    -webkit-border-radius: 60px;
+    border-radius: 15px;
+    border-color: black;
+    border-width: 3px;
+    margin-bottom: 10px; 
     text-align: center;
-    font-weight: bold;
+    box-shadow: 0 0 0 2pt black;
 }

@@ -17,7 +17,6 @@
         <option value="JobOpps">Job Opps</option>
         <option value="ForSale">For Sale</option>
         <option value="Wanted">Wanted</option>
-        
       </select>
     <!-- <input class="event-input" id="myInput" [(ngModel)]='beacon.name' formControlName="title" type="text" clearOnEdit="false" 
                        required placeholder="GIVE IT A TITLE"> -->
@@ -67,11 +66,17 @@
 </div>
 
 
-   
+<!-- <img [src]="beacon.userPhoto" alt="" class="beacon-photo" id="file" [ngClass]="{hidden: beacon.userPhoto == ''}"> -->
     
+<p *ngIf="userAura < 50" class="aura-needed-text">Increase your Aura to add images</p>
 
-<!-- <button class="post-pic-button" ion-button round color="red" (click)="clickFile()" >Add Image</button> -->
-<button ion-button [disabled]="myForm.invalid" 
+<button class="post-pic-btn" ion-button round color="red" (click)="setFile()" [ngClass]="{hidden: userAura < 50}" >ADD IMAGE</button> 
+
+<img *ngIf="image" [src]="image" class="beacon-photo">
+
+
+
+<button ion-button [disabled]="myForm.invalid || beacon.type == 'MEBOcircle'"
         round class="long-button" color="primary" (click)="saveBeacon(this.beacon)">BLAST OFF</button>
 
 

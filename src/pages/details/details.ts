@@ -34,6 +34,7 @@ export class DetailsPage implements OnDestroy {
   account$: Observable<Account>;
   authenticatedUser = {} as User;
   accountSubscription: any;
+  accountInfoSub: any;
   checkInCountSubscription;
   userCheckInSubscription;
   checkInCount: number;
@@ -57,6 +58,7 @@ export class DetailsPage implements OnDestroy {
               public app: MyApp,
               private events: Events) {
     this.foodtruck = this.navParams.get('truckData');
+   
     this.showLoading();
     this.hideCommentInput = true;
     this.checkInCountSubscription = this.database.getItemVotes(this.foodtruck.id).subscribe(allUserVotes =>{
@@ -67,8 +69,7 @@ export class DetailsPage implements OnDestroy {
         try {
           this.authenticatedUser = user;
           this.account$ = this.database.getAccountInfo(user.uid);
-          this.database.getAccountInfo(user.uid).subscribe((account) =>{
-          this.setAccount(account);
+          this.accountInfoSub = this.database.getAccountInfo(user.uid).subscribe((account) =>{
           this.userCheckInSubscription = this.database.getUserVotes(this.authenticatedUser.uid).subscribe((allVotes) => {
             if (allVotes[this.foodtruck.id + "checkIns"] != undefined){
               this.authtenticatedUserCheckIns = allVotes[this.foodtruck.id + 'checkIns']['checkIns']
@@ -143,6 +144,7 @@ export class DetailsPage implements OnDestroy {
 
   ionViewDidEnter(){
     this.canUserCheckIn();
+    this.setAccount(this.app.account);
   }
 
   goBack(){
@@ -206,6 +208,7 @@ export class DetailsPage implements OnDestroy {
     this.accountSubscription.unsubscribe();
     this.checkInCountSubscription.unsubscribe();
     this.userCheckInSubscription.unsubscribe();
+    this.accountInfoSub.unsubscribe();
   }
 
   showLoading(){

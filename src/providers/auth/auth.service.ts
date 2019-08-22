@@ -79,6 +79,7 @@ export class AuthService {
       let user = this.afAuth.auth.currentUser;
       user.sendEmailVerification()
       account.uid = user.uid;
+      account.password = "";
       this.database.createProfile(user, account);
       this.events.publish('user:login');
       })

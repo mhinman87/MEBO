@@ -7,6 +7,7 @@ import { User } from 'firebase/app';
 import { MyApp } from '../../app/app.component';
 import { UserComment } from '../../models/comment.model';
 import { DatabaseProvider } from '../../providers/database/database';
+import { AngularFireStorage } from 'angularfire2/storage'
 
 /**
  * Generated class for the BeaconDetailsPage page.
@@ -31,11 +32,13 @@ export class BeaconDetailsPage implements OnDestroy {
   account: Account;
   commentText: string;
   comments: Array<UserComment> = [];
+  imgSub: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private auth: AuthService,
               public app: MyApp,
+              private afStorage: AngularFireStorage,
               public database: DatabaseProvider) {
     this.beacon = this.navParams.get('beaconData');
     console.log(this.beacon);
@@ -50,14 +53,26 @@ export class BeaconDetailsPage implements OnDestroy {
       }
     })
 
+    this.setAccount(this.app.account);
 
   }
 
   ionViewDidLoad() {
+    try {
+      this.imgSub = this.afStorage.ref(this.beacon.userPhoto).getDownloadURL().subscribe(q=>{
+        let imgEle = document.getElementById('img') as HTMLImageElement
+        imgEle.src = q;
+      })
+    } catch(e){
+      console.log("No Image for Beacon")
+    }
+
+
     this.commentSubscription = this.database.getBeaconComments(this.beacon).subscribe((data)=>{
       this.comments = this.getAnswers(data, null)
       return data;
     })
+    
   }
 
   goBack(){
@@ -148,6 +163,9 @@ export class BeaconDetailsPage implements OnDestroy {
   }
 
   ngOnDestroy(){
+    if (this.imgSub != undefined){
+      this.imgSub.unsubscribe();
+    }
     this.commentSubscription.unsubscribe();
   }
 

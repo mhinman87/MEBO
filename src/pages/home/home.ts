@@ -80,9 +80,9 @@ export class HomePage implements OnDestroy {
  
   //Initialize Map on page load
   async ionViewDidLoad() {  
-      let latLng = new google.maps.LatLng(37.71814898706639, -97.28986489422863 );
+      let latLng = new google.maps.LatLng(37.718115926550766, -97.29444515 );
       this.platform.ready().then(() => {
-          this.initializeMap(latLng, 18);
+          this.initializeMap(latLng, 17);
           var imageBounds = {
             north: 37.7269,
             south: 37.7112,
@@ -130,7 +130,7 @@ export class HomePage implements OnDestroy {
 
       
       } else {
-        this.presentAlert("Not on Campus")
+        //this.presentAlert("Not on Campus")
       }
       this.setMarkers();
     },(err) => {
