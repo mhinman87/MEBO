@@ -43,7 +43,7 @@
         "ionic-angular": "3.9.2",
         "ionicons": "3.0.0",
         "ios": "0.0.1",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.19",
         "rxjs": "^6.2.2",
         "rxjs-compat": "^6.2.2",
         "sw-toolbox": "3.6.0",
